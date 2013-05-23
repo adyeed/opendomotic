@@ -1,0 +1,57 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                template="./template.xhtml"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core">
+
+    <ui:define name="content">
+        <h:form>
+            <p:panel header="Agendamento">
+                <p:messages/>
+                <h:panelGrid columns="2">
+                    Data:
+                    <p:inputMask value="#{jobMB.date}" mask="99/99/9999 99:99"/>
+                    Device:
+                    <p:selectOneMenu value="#{jobMB.deviceName}">
+                        <f:selectItems value="#{domoticMB.listDevice}" var="device" itemLabel="#{device.name}" itemValue="#{device.name}"/>
+                    </p:selectOneMenu>
+                    Valor:
+                    <p:inputText value="#{jobMB.value}"/>
+                </h:panelGrid>                
+                <p:commandButton value="Adicionar" action="#{jobMB.addJob}" update="tableJobs"/>               
+            </p:panel>
+            
+            <br/>
+
+            <p:dataTable id="tableJobs" value="#{jobMB.listJob}" var="job" emptyMessage="Sem agendamentos">
+                <p:column>
+                    <f:facet name="header">
+                        Data
+                    </f:facet>
+                    <h:outputText value="#{job.date}">
+                        <f:convertDateTime pattern="dd/MM/yyyy HH:mm" type="both"/>
+                    </h:outputText>
+                </p:column>
+                <p:column>
+                    <f:facet name="header">
+                        Device
+                    </f:facet>
+                    #{job.device.name}
+                </p:column>
+                <p:column>
+                    <f:facet name="header">
+                        Valor
+                    </f:facet>
+                    #{job.value}
+                </p:column>
+                <p:column>
+                    <p:commandButton value="Excluir" action="#{jobMB.removeJob(job)}" update="tableJobs"/>
+                </p:column>
+            </p:dataTable> 
+        </h:form>
+    </ui:define>
+
+</ui:composition>
