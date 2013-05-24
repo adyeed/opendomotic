@@ -3,6 +3,10 @@ function ImageShape(x, y, src) {
     this.image.src = src;
     this.image.style = "cursor:move";
 
+    this.image.onclick = function() {
+        alert('test click');
+    };
+
     this.x = x;
     this.y = y;
     this.width = 64;
