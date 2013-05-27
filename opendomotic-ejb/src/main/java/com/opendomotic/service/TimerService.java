@@ -23,7 +23,7 @@ public class TimerService {
     
     @Schedule(minute = "*/1", hour = "*")
     public void doWork() {       
-        LOG.info("Timer trigger");
+        //LOG.info("Timer trigger");
         jobService.checkJobs();
     }
     
