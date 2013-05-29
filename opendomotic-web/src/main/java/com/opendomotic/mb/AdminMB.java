@@ -6,6 +6,7 @@ package com.opendomotic.mb;
 
 import com.opendomotic.model.GraphicDevice;
 import com.opendomotic.service.DeviceService;
+import java.util.List;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 
@@ -20,10 +21,17 @@ public class AdminMB {
     private DeviceService deviceService;
     
     private String deviceName;
+    private String imagem;
 
     public void add() {
+        List<GraphicDevice> list = deviceService.getListGraphicDevice();
+        
+        int id = 1;
+        if (!list.isEmpty())
+            id = list.get(list.size()-1).getId()+1;        
+        
         deviceService.getListGraphicDevice().add(
-                new GraphicDevice(deviceName, 0, 0, "./resources/images/lampada.png"));
+                new GraphicDevice(id, 0, 0, deviceName, imagem));
     }
     
     public void clear() {
@@ -36,6 +44,14 @@ public class AdminMB {
 
     public void setDeviceName(String deviceName) {
         this.deviceName = deviceName;
+    }
+
+    public String getImagem() {
+        return imagem;
+    }
+
+    public void setImagem(String imagem) {
+        this.imagem = imagem;
     }
     
 }

@@ -8,6 +8,10 @@ var countImage = 0;
 
 window.onload = init;
 
+function getUrl(path) {
+    return '/opendomotic-web-0.0.1/' + path;
+}
+
 function init() {
     canvas = document.getElementById("canvasAdmin");
     canvas.onmousedown = mouseDown;
@@ -16,41 +20,25 @@ function init() {
     canvas.width = 1000;
     canvas.height = 950;
     context = canvas.getContext("2d");    
-
+    
+    $.getJSON(getUrl('device'), null, function(data) {
+        for (var device in data) {
+            for (var index in data[device]) {
+                d = data[device][index];                
+                arrayImage[countImage++] = new ImageShape(d.id, d.x, d.y, d.name, d.src);
+            }
+            if (countImage > 0) {
+                arrayImage[countImage-1].image.onload = function() {
+                    draw(); //demora para carregar a imagem.
+                };
+            }
+        }
+    });
+    
     imagePlanta.src = "./resources/images/planta.jpg";
     imagePlanta.onload = function() {
         draw(); //demora para carregar a imagem.
     };
-
-    var ajaxUrl = '/opendomotic-web-0.0.1/device';
-    $.getJSON(ajaxUrl, null, function(data) {
-        for (var device in data) {
-            for (var index in data[device]) {
-                d = data[device][index];
-                arrayImage[countImage++] = new ImageShape(d.x, d.y, d.src);
-            }
-        }
-        if (countImage > 0) {
-            arrayImage[countImage-1].onload = function() {
-                draw(); //demora para carregar a imagem.
-            };
-        }
-    });
-}
-
-function addLuz() {
-    arrayImage[countImage++] = new ImageShape(0, 0, "./resources/images/lampada.png");
-    draw();
-}
-
-function addTermometro() {
-    arrayImage[countImage++] = new ImageShape(0, 0, "./resources/images/termometro.png");
-    draw();
-}
-
-function addUmidade() {
-    arrayImage[countImage++] = new ImageShape(0, 0, "./resources/images/umidade.png");
-    draw();
 }
 
 function draw() {
@@ -95,7 +83,14 @@ function mouseMove(e) {
     }
 }
 
-function mouseUp(e) {
+function mouseUp(e) {   
+    if (imagePressed !== null) {
+        $.getJSON(getUrl(
+                'device/move?id='+imagePressed.id+
+                '&x='+imagePressed.x+
+                '&y='+imagePressed.y), null, null);
+    }
+    
     imagePressed = null;
     draw();
 }

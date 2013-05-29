@@ -1,18 +1,19 @@
-function ImageShape(x, y, src) {
-    this.image = new Image();
-    this.image.src = src;
-
+function ImageShape(id, x, y, name, src) {
+    this.id = id;
     this.x = x;
     this.y = y;
-    this.width = 64;
-    this.height = 64;
+    this.name = name;
+
+    this.image = new Image();
+    this.image.alt = name;
+    this.image.src = src;
 
     this.getRight = function() {
-        return this.x + this.width;
+        return this.x + this.image.width;
     };
 
     this.getBottom = function() {
-        return this.y + this.height;
+        return this.y + this.image.height;
     };
 
     this.isIn = function(x, y) {
