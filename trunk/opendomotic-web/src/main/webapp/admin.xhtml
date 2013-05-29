@@ -14,21 +14,27 @@
 
             <p:toolbar>
                 <p:toolbarGroup>
-                    <h:panelGrid columns="2" style="height: 48px;">
+                    <h:panelGrid columns="4" style="height: 48px;">
                         <h:outputText value="Device:"/>
                         <p:selectOneMenu value="#{adminMB.deviceName}">
                             <f:selectItems value="#{domoticMB.listDevice}" var="device" itemLabel="#{device.name}" itemValue="#{device.name}"/>
-                        </p:selectOneMenu>                     
+                        </p:selectOneMenu>    
+                        
+                        <h:outputText value="Imagem:"/>
+                        <p:selectOneMenu value="#{adminMB.imagem}">
+                            <f:selectItem itemLabel="Cafeteira" itemValue="./resources/images/cafeteira.png"/>
+                            <f:selectItem itemLabel="Lâmpada" itemValue="./resources/images/lampada.png"/>
+                            <f:selectItem itemLabel="Luminosidade" itemValue="./resources/images/luminosidade.png"/>
+                            <f:selectItem itemLabel="Termômetro" itemValue="./resources/images/termometro.png"/>
+                            <f:selectItem itemLabel="Umidade" itemValue="./resources/images/umidade.png"/>
+                            <f:selectItem itemLabel="Ventilador" itemValue="./resources/images/ventilador.png"/>                            
+                        </p:selectOneMenu>      
                     </h:panelGrid>
                 </p:toolbarGroup>  
                 
                 <p:toolbarGroup>
-                    <p:commandButton value="Adicionar" action="#{adminMB.add()}" update="form"/>
+                    <p:commandButton value="Adicionar" action="#{adminMB.add()}" ajax="false"/>
                     <p:commandButton value="Limpar" action="#{adminMB.clear()}" ajax="false"/>
-                    
-                    <p:separator/>
-                    <p:commandButton value="Termômetro" onclick="addTermometro();"/>
-                    <p:commandButton value="Umidade" onclick="addUmidade();"/>
                 </p:toolbarGroup>
             </p:toolbar>
 
