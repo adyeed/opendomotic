@@ -61,11 +61,6 @@ public class DeviceService {
         return list;
     }
     
-    public void addGraphicDevice(GraphicDevice graphicDevice) {
-        graphicDevice.setX(100*listGraphicDevice.size());
-        listGraphicDevice.add(graphicDevice);
-    }
-    
     public Device getDevice(String name) {
         return mapDevice.get(name);
     }
