@@ -13,27 +13,37 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 public class GraphicDevice {
    
-    private String deviceName;
+    private int id;
     private int x;
     private int y;
+    private String name; //image.alt
     private String src; //image.src
 
     public GraphicDevice() {
     }
     
-    public GraphicDevice(String deviceName, int x, int y, String src) {
-        this.deviceName = deviceName;
+    public GraphicDevice(int id, int x, int y, String name, String src) {
+        this.id = id;
         this.x = x;
         this.y = y;
+        this.name = name;
         this.src = src;
     }
 
-    public String getDeviceName() {
-        return deviceName;
+    public int getId() {
+        return id;
     }
 
-    public void setDeviceName(String deviceName) {
-        this.deviceName = deviceName;
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public int getX() {
@@ -58,6 +68,11 @@ public class GraphicDevice {
 
     public void setSrc(String src) {
         this.src = src;
+    }
+
+    @Override
+    public String toString() {
+        return "GraphicDevice{" + "id=" + id + ", name=" + name + ", x=" + x + ", y=" + y + ", src=" + src + '}';
     }
     
 }
