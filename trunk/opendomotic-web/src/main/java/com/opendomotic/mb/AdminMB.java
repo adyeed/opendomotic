@@ -22,9 +22,8 @@ public class AdminMB {
     private String deviceName;
 
     public void add() {
-        GraphicDevice g = new GraphicDevice();
-        g.setDeviceName(deviceName);
-        deviceService.addGraphicDevice(g);
+        deviceService.getListGraphicDevice().add(
+                new GraphicDevice(deviceName, 0, 0, "./resources/images/lampada.png"));
     }
     
     public void clear() {

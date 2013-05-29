@@ -8,7 +8,7 @@
                 xmlns:f="http://java.sun.com/jsf/core">
 
     <ui:define name="content">
-        <h:form>
+        <h:form id="form">
             <script type="text/javascript" src="./resources/js/imageShape.js"></script>
             <script type="text/javascript" src="./resources/js/canvasAdmin.js"></script>	
 
@@ -23,7 +23,7 @@
                 </p:toolbarGroup>  
                 
                 <p:toolbarGroup>
-                    <p:commandButton value="Adicionar" action="#{adminMB.add()}"/>
+                    <p:commandButton value="Adicionar" action="#{adminMB.add()}" update="form"/>
                     <p:commandButton value="Limpar" action="#{adminMB.clear()}" ajax="false"/>
                     
                     <p:separator/>

@@ -4,7 +4,7 @@ var xPan = 0;
 
 var imagePlanta = new Image();
 var arrayImage = new Array();
-var i = 0;
+var countImage = 0;
 
 window.onload = init;
 
@@ -13,27 +13,13 @@ function init() {
     canvas.onmousedown = mouseDown;
     canvas.onmousemove = mouseMove;
     canvas.onmouseup = mouseUp;
-    context = canvas.getContext("2d");
-
     canvas.width = 1000;
     canvas.height = 950;
-
-    //quartos
-    /*arrayImage[i++] = new ImageShape(820, 170, "./resources/images/lampada.png");
-    arrayImage[i++] = new ImageShape(710, 480, "./resources/images/lampada.png");
-    arrayImage[i++] = new ImageShape(590, 750, "./resources/images/lampada.png");
-    
-    //sala
-    arrayImage[i++] = new ImageShape(300, 400, "./resources/images/lampada.png");
-    arrayImage[i++] = new ImageShape(300, 750, "./resources/images/lampada.png");
-    
-    //sacada
-    arrayImage[i++] = new ImageShape(150, 150, "./resources/images/termometro.png");
-    arrayImage[i++] = new ImageShape(250, 150, "./resources/images/umidade.png");*/
+    context = canvas.getContext("2d");    
 
     imagePlanta.src = "./resources/images/planta.jpg";
     imagePlanta.onload = function() {
-        draw(); //demora para carregar a imagem. Verificar se precisa para as outras
+        draw(); //demora para carregar a imagem.
     };
 
     var ajaxUrl = '/opendomotic-web-0.0.1/device';
@@ -41,25 +27,29 @@ function init() {
         for (var device in data) {
             for (var index in data[device]) {
                 d = data[device][index];
-                arrayImage[i++] = new ImageShape(d.x, d.y, d.src);
+                arrayImage[countImage++] = new ImageShape(d.x, d.y, d.src);
             }
         }
-        draw();
+        if (countImage > 0) {
+            arrayImage[countImage-1].onload = function() {
+                draw(); //demora para carregar a imagem.
+            };
+        }
     });
 }
 
 function addLuz() {
-    arrayImage[i++] = new ImageShape(0, 0, "./resources/images/lampada.png");
+    arrayImage[countImage++] = new ImageShape(0, 0, "./resources/images/lampada.png");
     draw();
 }
 
 function addTermometro() {
-    arrayImage[i++] = new ImageShape(0, 0, "./resources/images/termometro.png");
+    arrayImage[countImage++] = new ImageShape(0, 0, "./resources/images/termometro.png");
     draw();
 }
 
 function addUmidade() {
-    arrayImage[i++] = new ImageShape(0, 0, "./resources/images/umidade.png");
+    arrayImage[countImage++] = new ImageShape(0, 0, "./resources/images/umidade.png");
     draw();
 }
 
@@ -70,6 +60,7 @@ function draw() {
     //fundo
     context.drawImage(imagePlanta, 0, 0);
 
+    //desenha devices
     for (var i in arrayImage) {
         arrayImage[i].draw(context);
     }
