@@ -4,6 +4,7 @@
  */
 package com.opendomotic.rest;
 
+import com.opendomotic.api.Device;
 import com.opendomotic.model.GraphicDevice;
 import com.opendomotic.service.DeviceService;
 import java.util.List;
@@ -50,6 +51,16 @@ public class DeviceRest {
             }
         }
         return "Device não encontrado";
+    }
+    
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path(value = "/toggle")
+    public String toggle(@QueryParam("name") String name) {
+        System.out.println("toggle "+name);
+        Device device = deviceService.getDevice(name);
+        device.setValue(device.getValue() == 1 ? 0 : 1);
+        return "OK";
     }
     
 }
