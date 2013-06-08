@@ -7,7 +7,7 @@ package com.opendomotic.service;
 import com.opendomotic.api.Device;
 import com.opendomotic.model.DeviceFactory;
 import com.opendomotic.model.DeviceProxy;
-import com.opendomotic.model.GraphicDevice;
+import com.opendomotic.model.rest.GraphicDevice;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -55,7 +55,7 @@ public class DeviceService {
         list.add(new GraphicDevice(5, 300, 750, "Luz janta", "./resources/images/lampada.png"));
 
         //sacada:
-        list.add(new GraphicDevice(6, 150, 150, "Termômetro", "./resources/images/termometro.png"));
+        list.add(new GraphicDevice(6, 150, 150, "Temperatura DHT11", "./resources/images/termometro.png"));
         list.add(new GraphicDevice(7, 250, 150, "Umidade",    "./resources/images/umidade.png"));
         
         return list;
