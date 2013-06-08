@@ -4,7 +4,7 @@
  */
 package com.opendomotic.mb;
 
-import com.opendomotic.model.GraphicDevice;
+import com.opendomotic.model.rest.GraphicDevice;
 import com.opendomotic.service.DeviceService;
 import java.util.List;
 import javax.ejb.EJB;

@@ -30,23 +30,24 @@ function initCanvas(canDrag, onMouseUpDevice) {
                 d = data[device][index];                
                 arrayImage[countImage++] = new ImageShape(d.id, d.x, d.y, d.name, d.src);
             }
-            if (countImage > 0) {
+            /*if (countImage > 0) {
                 arrayImage[countImage-1].image.onload = function() {
                     draw(); //demora para carregar a imagem.
                 };
-            }
+            }*/
         }
     });
     
     imagePlanta.src = "./resources/images/planta.jpg";
     imagePlanta.onload = function() {
-        draw(); //demora para carregar a imagem.
+        updateValues(); //demora para carregar a imagem.
     };
 }
 
 function draw() {
     //clear canvas
     context.clearRect(0, 0, canvas.width, canvas.height); 
+    context.font = "bold 26px verdana";
 
     //fundo
     context.drawImage(imagePlanta, 0, 0);
@@ -54,12 +55,31 @@ function draw() {
     //desenha devices
     for (var i in arrayImage) {
         arrayImage[i].draw(context);
+        if (arrayImage[i].value !== null) {
+            context.fillText(arrayImage[i].value, arrayImage[i].x, arrayImage[i].getBottom());
+        }
     }
 
     //para desenhar por cima
     if (imagePressed !== null) {
         imagePressed.draw(context);
     }
+}
+
+function updateValues() {
+    $.getJSON(getUrl('device/value'), null, function(data) {
+        for (var device in data) {
+            for (var index in data[device]) {
+                d = data[device][index]; //d.name; d.value;
+                for (var i in arrayImage) {
+                    if (arrayImage[i].name === d.name) {
+                        arrayImage[i].value = d.value;
+                    }
+                }
+            }
+        }
+        draw();
+    });    
 }
 
 //------------------------------------------------------------------------------
@@ -89,7 +109,8 @@ function mouseMove(e) {
 function mouseUp(e) {   
     if (imagePressed !== null && onMouseUpDevice !== null) {
         onMouseUpDevice();
-    }    
+    }
     imagePressed = null;
-    draw();
+    
+    setTimeout(function() {updateValues()}, 500);
 }
