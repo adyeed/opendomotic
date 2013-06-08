@@ -5,8 +5,11 @@
 package com.opendomotic.rest;
 
 import com.opendomotic.api.Device;
-import com.opendomotic.model.GraphicDevice;
+import com.opendomotic.model.DeviceProxy;
+import com.opendomotic.model.rest.DeviceValue;
+import com.opendomotic.model.rest.GraphicDevice;
 import com.opendomotic.service.DeviceService;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
@@ -33,6 +36,24 @@ public class DeviceRest {
     public List<GraphicDevice> getListGraphicDevice() {
         return deviceService.getListGraphicDevice();
     }
+    
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path(value = "/value")
+    public List<DeviceValue> getListValue() {
+        List<DeviceValue> list = new ArrayList<>();
+        for (DeviceProxy device : deviceService.getListDevice()) {
+            String value = "";
+            try {
+                device.updateValue();
+                value = device.getValue().toString();
+            } catch (Exception e) {
+                LOG.warning(e.toString());
+            }            
+            list.add(new DeviceValue(device.getName(), value));
+        }
+        return list;
+    }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -57,10 +78,13 @@ public class DeviceRest {
     @Produces(MediaType.APPLICATION_JSON)
     @Path(value = "/toggle")
     public String toggle(@QueryParam("name") String name) {
-        System.out.println("toggle "+name);
         Device device = deviceService.getDevice(name);
-        device.setValue(device.getValue() == 1 ? 0 : 1);
-        return "OK";
+        if (device != null) {
+            device.setValue(device.getValue() == 1 ? 0 : 1);
+            return "OK";
+        } else {
+            return "Device não encontrado";
+        }
     }
     
 }
