@@ -3,6 +3,7 @@ function ImageShape(id, x, y, name, src) {
     this.x = x;
     this.y = y;
     this.name = name;
+    this.value = null;
 
     this.image = new Image();
     this.image.alt = name;
