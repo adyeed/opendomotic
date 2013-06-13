@@ -112,5 +112,5 @@ function mouseUp(e) {
     }
     imagePressed = null;
     
-    setTimeout(function() {updateValues()}, 500);
+    setTimeout(function() {updateValues();}, 100);
 }
