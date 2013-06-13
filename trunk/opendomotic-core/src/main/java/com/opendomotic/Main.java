@@ -5,7 +5,8 @@
 package com.opendomotic;
 
 import com.opendomotic.api.Device;
-import com.opendomotic.ethernet.HttpDevice;
+import com.opendomotic.serial.SerialDevice;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -42,7 +43,7 @@ public class Main {
      * @param args the command line arguments
      */
     public static void main(String[] args) throws InterruptedException {
-        Device luz = new HttpDevice("Teste", "192.168.10.47", "?luzEscritorio");
+        /*Device luz = new HttpDevice("Teste", "192.168.10.47", "?luzEscritorio");
         Device ven = new HttpDevice("Teste", "192.168.10.47", "?ventilador");
         luz.setValue(0);
         ven.setValue(1);
@@ -50,7 +51,7 @@ public class Main {
         luz.setValue(1);
         ven.setValue(0);
         
-        /*
+        */
         luzSala       = new SerialDevice("Luz sala",       ADDRESS_SALA, DEVICE_SALA_LUZ);
         luzEscritorio = new SerialDevice("Luz escritorio", ADDRESS_ESCRITORIO, DEVICE_ESCRITORIO_LUZ);
         ventilador    = new SerialDevice("Ventilador",     ADDRESS_ESCRITORIO, DEVICE_ESCRITORIO_VENTILADOR);
@@ -75,7 +76,7 @@ public class Main {
         for (Device d : listDevice) {
             System.out.println(d.getName() + ": " + d.getValue());
         }
-        */
+        
         Thread.sleep(1000);
         System.exit(0);
     }
