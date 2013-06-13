@@ -48,11 +48,11 @@ public class DeviceService {
         //quartos:
         list.add(new GraphicDevice(1, 820, 170, "Teste ethernet", "./resources/images/lampada.png"));
         list.add(new GraphicDevice(2, 710, 480, "Luz escritorio", "./resources/images/lampada.png"));
-        list.add(new GraphicDevice(3, 590, 750, "Luz visita",     "./resources/images/lampada.png"));
+        //list.add(new GraphicDevice(3, 590, 750, "Luz visita",     "./resources/images/lampada.png"));
 
         //sala:
         list.add(new GraphicDevice(4, 300, 400, "Luz sala",    "./resources/images/lampada.png"));
-        list.add(new GraphicDevice(5, 300, 750, "Luz janta", "./resources/images/lampada.png"));
+        //list.add(new GraphicDevice(5, 300, 750, "Luz janta", "./resources/images/lampada.png"));
 
         //sacada:
         list.add(new GraphicDevice(6, 150, 150, "Temperatura DHT11", "./resources/images/termometro.png"));
