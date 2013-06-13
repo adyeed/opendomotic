@@ -6,6 +6,7 @@ package com.opendomotic.serial;
 
 import com.pi4j.io.serial.SerialDataEvent;
 import com.pi4j.io.serial.SerialDataListener;
+import java.util.logging.Logger;
 
 /**
  *
@@ -13,16 +14,19 @@ import com.pi4j.io.serial.SerialDataListener;
  */
 public class SerialBusListener implements SerialDataListener {
 
+    private static final Logger LOG = Logger.getLogger(SerialBusListener.class.getName());
+
     @Override
     public void dataReceived(SerialDataEvent event) {
         //byte ferra quando é maior que 127. Deve ser por causa do unsigned. Vem 1 byte a mais na frente com 194 ou 195
-        System.out.print("listener RX=");     
+        StringBuilder log = new StringBuilder("listener RX=");
         byte[] bufferRx = event.getData().getBytes();  
         for (int i=0; i<bufferRx.length; i++) {
             int rx = bufferRx[i] & 0xff; //unsigned
-            System.out.print(rx+"|");
+            log.append(rx);            
+            log.append("|");
         }
-        System.out.println();
+        LOG.info(log.toString());
     }
     
 }

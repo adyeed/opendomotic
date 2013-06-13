@@ -28,6 +28,8 @@ public class SerialBus {
     private static final int INDEX_DATA_LENGTH = 1;
     private static final int INDEX_DATA_BEGIN  = 2;
     
+    private static final int READ_ATTEMPTS = 3; //tentativas para ler o device
+    
     private static SerialBus instance;
     private static final Logger LOG = Logger.getLogger(SerialBus.class.getName());
     
@@ -38,7 +40,7 @@ public class SerialBus {
     private SerialDataListener serialListener = new SerialBusListener();
     
     private SerialBus() {
-        System.out.println("constructor DomoticMaster");
+        LOG.info("contructor");
         
         gpio = GpioFactory.getInstance();
         pin1 = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_01, "PIN_RE_485", PinState.LOW);
@@ -82,14 +84,20 @@ public class SerialBus {
         serialWrite(bufferTx, true);
     }
     
-    public int serialRead(byte[] bufferTx) {
+    public int serialRead(byte[] bufferTx, int attempts) {
         serial.removeListener(serialListener);
         try {
             serialWrite(bufferTx, false);
             int[] bufferRx = waitResponse();
-            if (bufferRx != null)
-                return getBufferInt(bufferRx, 0);    
-            return -1;
+            if (bufferRx != null) {
+                return getBufferInt(bufferRx, 0); //conseguiu ler
+            } else if (attempts > 0) {
+                LOG.warning("Error on reading device. Trying again...");
+                return serialRead(bufferTx, attempts-1);
+            } else {
+                LOG.severe("Failed on read device.");
+                return -1;
+            }
         } finally {
             serial.addListener(serialListener);
         }
@@ -100,16 +108,19 @@ public class SerialBus {
         int indexRx=0;
         long millisStart = System.currentTimeMillis();        
         
-        System.out.print("waitResponse RX=");
+        StringBuilder log = new StringBuilder("waitResponse RX=");
         while (System.currentTimeMillis()-millisStart < 200) {
             if (serial.availableBytes() > 0) {
                 bufferRx[indexRx++] = serial.read() & 0xff; //unsigned
-                System.out.print(bufferRx[indexRx-1]+"|");
+                log.append(bufferRx[indexRx-1]);
+                log.append("|");
             } else if (indexRx > 0) {
                 break;
             }
         }
-        System.out.println(" " + (System.currentTimeMillis()-millisStart) + " ms");
+        log.append(System.currentTimeMillis()-millisStart);
+        log.append(" ms");
+        LOG.info(log.toString());
 
         if (indexRx > 0 && isCheckSumOK(bufferRx))
             return Arrays.copyOf(bufferRx, indexRx);
@@ -127,16 +138,17 @@ public class SerialBus {
         boolean isOK = (bufferRx[i] == checksum / 256) && (bufferRx[i+1] == checksum % 256);
 
         if (!isOK) {
-            System.out.print("CHECKSUM ERROR: ");
-            System.out.print(checksum);
-            System.out.print(" rx=");
-            System.out.print(bufferRx[i]);
-            System.out.print("|");
-            System.out.print(bufferRx[i+1]);
-            System.out.print(" expected=");
-            System.out.print(checksum / 256);
-            System.out.print("|");
-            System.out.println(checksum % 256);
+            StringBuilder log = new StringBuilder("CHECKSUM ERROR: ");
+            log.append(checksum);
+            log.append(" rx=");
+            log.append(bufferRx[i]);
+            log.append("|");
+            log.append(bufferRx[i+1]);
+            log.append(" expected=");
+            log.append(checksum / 256);
+            log.append("|");
+            log.append(checksum % 256);
+            LOG.severe(log.toString());
         }
 
         return isOK;
@@ -166,7 +178,7 @@ public class SerialBus {
     }
     
     public int readDevice(int address, int device) {
-        return serialRead(getBufferTx(address, COMMAND_READ, device, 0));
+        return serialRead(getBufferTx(address, COMMAND_READ, device, 0), READ_ATTEMPTS);
     }
     
     public void writeDevice(int address, int device, int value) {
