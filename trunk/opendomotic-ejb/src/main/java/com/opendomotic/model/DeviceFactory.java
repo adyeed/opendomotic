@@ -37,6 +37,7 @@ public class DeviceFactory {
     public static final char DEVICE_ESCRITORIO_BRILHO      = 5;
     public static final char DEVICE_ESCRITORIO_UMIDADE     = 6;
     public static final char DEVICE_ESCRITORIO_TEMP_DHT11  = 7;
+    public static final char DEVICE_ESCRITORIO_PIR         = 8;
     
     public static final String DEVICE_NAME_LUZ_SALA            = "Luz sala";
     public static final String DEVICE_NAME_LUZ_ESCRITORIO      = "Luz escritorio";
@@ -48,6 +49,7 @@ public class DeviceFactory {
     public static final String DEVICE_NAME_TEMPERATURA_LM35    = "Temperatura LM35";
     public static final String DEVICE_NAME_TEMPERATURA_DHT11   = "Temperatura DHT11";
     public static final String DEVICE_NAME_UMIDADE             = "Umidade";
+    public static final String DEVICE_NAME_PIR                 = "PIR";
     public static final String DEVICE_NAME_RELOGIO             = "Relogio";
     public static final String DEVICE_NAME_TESTE_ETHERNET      = "Teste ethernet";
     
@@ -72,6 +74,7 @@ public class DeviceFactory {
         addSerialDevice(DEVICE_NAME_TEMPERATURA_LM35,  ADDRESS_ESCRITORIO, DEVICE_ESCRITORIO_TEMP_LM35);
         addSerialDevice(DEVICE_NAME_TEMPERATURA_DHT11, ADDRESS_ESCRITORIO, DEVICE_ESCRITORIO_TEMP_DHT11);
         addSerialDevice(DEVICE_NAME_UMIDADE,           ADDRESS_ESCRITORIO, DEVICE_ESCRITORIO_UMIDADE);
+        addSerialDevice(DEVICE_NAME_PIR,               ADDRESS_ESCRITORIO, DEVICE_ESCRITORIO_PIR);
         
         //LOCAL----------------
         addDevice(DEVICE_NAME_RELOGIO, new Clock());
