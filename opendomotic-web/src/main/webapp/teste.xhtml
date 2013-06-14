@@ -9,13 +9,36 @@
 
     <ui:define name="content">
         <h:form id="form">
-            <script type="text/javascript" src="./resources/js/imageShape.js"></script>
-            <script type="text/javascript" src="./resources/js/canvasCore.js"></script>
-            <script type="text/javascript" src="./resources/js/canvasUser.js"></script>
+            <p:toolbar>
+                <p:toolbarGroup>
+                    <p:commandButton id="buttonAtualizar" action="#{domoticMB.atualizar()}" value="Atualizar" update="form"/>
+                    <p:separator/>
+                    
+                    <ui:repeat value="#{domoticMB.listDeviceButton}" var="device"> 
+                        <p:commandButton action="#{domoticMB.toogleDevice(device)}" value="#{device.value == 1 ? 'Desligar' : 'Ligar'} #{device.name}" update="@form"/>
+                    </ui:repeat>
+                    
+                    <p:separator/>
+                    <p:commandButton id="buttonTudo" action="#{domoticMB.toggleAll()}" value="#{domoticMB.captionAll}" update="form" onclick="return confirm('Confirma #{domoticMB.captionAll}?');"/>
+                </p:toolbarGroup>
+            </p:toolbar>
 
-            <div style="width: 100%; height: 100%; overflow: auto;">
-                <canvas id="canvas"></canvas>
-            </div>
+            <br/>
+
+            <p:dataTable id="table" value="#{domoticMB.listDevice}" var="device">
+                <p:column>
+                    <f:facet name="header">
+                        #{msg.Device}
+                    </f:facet>
+                    #{device.name}
+                </p:column>
+                <p:column>
+                    <f:facet name="header">
+                        #{msg.Value}
+                    </f:facet>
+                    #{device.value}
+                </p:column>
+            </p:dataTable>
         </h:form>
     </ui:define>
 

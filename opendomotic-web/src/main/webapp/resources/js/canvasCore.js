@@ -93,6 +93,7 @@ function mouseDown(e) {
             imagePressed = arrayImage[i];
             xMouseDown = x - imagePressed.x;
             yMouseDown = y - imagePressed.y;
+            context.fillText("aguarde...", imagePressed.x, imagePressed.y);
             break;
         }
     }
