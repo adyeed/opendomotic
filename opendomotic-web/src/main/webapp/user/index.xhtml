@@ -2,16 +2,16 @@
 <!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
-                template="./template.xhtml"
+                template="../template.xhtml"
                 xmlns:p="http://primefaces.org/ui"
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:h="http://java.sun.com/jsf/html">
 
     <ui:define name="content">
         <h:form id="form">
-            <script type="text/javascript" src="./resources/js/imageShape.js"></script>
-            <script type="text/javascript" src="./resources/js/canvasCore.js"></script>
-            <script type="text/javascript" src="./resources/js/canvasUser.js"></script>
+            <h:outputScript library="js" name="imageShape.js"/>
+            <h:outputScript library="js" name="canvasCore.js"/>
+            <h:outputScript library="js" name="canvasUser.js"/>
 
             <div style="width: 100%; height: 100%; overflow: auto;">
                 <canvas id="canvas"></canvas>

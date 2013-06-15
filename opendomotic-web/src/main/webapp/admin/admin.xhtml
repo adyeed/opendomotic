@@ -2,16 +2,16 @@
 <!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
-                template="./template.xhtml"
+                template="../template.xhtml"
                 xmlns:p="http://primefaces.org/ui"
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:f="http://java.sun.com/jsf/core">
 
     <ui:define name="content">
         <h:form id="form">
-            <script type="text/javascript" src="./resources/js/imageShape.js"></script>
-            <script type="text/javascript" src="./resources/js/canvasCore.js"></script>	
-            <script type="text/javascript" src="./resources/js/canvasAdmin.js"></script>	
+            <h:outputScript library="js" name="imageShape.js"/>
+            <h:outputScript library="js" name="canvasCore.js"/>
+            <h:outputScript library="js" name="canvasAdmin.js"/>
 
             <p:toolbar>
                 <p:toolbarGroup>
@@ -23,18 +23,18 @@
                         
                         <h:outputText value="Imagem:"/>
                         <p:selectOneMenu value="#{adminMB.imagem}">
-                            <f:selectItem itemLabel="Cafeteira" itemValue="./resources/images/cafeteira.png"/>
-                            <f:selectItem itemLabel="Lâmpada" itemValue="./resources/images/lampada.png"/>
-                            <f:selectItem itemLabel="Luminosidade" itemValue="./resources/images/luminosidade.png"/>
-                            <f:selectItem itemLabel="Presença" itemValue="./resources/images/pir.png"/>  
-                            <f:selectItem itemLabel="Presença2" itemValue="./resources/images/pir2.png"/>  
-                            <f:selectItem itemLabel="Presença3" itemValue="./resources/images/pir3.png"/>  
-                            <f:selectItem itemLabel="Potenciômetro" itemValue="./resources/images/potenciometro.png"/>  
-                            <f:selectItem itemLabel="Termômetro" itemValue="./resources/images/termometro.png"/>
-                            <f:selectItem itemLabel="Termômetro2" itemValue="./resources/images/termometro2.png"/>
-                            <f:selectItem itemLabel="Termômetro3" itemValue="./resources/images/termometro3.png"/>
-                            <f:selectItem itemLabel="Umidade" itemValue="./resources/images/umidade.png"/>                                                      
-                            <f:selectItem itemLabel="Ventilador" itemValue="./resources/images/ventilador.png"/>                            
+                            <f:selectItem itemLabel="Cafeteira"     itemValue="../resources/images/cafeteira.png"/>
+                            <f:selectItem itemLabel="Lâmpada"       itemValue="../resources/images/lampada.png"/>
+                            <f:selectItem itemLabel="Luminosidade"  itemValue="../resources/images/luminosidade.png"/>
+                            <f:selectItem itemLabel="Presença"      itemValue="../resources/images/pir.png"/>  
+                            <f:selectItem itemLabel="Presença2"     itemValue="../resources/images/pir2.png"/>  
+                            <f:selectItem itemLabel="Presença3"     itemValue="../resources/images/pir3.png"/>  
+                            <f:selectItem itemLabel="Potenciômetro" itemValue="../resources/images/potenciometro.png"/>  
+                            <f:selectItem itemLabel="Termômetro"    itemValue="../resources/images/termometro.png"/>
+                            <f:selectItem itemLabel="Termômetro2"   itemValue="../resources/images/termometro2.png"/>
+                            <f:selectItem itemLabel="Termômetro3"   itemValue="../resources/images/termometro3.png"/>
+                            <f:selectItem itemLabel="Umidade"       itemValue="../resources/images/umidade.png"/>                                                      
+                            <f:selectItem itemLabel="Ventilador"    itemValue="../resources/images/ventilador.png"/>                            
                         </p:selectOneMenu>      
                     </h:panelGrid>
                 </p:toolbarGroup>  
