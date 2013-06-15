@@ -27,7 +27,7 @@ public class LoginMB implements Serializable {
             return "login";
         } else {
             getSession().setAttribute("usuarioLogado", usuario);        
-            return "index";
+            return "user/index";
         }
     }
 

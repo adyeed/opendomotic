@@ -17,7 +17,53 @@
         <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
         <load-on-startup>1</load-on-startup>
     </servlet>
+      
+    <login-config>
+        <auth-method>BASIC</auth-method>
+        <realm-name>UserDatabase</realm-name>
+    </login-config>
+    
+    <security-role>
+        <role-name>USER-ROLE</role-name>
+    </security-role>
+    <security-role>
+        <role-name>ADMIN-ROLE</role-name>
+    </security-role> 
    
+    <security-constraint>
+        <web-resource-collection>
+            <web-resource-name>user pages</web-resource-name>
+            <url-pattern>/user/*</url-pattern>
+        </web-resource-collection>
+        <auth-constraint>
+            <role-name>USER-ROLE</role-name>
+            <role-name>ADMIN-ROLE</role-name>
+        </auth-constraint>
+    </security-constraint>
+    
+    <security-constraint>
+        <web-resource-collection>
+            <web-resource-name>admin pages</web-resource-name>
+            <url-pattern>/admin/*</url-pattern>
+        </web-resource-collection>
+        <auth-constraint>
+            <role-name>ADMIN-ROLE</role-name>
+        </auth-constraint>
+        <!--<user-data-constraint>
+            <transport-guarantee>CONFIDENTIAL</transport-guarantee>
+        </user-data-constraint>!-->
+    </security-constraint>
+    
+    <security-constraint>
+        <web-resource-collection>
+            <web-resource-name>device rest</web-resource-name>
+            <url-pattern>/device/*</url-pattern>
+            <http-method>GET</http-method>
+        </web-resource-collection>
+        <auth-constraint>
+            <role-name>*</role-name>
+        </auth-constraint>
+    </security-constraint>
    
     <servlet-mapping>
         <servlet-name>Faces Servlet</servlet-name>
@@ -29,6 +75,7 @@
         </session-timeout>
     </session-config>
     <welcome-file-list>
-        <welcome-file>index.jsf</welcome-file>
+        <!--<welcome-file>user/index.jsf</welcome-file>!-->
+        <welcome-file>index.jsp</welcome-file>
     </welcome-file-list>
 </web-app>

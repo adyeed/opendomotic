@@ -20,7 +20,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author Jaques
  */
-@WebFilter(servletNames = {"Faces Servlet"})
+//@WebFilter(servletNames = {"Faces Servlet"})
 public class AuthenticatorFilter implements Filter {
 
     private static final Logger LOG = Logger.getLogger(AuthenticatorFilter.class.getName());

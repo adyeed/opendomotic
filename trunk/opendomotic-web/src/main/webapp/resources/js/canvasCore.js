@@ -38,7 +38,7 @@ function initCanvas(canDrag, onMouseUpDevice) {
         }
     });
     
-    imagePlanta.src = "./resources/images/planta.jpg";
+    imagePlanta.src = "../resources/images/planta.jpg";
     imagePlanta.onload = function() {
         updateValues(); //demora para carregar a imagem.
     };
