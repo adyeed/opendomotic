@@ -29,40 +29,32 @@
     <security-role>
         <role-name>ADMIN-ROLE</role-name>
     </security-role> 
-   
-    <security-constraint>
-        <web-resource-collection>
-            <web-resource-name>user pages</web-resource-name>
-            <url-pattern>/user/*</url-pattern>
-        </web-resource-collection>
-        <auth-constraint>
-            <role-name>USER-ROLE</role-name>
-            <role-name>ADMIN-ROLE</role-name>
-        </auth-constraint>
-    </security-constraint>
     
     <security-constraint>
         <web-resource-collection>
-            <web-resource-name>admin pages</web-resource-name>
+            <web-resource-name>admin</web-resource-name>
             <url-pattern>/admin/*</url-pattern>
         </web-resource-collection>
         <auth-constraint>
             <role-name>ADMIN-ROLE</role-name>
         </auth-constraint>
-        <!--<user-data-constraint>
+        <user-data-constraint>
             <transport-guarantee>CONFIDENTIAL</transport-guarantee>
-        </user-data-constraint>!-->
+        </user-data-constraint>
     </security-constraint>
     
     <security-constraint>
         <web-resource-collection>
-            <web-resource-name>device rest</web-resource-name>
-            <url-pattern>/device/*</url-pattern>
-            <http-method>GET</http-method>
+            <web-resource-name>all</web-resource-name>
+            <url-pattern>/*</url-pattern>
         </web-resource-collection>
         <auth-constraint>
-            <role-name>*</role-name>
+            <role-name>USER-ROLE</role-name>
+            <role-name>ADMIN-ROLE</role-name>
         </auth-constraint>
+        <user-data-constraint>
+            <transport-guarantee>CONFIDENTIAL</transport-guarantee>
+        </user-data-constraint>
     </security-constraint>
    
     <servlet-mapping>
