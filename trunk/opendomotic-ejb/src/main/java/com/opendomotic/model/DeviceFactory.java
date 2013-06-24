@@ -29,6 +29,9 @@ public class DeviceFactory {
     public static final char DEVICE_SALA_LUZ               = 1;
     public static final char DEVICE_SALA_POTENCIOMETRO     = 2;
     public static final char DEVICE_SALA_CAFETEIRA         = 3;
+    public static final char DEVICE_SALA_PIR               = 4;
+    public static final char DEVICE_SALA_LDR               = 5;
+    
     
     public static final char DEVICE_ESCRITORIO_LUZ         = 1;
     public static final char DEVICE_ESCRITORIO_VENTILADOR  = 2;
@@ -37,7 +40,6 @@ public class DeviceFactory {
     public static final char DEVICE_ESCRITORIO_BRILHO      = 5;
     public static final char DEVICE_ESCRITORIO_UMIDADE     = 6;
     public static final char DEVICE_ESCRITORIO_TEMP_DHT11  = 7;
-    public static final char DEVICE_ESCRITORIO_PIR         = 8;
     
     public static final String DEVICE_NAME_LUZ_SALA            = "Luz sala";
     public static final String DEVICE_NAME_LUZ_ESCRITORIO      = "Luz escritorio";
@@ -45,7 +47,8 @@ public class DeviceFactory {
     public static final String DEVICE_NAME_CAFETEIRA           = "Cafeteira";
     public static final String DEVICE_NAME_POTENCIOMETRO       = "Potenciometro";
     public static final String DEVICE_NAME_BRILHO              = "Brilho";
-    public static final String DEVICE_NAME_LDR                 = "Ldr";
+    public static final String DEVICE_NAME_LDR_ESCRITORIO      = "Ldr escritorio";
+    public static final String DEVICE_NAME_LDR_SALA            = "Ldr sala";
     public static final String DEVICE_NAME_TEMPERATURA_LM35    = "Temperatura LM35";
     public static final String DEVICE_NAME_TEMPERATURA_DHT11   = "Temperatura DHT11";
     public static final String DEVICE_NAME_UMIDADE             = "Umidade";
@@ -65,16 +68,17 @@ public class DeviceFactory {
         addSerialDevice(DEVICE_NAME_LUZ_SALA,      ADDRESS_SALA, DEVICE_SALA_LUZ);
         addSerialDevice(DEVICE_NAME_CAFETEIRA,     ADDRESS_SALA, DEVICE_SALA_CAFETEIRA);
         addSerialDevice(DEVICE_NAME_POTENCIOMETRO, ADDRESS_SALA, DEVICE_SALA_POTENCIOMETRO);
+        addSerialDevice(DEVICE_NAME_PIR,           ADDRESS_SALA, DEVICE_SALA_PIR);
+        addSerialDevice(DEVICE_NAME_LDR_SALA,      ADDRESS_SALA, DEVICE_SALA_LDR);
         
         //ESCRITORIO-----------
         addSerialDevice(DEVICE_NAME_LUZ_ESCRITORIO,    ADDRESS_ESCRITORIO, DEVICE_ESCRITORIO_LUZ);
         addSerialDevice(DEVICE_NAME_VENTILADOR,        ADDRESS_ESCRITORIO, DEVICE_ESCRITORIO_VENTILADOR);
         addSerialDevice(DEVICE_NAME_BRILHO,            ADDRESS_ESCRITORIO, DEVICE_ESCRITORIO_BRILHO);
-        addSerialDevice(DEVICE_NAME_LDR,               ADDRESS_ESCRITORIO, DEVICE_ESCRITORIO_LDR);
+        addSerialDevice(DEVICE_NAME_LDR_ESCRITORIO,    ADDRESS_ESCRITORIO, DEVICE_ESCRITORIO_LDR);
         addSerialDevice(DEVICE_NAME_TEMPERATURA_LM35,  ADDRESS_ESCRITORIO, DEVICE_ESCRITORIO_TEMP_LM35);
         addSerialDevice(DEVICE_NAME_TEMPERATURA_DHT11, ADDRESS_ESCRITORIO, DEVICE_ESCRITORIO_TEMP_DHT11);
         addSerialDevice(DEVICE_NAME_UMIDADE,           ADDRESS_ESCRITORIO, DEVICE_ESCRITORIO_UMIDADE);
-        addSerialDevice(DEVICE_NAME_PIR,               ADDRESS_ESCRITORIO, DEVICE_ESCRITORIO_PIR);
         
         //LOCAL----------------
         addDevice(DEVICE_NAME_RELOGIO, new Clock());
