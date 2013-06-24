@@ -38,9 +38,9 @@
         <auth-constraint>
             <role-name>ADMIN-ROLE</role-name>
         </auth-constraint>
-        <user-data-constraint>
+        <!--<user-data-constraint>
             <transport-guarantee>CONFIDENTIAL</transport-guarantee>
-        </user-data-constraint>
+        </user-data-constraint>!-->
     </security-constraint>
     
     <security-constraint>
@@ -52,9 +52,16 @@
             <role-name>USER-ROLE</role-name>
             <role-name>ADMIN-ROLE</role-name>
         </auth-constraint>
-        <user-data-constraint>
+        <!--<user-data-constraint>
             <transport-guarantee>CONFIDENTIAL</transport-guarantee>
-        </user-data-constraint>
+        </user-data-constraint>!-->
+    </security-constraint>
+    
+    <security-constraint>
+        <web-resource-collection>
+            <web-resource-name>public device values</web-resource-name>
+            <url-pattern>/device/value</url-pattern>
+        </web-resource-collection>
     </security-constraint>
    
     <servlet-mapping>
