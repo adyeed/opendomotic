@@ -6,6 +6,7 @@ var arrayImage = new Array();
 var countImage = 0;
 var canDrag = false;
 var onMouseUpDevice = null;
+var loading = true;
 
 function getUrl(path) {
     return '/opendomotic-web-0.0.1/' + path;
@@ -23,6 +24,13 @@ function initCanvas(canDrag, onMouseUpDevice) {
     canvas.width = 1000;
     canvas.height = 950;
     context = canvas.getContext("2d");    
+    context.font = "bold 26px verdana";
+    drawLoading();
+    
+    imagePlanta.src = "../resources/images/planta.jpg";
+    imagePlanta.onload = function() {
+        draw();
+    };
     
     $.getJSON(getUrl('device'), null, function(data) {
         for (var device in data) {
@@ -30,27 +38,21 @@ function initCanvas(canDrag, onMouseUpDevice) {
                 d = data[device][index];                
                 arrayImage[countImage++] = new ImageShape(d.id, d.x, d.y, d.name, d.src);
             }
-            /*if (countImage > 0) {
-                arrayImage[countImage-1].image.onload = function() {
-                    draw(); //demora para carregar a imagem.
-                };
-            }*/
         }
+        updateValues();
     });
-    
-    imagePlanta.src = "../resources/images/planta.jpg";
-    imagePlanta.onload = function() {
-        updateValues(); //demora para carregar a imagem.
-    };
 }
 
 function draw() {
     //clear canvas
     context.clearRect(0, 0, canvas.width, canvas.height); 
-    context.font = "bold 26px verdana";
 
     //fundo
     context.drawImage(imagePlanta, 0, 0);
+
+    if (loading) {
+        drawLoading();
+    }
 
     //desenha devices
     for (var i in arrayImage) {
@@ -66,6 +68,10 @@ function draw() {
     }
 }
 
+function drawLoading() {
+    context.fillText("carregando...", 10, 30);
+}
+
 function updateValues() {
     $.getJSON(getUrl('device/value'), null, function(data) {
         for (var device in data) {
@@ -78,6 +84,7 @@ function updateValues() {
                 }
             }
         }
+        loading = false;
         draw();
     });    
 }
