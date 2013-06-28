@@ -15,27 +15,21 @@
 
             <p:toolbar>
                 <p:toolbarGroup>
-                    <h:panelGrid columns="4" style="height: 48px;">
+                    <h:panelGrid columns="6" style="height: 48px;">
                         <h:outputText value="Device:"/>
                         <p:selectOneMenu value="#{adminMB.deviceName}">
                             <f:selectItems value="#{domoticMB.listDevice}" var="device" itemLabel="#{device.name}" itemValue="#{device.name}"/>
                         </p:selectOneMenu>    
                         
-                        <h:outputText value="Imagem:"/>
-                        <p:selectOneMenu value="#{adminMB.imagem}">
-                            <f:selectItem itemLabel="Cafeteira"     itemValue="../resources/images/cafeteira.png"/>
-                            <f:selectItem itemLabel="Lâmpada"       itemValue="../resources/images/lampada.png"/>
-                            <f:selectItem itemLabel="Luminosidade"  itemValue="../resources/images/luminosidade.png"/>
-                            <f:selectItem itemLabel="Presença"      itemValue="../resources/images/pir.png"/>  
-                            <f:selectItem itemLabel="Presença2"     itemValue="../resources/images/pir2.png"/>  
-                            <f:selectItem itemLabel="Presença3"     itemValue="../resources/images/pir3.png"/>  
-                            <f:selectItem itemLabel="Potenciômetro" itemValue="../resources/images/potenciometro.png"/>  
-                            <f:selectItem itemLabel="Termômetro"    itemValue="../resources/images/termometro.png"/>
-                            <f:selectItem itemLabel="Termômetro2"   itemValue="../resources/images/termometro2.png"/>
-                            <f:selectItem itemLabel="Termômetro3"   itemValue="../resources/images/termometro3.png"/>
-                            <f:selectItem itemLabel="Umidade"       itemValue="../resources/images/umidade.png"/>                                                      
-                            <f:selectItem itemLabel="Ventilador"    itemValue="../resources/images/ventilador.png"/>                            
+                        <h:outputText value="Imagem0:"/>
+                        <p:selectOneMenu value="#{adminMB.imagem0}">
+                            <f:selectItems value="#{adminMB.listImage}"/>                         
                         </p:selectOneMenu>      
+                        
+                        <h:outputText value="Imagem1:"/>
+                        <p:selectOneMenu value="#{adminMB.imagem1}">
+                            <f:selectItems value="#{adminMB.listImage}"/>                           
+                        </p:selectOneMenu>   
                     </h:panelGrid>
                 </p:toolbarGroup>  
                 
