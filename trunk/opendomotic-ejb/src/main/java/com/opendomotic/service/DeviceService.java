@@ -46,17 +46,15 @@ public class DeviceService {
         List<GraphicDevice> list = new ArrayList<>();
         
         //quartos:
-        list.add(new GraphicDevice(1, 820, 170, "Teste ethernet", "../resources/images/lampada.png"));
-        list.add(new GraphicDevice(2, 710, 480, "Luz escritorio", "../resources/images/lampada.png"));
-        //list.add(new GraphicDevice(3, 590, 750, "Luz visita",     "../resources/images/lampada.png"));
+        list.add(new GraphicDevice(1, 820, 170, "Teste ethernet", "../resources/images/lampada-off.png", "../resources/images/lampada-on.png"));
+        list.add(new GraphicDevice(2, 710, 480, "Luz escritorio", "../resources/images/lampada-off.png", "../resources/images/lampada-on.png"));
 
         //sala:
-        list.add(new GraphicDevice(4, 300, 400, "Luz sala",    "../resources/images/lampada.png"));
-        //list.add(new GraphicDevice(5, 300, 750, "Luz janta", "../resources/images/lampada.png"));
+        list.add(new GraphicDevice(4, 300, 400, "Luz sala", "../resources/images/lampada-off.png", "../resources/images/lampada-on.png"));
 
         //sacada:
-        list.add(new GraphicDevice(6, 150, 150, "Temperatura DHT11", "../resources/images/termometro.png"));
-        list.add(new GraphicDevice(7, 250, 150, "Umidade",    "../resources/images/umidade.png"));
+        list.add(new GraphicDevice(6, 150, 150, "Temperatura DHT11", "../resources/images/termometro.png", null));
+        list.add(new GraphicDevice(7, 250, 150, "Umidade", "../resources/images/umidade.png", null));
         
         return list;
     }
