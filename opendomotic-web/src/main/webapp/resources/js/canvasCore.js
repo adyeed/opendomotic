@@ -36,7 +36,7 @@ function initCanvas(canDrag, onMouseUpDevice) {
         for (var device in data) {
             for (var index in data[device]) {
                 d = data[device][index];                
-                arrayImage[countImage++] = new ImageShape(d.id, d.x, d.y, d.name, d.src);
+                arrayImage[countImage++] = new ImageShape(d.id, d.x, d.y, d.name, d.src0, d.src1);
             }
         }
         updateValues();
