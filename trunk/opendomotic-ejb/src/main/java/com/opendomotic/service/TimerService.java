@@ -4,6 +4,8 @@
  */
 package com.opendomotic.service;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ejb.Schedule;
@@ -17,7 +19,8 @@ import javax.ejb.Singleton;
 public class TimerService {
 
     private static final Logger LOG = Logger.getLogger(TimerService.class.getName());
-
+    private BroadcastWebsocket broadcastWebsocket;
+    
     @EJB
     private JobService jobService;
     
@@ -25,6 +28,14 @@ public class TimerService {
     public void doWork() {       
         //LOG.info("Timer trigger");
         jobService.checkJobs();
+        
+        if (broadcastWebsocket != null) {
+            broadcastWebsocket.sendBroadcast(new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(new Date()));
+        }
     }
-    
+
+    public void setBroadcastWebsocket(BroadcastWebsocket broadcastWebsocket) {
+        this.broadcastWebsocket = broadcastWebsocket;
+    }
+
 }
