@@ -2,6 +2,7 @@ window.onload = initUser;
 
 function initUser() {
     initCanvas(null, mouseUpDevice);
+    connect();
 }
 
 //------------------------------------------------------------------------------
