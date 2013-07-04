@@ -8,11 +8,18 @@
                 xmlns:h="http://java.sun.com/jsf/html">
 
     <ui:define name="content">
+        <div>
+            <input id="message" type="text"></input>
+            <button id="send" onclick="send();">Enviar</button>
+            <label id="log">log</label>
+        </div>
+
         <h:form id="form">
+            <h:outputScript library="js" name="websocket.js"/>
             <h:outputScript library="js" name="imageShape.js"/>
             <h:outputScript library="js" name="canvasCore.js"/>
             <h:outputScript library="js" name="canvasUser.js"/>
-
+            
             <div style="width: 100%; height: 100%; overflow: auto;">
                 <canvas id="canvas"></canvas>
             </div>

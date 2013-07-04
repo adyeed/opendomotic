@@ -30,41 +30,20 @@
             <artifactId>primefaces</artifactId>
             <version>3.4</version>
         </dependency>
-        
-        
-        <!--<dependency>
-            <groupId>com.sun.jersey</groupId>
-            <artifactId>jersey-server</artifactId>
-            <version>1.17</version>
-        </dependency>
-        <dependency> 
-            <groupId>com.sun.jersey</groupId> 
-            <artifactId>jersey-servlet</artifactId> 
-            <version>1.17</version> 
+                
+        <dependency>
+            <groupId>org.apache.tomcat</groupId>
+            <artifactId>tomcat-catalina</artifactId>
+            <version>7.0.37</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>com.sun.jersey</groupId>
-            <artifactId>jersey-atom</artifactId>
-            <version>1.17</version>
-        </dependency>
-        <dependency>
-            <groupId>com.sun.jersey</groupId>
-            <artifactId>jersey-json</artifactId>
-            <version>1.17</version>
-        </dependency>
-        <dependency>
-            <groupId>com.sun.jersey</groupId>
-            <artifactId>jersey-core</artifactId>
-            <version>1.17</version>
-        </dependency>
-        <dependency>
-            <groupId>com.sun.jersey</groupId>
-            <artifactId>jersey-client</artifactId>
-            <version>1.17</version>
-        </dependency>!-->        
-
-        
-        
+            <groupId>org.apache.tomcat</groupId>
+            <artifactId>tomcat-coyote</artifactId>
+            <version>7.0.37</version>
+            <scope>provided</scope>
+        </dependency>       
+       
         <dependency>
             <groupId>javax</groupId>
             <artifactId>javaee-web-api</artifactId>
