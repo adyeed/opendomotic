@@ -24,22 +24,26 @@ public class DeviceFactory {
     public static final int ADDRESS_BROADCAST              = 255;
     public static final int ADDRESS_SALA                   = 1;
     public static final int ADDRESS_ESCRITORIO             = 2;
+    public static final int ADDRESS_TV                     = 3;
     
     public static final char DEVICE_ALL                    = 255;
     public static final char DEVICE_SALA_LUZ               = 1;
     public static final char DEVICE_SALA_POTENCIOMETRO     = 2;
     public static final char DEVICE_SALA_CAFETEIRA         = 3;
     public static final char DEVICE_SALA_PIR               = 4;
-    public static final char DEVICE_SALA_LDR               = 5;
-    
+    public static final char DEVICE_SALA_LDR               = 5;    
     
     public static final char DEVICE_ESCRITORIO_LUZ         = 1;
     public static final char DEVICE_ESCRITORIO_VENTILADOR  = 2;
     public static final char DEVICE_ESCRITORIO_LDR         = 3;
     public static final char DEVICE_ESCRITORIO_TEMP_LM35   = 4;
     public static final char DEVICE_ESCRITORIO_BRILHO      = 5;
-    public static final char DEVICE_ESCRITORIO_UMIDADE     = 6;
-    public static final char DEVICE_ESCRITORIO_TEMP_DHT11  = 7;
+    //public static final char DEVICE_ESCRITORIO_UMIDADE     = 6;
+    //public static final char DEVICE_ESCRITORIO_TEMP_DHT11  = 7;
+    
+    public static final char DEVICE_TV_CORRENTE             = 1;
+    public static final char DEVICE_TV_UMIDADE              = 2;
+    public static final char DEVICE_TV_TEMPERATURA          = 3;
     
     public static final String DEVICE_NAME_LUZ_SALA            = "Luz sala";
     public static final String DEVICE_NAME_LUZ_ESCRITORIO      = "Luz escritorio";
@@ -55,6 +59,7 @@ public class DeviceFactory {
     public static final String DEVICE_NAME_PIR                 = "PIR";
     public static final String DEVICE_NAME_RELOGIO             = "Relogio";
     public static final String DEVICE_NAME_TESTE_ETHERNET      = "Teste ethernet";
+    public static final String DEVICE_NAME_CORRENTE            = "Corrente";
     
     private Map<String, DeviceProxy> mapDevice;
     private List<DeviceProxy> listDevice;
@@ -77,8 +82,13 @@ public class DeviceFactory {
         addSerialDevice(DEVICE_NAME_BRILHO,            ADDRESS_ESCRITORIO, DEVICE_ESCRITORIO_BRILHO);
         addSerialDevice(DEVICE_NAME_LDR_ESCRITORIO,    ADDRESS_ESCRITORIO, DEVICE_ESCRITORIO_LDR);
         addSerialDevice(DEVICE_NAME_TEMPERATURA_LM35,  ADDRESS_ESCRITORIO, DEVICE_ESCRITORIO_TEMP_LM35);
-        addSerialDevice(DEVICE_NAME_TEMPERATURA_DHT11, ADDRESS_ESCRITORIO, DEVICE_ESCRITORIO_TEMP_DHT11);
-        addSerialDevice(DEVICE_NAME_UMIDADE,           ADDRESS_ESCRITORIO, DEVICE_ESCRITORIO_UMIDADE);
+        //addSerialDevice(DEVICE_NAME_TEMPERATURA_DHT11, ADDRESS_ESCRITORIO, DEVICE_ESCRITORIO_TEMP_DHT11);
+        //addSerialDevice(DEVICE_NAME_UMIDADE,           ADDRESS_ESCRITORIO, DEVICE_ESCRITORIO_UMIDADE);
+        
+        //TV--------------------
+        addSerialDevice(DEVICE_NAME_CORRENTE,           ADDRESS_TV, DEVICE_TV_CORRENTE);
+        addSerialDevice(DEVICE_NAME_UMIDADE,            ADDRESS_TV, DEVICE_TV_UMIDADE);
+        addSerialDevice(DEVICE_NAME_TEMPERATURA_DHT11,  ADDRESS_TV, DEVICE_TV_TEMPERATURA);
         
         //LOCAL----------------
         addDevice(DEVICE_NAME_RELOGIO, new Clock());
