@@ -4,7 +4,7 @@
  */
 package com.opendomotic.service;
 
-import com.opendomotic.model.Teste;
+import com.opendomotic.model.entity.Teste;
 import java.util.List;
 import java.util.Random;
 import javax.annotation.PostConstruct;
