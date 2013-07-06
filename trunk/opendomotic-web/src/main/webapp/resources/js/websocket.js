@@ -11,15 +11,13 @@ function connect() {
         return;
     }
     ws.onopen = function () {
-        setConnected(true);
-        log('Info: Conexão aberta.');
+        log('Info: Conexao aberta.');
     };
     ws.onmessage = function (event) {
         log('Recebido: ' + event.data);
     };
     ws.onclose = function () {
-        setConnected(false);
-        log('Info: Conexão fechada.');
+        log('Info: Conexao fechada.');
     };
 }
 
