@@ -5,7 +5,6 @@
 package com.opendomotic.mb;
 
 import com.opendomotic.api.Device;
-import com.opendomotic.model.DeviceFactory;
 import com.opendomotic.model.DeviceProxy;
 import com.opendomotic.service.DeviceService;
 import com.opendomotic.service.TesteService;
@@ -53,11 +52,11 @@ public class DomoticMB implements Serializable {
     
     private void createListDeviceButton() {
         listDeviceButton = new ArrayList<>();
-        listDeviceButton.add(deviceService.getDevice(DeviceFactory.DEVICE_NAME_LUZ_SALA));
+        /*listDeviceButton.add(deviceService.getDevice(DeviceFactory.DEVICE_NAME_LUZ_SALA));
         listDeviceButton.add(deviceService.getDevice(DeviceFactory.DEVICE_NAME_LUZ_ESCRITORIO));
         listDeviceButton.add(deviceService.getDevice(DeviceFactory.DEVICE_NAME_VENTILADOR));
         listDeviceButton.add(deviceService.getDevice(DeviceFactory.DEVICE_NAME_CAFETEIRA));
-        listDeviceButton.add(deviceService.getDevice(DeviceFactory.DEVICE_NAME_TESTE_ETHERNET));
+        listDeviceButton.add(deviceService.getDevice(DeviceFactory.DEVICE_NAME_TESTE_ETHERNET));*/
     }
     
     public void atualizar() {

@@ -17,7 +17,7 @@ import javax.faces.model.SelectItem;
  * @author Jaques
  */
 @ManagedBean
-public class AdminMB {
+public class EnvironmentMB {
     
     @EJB
     private DeviceService deviceService;

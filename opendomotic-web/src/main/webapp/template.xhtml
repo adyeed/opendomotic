@@ -17,7 +17,19 @@
         <f:loadBundle basename="messages" var="msg"/>
         
         <div id="top">
-            
+            <h:form>
+                <p:toolbar>
+                    <p:toolbarGroup>
+                        <p:commandButton action="/user/index" value="Principal" ajax="false"/>
+                        <p:commandButton action="/user/teste" value="Teste" ajax="false"/>
+                        <p:commandButton action="/user/job" value="Agendamento" ajax="false"/>
+                        <p:separator/>                        
+                        <p:commandButton action="/admin/device" value="#{msg.Device}" ajax="false"/>
+                        <p:commandButton action="/admin/environment" value="#{msg.Environment}" ajax="false"/>
+                    </p:toolbarGroup>
+                </p:toolbar>
+            </h:form>
+            <br/>
         </div>
 
         <div id="content" class="center_content">
@@ -27,16 +39,7 @@
         <br/>
         
         <div id="bottom">
-            <h:form>
-                <p:toolbar>
-                    <p:toolbarGroup>
-                        <p:commandButton action="/user/index" value="Principal" ajax="false"/>
-                        <p:commandButton action="/user/teste" value="Teste" ajax="false"/>
-                        <p:commandButton action="/admin/admin" value="Administração" ajax="false"/>
-                        <p:commandButton action="/user/job" value="Agendamento" ajax="false"/>
-                    </p:toolbarGroup>
-                </p:toolbar>
-            </h:form>
+            
         </div>
 
         <p:ajaxStatus style="width:64px;height:64px;position:fixed;right:5px;top:5px">  

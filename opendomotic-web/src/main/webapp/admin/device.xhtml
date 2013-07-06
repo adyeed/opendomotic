@@ -1,0 +1,65 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                template="./../template.xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://java.sun.com/jsf/core">
+
+    <ui:define name="content">
+        <h:form id="form">
+            <p:panel header="#{msg.Device}">
+                <h:panelGrid columns="2">
+                    #{msg.Name}
+                    <p:inputText value="#{deviceMB.config.name}"/>
+                    
+                    #{msg.Address}
+                    <p:inputText value="#{deviceMB.config.address}"/>
+                    
+                    #{msg.Param}
+                    <p:inputText value="#{deviceMB.config.param}"/>
+                    
+                    #{msg.Protocol}
+                    <p:selectOneMenu value="#{deviceMB.config.protocol}">
+                        <f:selectItems value="#{deviceMB.listProtocol}"/>
+                    </p:selectOneMenu> 
+                </h:panelGrid>
+                
+                <p:commandButton value="#{msg.Add}" action="#{deviceMB.add}" ajax="false"/>
+            </p:panel>
+
+            <br/>
+
+            <p:dataTable id="table" value="#{deviceMB.listConfig}" var="config">
+                <p:column>
+                    <f:facet name="header">
+                        #{msg.Name}
+                    </f:facet>
+                    #{config.name}
+                </p:column>
+                <p:column>
+                    <f:facet name="header">
+                        #{msg.Address}
+                    </f:facet>
+                    #{config.address}
+                </p:column>
+                <p:column>
+                    <f:facet name="header">
+                        #{msg.Param}
+                    </f:facet>
+                    #{config.param}
+                </p:column>
+                <p:column>
+                    <f:facet name="header">
+                        #{msg.Protocol}
+                    </f:facet>
+                    #{config.protocol}
+                </p:column>
+                <p:column>
+                    <p:commandButton value="#{msg.Remove}" action="#{deviceMB.remove(config)}" update="table"/>
+                </p:column>
+            </p:dataTable>
+        </h:form>
+    </ui:define>
+
+</ui:composition>

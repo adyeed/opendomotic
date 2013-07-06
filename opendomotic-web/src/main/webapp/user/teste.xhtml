@@ -39,6 +39,12 @@
                     #{device.value}
                 </p:column>
             </p:dataTable>
+            
+            <br/>
+            
+            <h:commandButton value="adicionar" action="#{domoticMB.adicionarTeste()}"/>
+            <h:commandButton value="excluir" action="#{domoticMB.excluirTeste()}"/>
+            <h:outputText value="#{domoticMB.teste}"/>
         </h:form>
     </ui:define>
 

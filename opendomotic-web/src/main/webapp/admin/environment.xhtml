@@ -17,25 +17,25 @@
                 <p:toolbarGroup>
                     <h:panelGrid columns="6" style="height: 48px;">
                         <h:outputText value="Device:"/>
-                        <p:selectOneMenu value="#{adminMB.deviceName}">
+                        <p:selectOneMenu value="#{environmentMB.deviceName}">
                             <f:selectItems value="#{domoticMB.listDevice}" var="device" itemLabel="#{device.name}" itemValue="#{device.name}"/>
                         </p:selectOneMenu>    
                         
                         <h:outputText value="Imagem0:"/>
-                        <p:selectOneMenu value="#{adminMB.imagem0}">
-                            <f:selectItems value="#{adminMB.listImage}"/>                         
+                        <p:selectOneMenu value="#{environmentMB.imagem0}">
+                            <f:selectItems value="#{environmentMB.listImage}"/>                         
                         </p:selectOneMenu>      
                         
                         <h:outputText value="Imagem1:"/>
-                        <p:selectOneMenu value="#{adminMB.imagem1}">
-                            <f:selectItems value="#{adminMB.listImage}"/>                           
+                        <p:selectOneMenu value="#{environmentMB.imagem1}">
+                            <f:selectItems value="#{environmentMB.listImage}"/>                           
                         </p:selectOneMenu>   
                     </h:panelGrid>
                 </p:toolbarGroup>  
                 
                 <p:toolbarGroup>
-                    <p:commandButton value="Adicionar" action="#{adminMB.add()}" ajax="false"/>
-                    <p:commandButton value="Limpar" action="#{adminMB.clear()}" ajax="false"/>
+                    <p:commandButton value="Adicionar" action="#{environmentMB.add()}" ajax="false"/>
+                    <p:commandButton value="Limpar" action="#{environmentMB.clear()}" ajax="false"/>
                 </p:toolbarGroup>
             </p:toolbar>
 
@@ -44,12 +44,6 @@
             <div style="width: 100%; height: 100%; overflow: auto;">
                 <canvas id="canvas"></canvas>
             </div>
-
-            <br/>
-            
-            <h:commandButton value="adicionar" action="#{domoticMB.adicionarTeste()}"/>
-            <h:commandButton value="excluir" action="#{domoticMB.excluirTeste()}"/>
-            <h:outputText value="#{domoticMB.teste}"/>
         </h:form>
     </ui:define>
 
