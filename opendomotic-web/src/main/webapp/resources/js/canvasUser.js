@@ -1,7 +1,7 @@
 window.onload = initUser;
 
 function initUser() {
-    initCanvas(null, mouseUpDevice);
+    initCanvas(null, mouseUpDevice, 2, "../resources/images/planta.jpg");
     connect();
 }
 

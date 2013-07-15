@@ -13,24 +13,24 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
-import javax.ejb.EJB;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
+import javax.enterprise.context.SessionScoped;
+import javax.inject.Inject;
+import javax.inject.Named;
 
 /**
  *
  * @author Jaques
  */
-@ManagedBean
+@Named
 @SessionScoped
 public class DomoticMB implements Serializable {
     
     private static final Logger LOG = Logger.getLogger(DomoticMB.class.getName());
 
-    @EJB
+    @Inject
     private DeviceService deviceService;
     
-    @EJB
+    @Inject
     private TesteService testeService;
     
     private List<Device> listDeviceButton;

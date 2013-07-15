@@ -1,49 +1,66 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<ui:composition xmlns="http://www.w3.org/1999/xhtml"
-                xmlns:ui="http://java.sun.com/jsf/facelets"
-                template="../template.xhtml"
-                xmlns:p="http://primefaces.org/ui"
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                template="./../template/default.xhtml"
                 xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
                 xmlns:f="http://java.sun.com/jsf/core">
 
     <ui:define name="content">
-        <h:form id="form">
-            <h:outputScript library="js" name="imageShape.js"/>
-            <h:outputScript library="js" name="canvasCore.js"/>
-            <h:outputScript library="js" name="canvasAdmin.js"/>
+        <h:form id="form" enctype="multipart/form-data">           
+            <p:growl id="messages" showDetail="true"/> 
+            
+            <p:commandButton value="#{msg.New}" action="#{environmentMB.create}" update="panel"/>
+            
+            <p:panel id="panel" header="#{msg.Environment}" visible="#{environmentMB.dialogVisible}">                   
+                <h:panelGrid columns="2">
+                    <h:outputText value="#{msg.Name}"/>
+                    <p:inputText value="#{environmentMB.environment.name}"/>
 
-            <p:toolbar>
-                <p:toolbarGroup>
-                    <h:panelGrid columns="6" style="height: 48px;">
-                        <h:outputText value="Device:"/>
-                        <p:selectOneMenu value="#{environmentMB.deviceName}">
-                            <f:selectItems value="#{domoticMB.listDevice}" var="device" itemLabel="#{device.name}" itemValue="#{device.name}"/>
-                        </p:selectOneMenu>    
+                    <h:outputText value="#{msg.Image}"/>
+                    <h:panelGroup rendered="#{environmentMB.environment.id != null}">
+                        <p:graphicImage 
+                            value="../resources/images/#{environmentMB.environment.fileName}" 
+                            width="200" 
+                            rendered="#{!empty environmentMB.environment.fileName}"/>
                         
-                        <h:outputText value="Imagem0:"/>
-                        <p:selectOneMenu value="#{environmentMB.imagem0}">
-                            <f:selectItems value="#{environmentMB.listImage}"/>                         
-                        </p:selectOneMenu>      
-                        
-                        <h:outputText value="Imagem1:"/>
-                        <p:selectOneMenu value="#{environmentMB.imagem1}">
-                            <f:selectItems value="#{environmentMB.listImage}"/>                           
-                        </p:selectOneMenu>   
-                    </h:panelGrid>
-                </p:toolbarGroup>  
-                
-                <p:toolbarGroup>
-                    <p:commandButton value="Adicionar" action="#{environmentMB.add()}" ajax="false"/>
-                    <p:commandButton value="Limpar" action="#{environmentMB.clear()}" ajax="false"/>
-                </p:toolbarGroup>
-            </p:toolbar>
+                        <p:fileUpload fileUploadListener="#{environmentMB.handleFileUpload}"  
+                            label="#{msg.Upload}"
+                            mode="advanced"  
+                            update="panel,messages"  
+                            auto="true"  
+                            allowTypes="/(\.|\/)(gif|jpe?g|png)$/"/>
+                    </h:panelGroup>
+                </h:panelGrid>                  
 
+                <p:commandButton value="#{msg.Save}" action="#{environmentMB.save}" update="panel,table"/>
+            </p:panel>
+            
             <br/>
-
-            <div style="width: 100%; height: 100%; overflow: auto;">
-                <canvas id="canvas"></canvas>
-            </div>
+            
+            <p:dataTable id="table" value="#{environmentMB.listEnvironment}" var="item">
+                <p:column>
+                    <f:facet name="header">
+                        #{msg.Name}
+                    </f:facet>
+                    #{item.name}
+                </p:column>
+                <p:column>
+                    <f:facet name="header">
+                        #{msg.Image}
+                    </f:facet>                    
+                    <p:graphicImage 
+                        value="../resources/images/#{item.fileName}" 
+                        width="100" 
+                        rendered="#{!empty item.fileName}"/>
+                    #{item.fileName}
+                </p:column>
+                <p:column>
+                    <p:commandButton value="#{msg.Delete}" action="#{environmentMB.delete(item)}" update="table" onclick="return confirm('#{msg.ConfirmsTheExclusion}');"/>
+                    <p:commandButton value="#{msg.Edit}" action="#{environmentMB.edit(item)}" update="@form"/>
+                </p:column>
+            </p:dataTable>
+            
         </h:form>
     </ui:define>
 

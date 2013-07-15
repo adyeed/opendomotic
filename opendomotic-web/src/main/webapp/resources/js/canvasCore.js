@@ -12,7 +12,7 @@ function getUrl(path) {
     return '/opendomotic-web-0.0.1/' + path;
 }
 
-function initCanvas(canDrag, onMouseUpDevice) {   
+function initCanvas(canDrag, onMouseUpDevice, idEnvironment, imageSrc) {   
     this.canDrag = canDrag;
     this.onMouseUpDevice = onMouseUpDevice;
     
@@ -27,12 +27,13 @@ function initCanvas(canDrag, onMouseUpDevice) {
     context.font = "bold 26px verdana";
     drawLoading();
     
-    imagePlanta.src = "../resources/images/planta.jpg";
+    imagePlanta.src = imageSrc;
     imagePlanta.onload = function() {
         draw();
     };
     
-    $.getJSON(getUrl('device'), null, function(data) {
+    arrayImage = new Array(); //para limpar em caso de ajax update
+    $.getJSON(getUrl('device/list?idEnvironment='+idEnvironment), null, function(data) {
         for (var device in data) {
             for (var index in data[device]) {
                 d = data[device][index];                

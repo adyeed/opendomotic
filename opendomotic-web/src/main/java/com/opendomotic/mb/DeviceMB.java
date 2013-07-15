@@ -10,38 +10,59 @@ import com.opendomotic.service.DeviceService;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
-import javax.ejb.EJB;
-import javax.faces.bean.ManagedBean;
+import javax.annotation.PostConstruct;
+import javax.enterprise.context.RequestScoped;
 import javax.faces.model.SelectItem;
+import javax.inject.Inject;
+import javax.inject.Named;
 
 /**
  *
  * @author jaques
  */
-@ManagedBean
+@Named
+@RequestScoped
 public class DeviceMB {
     
     private static final Logger LOG = Logger.getLogger(DeviceMB.class.getName());
 
-    private DeviceConfig config = new DeviceConfig();
-    private List<SelectItem> listProtocol;
-    
-    @EJB
+    @Inject 
     private DeviceService deviceService;
     
-    @EJB
+    @Inject 
     private DeviceConfigService deviceConfigService;
     
-    public void add() {
+    private DeviceConfig config = new DeviceConfig();
+    private List<SelectItem> listProtocol;
+    private boolean dialogVisible = false;
+    
+    @PostConstruct
+    public void init() {
+        LOG.info("DeviceMB.init...");
+        //config = new DeviceConfig();
+    }
+    
+    public void create() {
+        config = new DeviceConfig();
+        dialogVisible = true;
+    }    
+    
+    public void save() {
         LOG.info(config.toString());
-        deviceConfigService.persist(config);
+        deviceConfigService.save(config);
         deviceService.addDevice(config.createDevice());
+        dialogVisible = false;
     }
         
-    public void remove(DeviceConfig config) {
+    public void delete(DeviceConfig config) {
         LOG.info(config.toString());
-        deviceConfigService.remove(config);
+        deviceConfigService.delete(config);
         deviceService.removeDevice(config.getName());
+    }
+    
+    public void edit(DeviceConfig config) {
+        this.config = config;
+        this.dialogVisible = true;
     }
 
     public DeviceConfig getConfig() {
@@ -49,7 +70,7 @@ public class DeviceMB {
     }
 
     public List<DeviceConfig> getListConfig() {
-        return deviceConfigService.getListAll();
+        return deviceConfigService.findAll();
     }
 
     public List<SelectItem> getListProtocol() {
@@ -59,6 +80,14 @@ public class DeviceMB {
             listProtocol.add(new SelectItem("HTTP", "HTTP"));
         }
         return listProtocol;
+    }
+
+    public boolean isDialogVisible() {
+        return dialogVisible;
+    }
+
+    public void setDialogVisible(boolean dialogVisible) {
+        this.dialogVisible = dialogVisible;
     }
     
 }
