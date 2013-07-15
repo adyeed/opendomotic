@@ -6,13 +6,17 @@ package com.opendomotic.service.rest;
 
 import com.opendomotic.api.Device;
 import com.opendomotic.model.DeviceProxy;
+import com.opendomotic.model.entity.DevicePosition;
+import com.opendomotic.model.entity.Environment;
 import com.opendomotic.model.rest.DeviceValue;
 import com.opendomotic.model.rest.GraphicDevice;
+import com.opendomotic.service.DevicePositionService;
 import com.opendomotic.service.DeviceService;
+import com.opendomotic.service.EnvironmentService;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
-import javax.ejb.EJB;
+import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -28,13 +32,50 @@ public class DeviceRest {
     
     private static final Logger LOG = Logger.getLogger(DeviceRest.class.getName());
 
-    @EJB
+    @Inject
     private DeviceService deviceService;
 
+    @Inject
+    private DevicePositionService positionService;
+    
+    @Inject
+    private EnvironmentService environmentService;
+    
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public List<GraphicDevice> getListGraphicDevice() {
-        return deviceService.getListGraphicDevice();
+        List<GraphicDevice> list = new ArrayList<>();
+        for (DevicePosition position : positionService.findAll()) { //TO-DO: adicionar filtro idEnvironment           
+            list.add(new GraphicDevice(
+                    position.getId(), 
+                    position.getX(),
+                    position.getY(),
+                    position.getDeviceConfig().getName(), 
+                    "../resources/images/" + position.getDeviceImage().getFileName(), //TO-DO: lista de imagens
+                    null));            
+        }
+        return list;
+    }
+    
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path(value = "/list")
+    public List<GraphicDevice> getListGraphicDevice(@QueryParam("idEnvironment") int idEnvironment) {
+        List<GraphicDevice> list = new ArrayList<>();
+        Environment environment = environmentService.findById(idEnvironment);
+        if (environment != null) {
+            for (DevicePosition position : environment.getListDevicePosition()) {  
+               System.out.println("yyy!!!!!!!!!!");
+               list.add(new GraphicDevice(
+                   position.getId(), 
+                   position.getX(),
+                   position.getY(),
+                   position.getDeviceConfig().getName(), 
+                   "../resources/images/" + position.getDeviceImage().getFileName(), //TO-DO: lista de imagens
+                   null));            
+            }
+        }
+        return list;
     }
     
     @GET
@@ -63,13 +104,14 @@ public class DeviceRest {
             @QueryParam("x") int x,
             @QueryParam("y") int y) {
         
-        for (GraphicDevice device : deviceService.getListGraphicDevice()) {
-            if (device.getId() == id) {
-                device.setX(x);
-                device.setY(y);
-                LOG.info(device.toString());
-                return "OK";
-            }
+        LOG.info(String.format("id=%d x=%d y=%d", id, x, y));
+        
+        DevicePosition position = positionService.findById(id);
+        if (position != null) {
+            position.setX(x);
+            position.setY(y);
+            positionService.save(position);
+            return "OK";
         }
         return "Device não encontrado";
     }
