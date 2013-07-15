@@ -7,49 +7,33 @@ package com.opendomotic.model.entity;
 import com.opendomotic.api.Device;
 import com.opendomotic.ethernet.HttpDevice;
 import com.opendomotic.serial.SerialDevice;
-import java.io.Serializable;
+import java.util.logging.Logger;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
 
 /**
  *
  * @author jaques
  */
 @Entity
-public class DeviceConfig implements Serializable {
+public class DeviceConfig extends AbstractEntityName {
     
-    @Id
-    @GeneratedValue
-    private Integer id;    
-    private String name;
+    private static final Logger LOG = Logger.getLogger(DeviceConfig.class.getName());
+    
     private String address;
     private String param;
     private String protocol;
 
     //TO-DO: factory method para enum de protocol
     public Device createDevice() {
-        switch (protocol) {
-            case "RS485": return new SerialDevice(name, Integer.parseInt(address), Integer.parseInt(param));
-            case "HTTP":  return new HttpDevice(name, address, param);
-            default: return null;
+        try {
+            switch (protocol) {
+                case "RS485": return new SerialDevice(getName(), Integer.parseInt(address), Integer.parseInt(param));
+                case "HTTP":  return new HttpDevice(getName(), address, param);
+            }
+        } catch (Exception e) {
+            LOG.severe("Error on create device");
         }
-    }    
-    
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
+        return null;
     }
 
     public String getAddress() {
@@ -78,7 +62,7 @@ public class DeviceConfig implements Serializable {
 
     @Override
     public String toString() {
-        return "DeviceConfig{" + "id=" + id + ", name=" + name + ", address=" + address + ", param=" + param + ", protocol=" + protocol + '}';
+        return "DeviceConfig{" + "address=" + address + ", param=" + param + ", protocol=" + protocol + '}';
     }
     
 }

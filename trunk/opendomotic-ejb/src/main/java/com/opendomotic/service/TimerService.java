@@ -7,9 +7,9 @@ package com.opendomotic.service;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.logging.Logger;
-import javax.ejb.EJB;
 import javax.ejb.Schedule;
 import javax.ejb.Singleton;
+import javax.inject.Inject;
 
 /**
  *
@@ -21,7 +21,7 @@ public class TimerService {
     private static final Logger LOG = Logger.getLogger(TimerService.class.getName());
     private BroadcastWebsocket broadcastWebsocket;
     
-    @EJB
+    @Inject
     private JobService jobService;
     
     @Schedule(minute = "*/1", hour = "*")
