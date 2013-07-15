@@ -4,88 +4,102 @@
  */
 package com.opendomotic.mb;
 
+import com.opendomotic.model.entity.Environment;
 import com.opendomotic.model.rest.GraphicDevice;
 import com.opendomotic.service.DeviceService;
+import com.opendomotic.service.EnvironmentService;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import javax.ejb.EJB;
-import javax.faces.bean.ManagedBean;
+import javax.enterprise.context.SessionScoped;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
+import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
+import javax.inject.Inject;
+import javax.inject.Named;
+import org.primefaces.event.FileUploadEvent;
 
 /**
  *
  * @author Jaques
  */
-@ManagedBean
-public class EnvironmentMB {
+@Named
+@SessionScoped
+public class EnvironmentMB implements Serializable {
     
-    @EJB
-    private DeviceService deviceService;
+    @Inject
+    private EnvironmentService environmentService;
     
-    private String deviceName;
-    private String imagem0;
-    private String imagem1;
-    
-    private List<SelectItem> listImage;
+    private Environment environment = new Environment();
+    private List<Environment> listEnvironment;
+    private boolean dialogVisible = false;
 
-    public void add() {
-        List<GraphicDevice> list = deviceService.getListGraphicDevice();
+    public void handleFileUpload(FileUploadEvent event) throws IOException {  
+        System.out.println("handle fileupload: "+event.getFile());
+  
+        FacesMessage msg = new FacesMessage("Sucesso", event.getFile().getFileName() + " foi carregado.");  
+        FacesContext.getCurrentInstance().addMessage("teste", msg);
         
-        int id = 1;
-        if (!list.isEmpty())
-            id = list.get(list.size()-1).getId()+1;        
+        String caminho = FacesContext.getCurrentInstance().getExternalContext()  
+                .getRealPath("/resources/images/" + event.getFile().getFileName());  
+  
+        System.out.println(caminho);
         
-        deviceService.getListGraphicDevice().add(
-                new GraphicDevice(id, 0, 0, deviceName, imagem0, imagem1.isEmpty() ? null : imagem1));
-    }
-    
-    public void clear() {
-        deviceService.getListGraphicDevice().clear();
-    }
-    
-    public String getDeviceName() {
-        return deviceName;
-    }
-
-    public void setDeviceName(String deviceName) {
-        this.deviceName = deviceName;
-    }
-
-    public String getImagem0() {
-        return imagem0;
-    }
-
-    public void setImagem0(String imagem0) {
-        this.imagem0 = imagem0;
-    }
-
-    public String getImagem1() {
-        return imagem1;
-    }
-
-    public void setImagem1(String imagem1) {
-        this.imagem1 = imagem1;
-    }
-    
-    public List<SelectItem> getListImage() {
-        if (listImage == null) {  
-            listImage = new ArrayList<>();
-            listImage.add(new SelectItem(null, "Selecione"));
-            listImage.add(new SelectItem("../resources/images/cafeteira.png", "Cafeteira"));
-            listImage.add(new SelectItem("../resources/images/lampada-on.png", "Lâmpada ON"));
-            listImage.add(new SelectItem("../resources/images/lampada-off.png", "Lâmpada OFF"));
-            listImage.add(new SelectItem("../resources/images/luminosidade.png", "Luminosidade"));
-            listImage.add(new SelectItem("../resources/images/pir.png", "Presença"));
-            listImage.add(new SelectItem("../resources/images/pir2.png", "Presença2"));
-            listImage.add(new SelectItem("../resources/images/pir3.png", "Presença3"));
-            listImage.add(new SelectItem("../resources/images/potenciometro.png", "Potenciômetro"));
-            listImage.add(new SelectItem("../resources/images/termometro.png", "Termômetro"));
-            listImage.add(new SelectItem("../resources/images/termometro2.png", "Termômetro2"));
-            listImage.add(new SelectItem("../resources/images/termometro3.png", "Termômetro3"));
-            listImage.add(new SelectItem("../resources/images/umidade.png", "Umidade"));
-            listImage.add(new SelectItem("../resources/images/ventilador.png", "Ventilador"));
+        byte[] conteudo = event.getFile().getContents();  
+        try (FileOutputStream fos = new FileOutputStream(caminho)) {
+            fos.write(conteudo);
         }
-        return listImage;
+        
+        if (environment.getId() != null) {
+            environment.setFileName(event.getFile().getFileName());
+            environmentService.save(environment);
+        }
+    }
+    
+    public void create() {
+        edit(new Environment());
+    }
+    
+    public void save() {
+        environmentService.save(environment);
+        listEnvironment = null;
+        dialogVisible = environment.getFileName() == null;
+    }
+    
+    public void delete(Environment environment) {
+        environmentService.delete(environment);
+        listEnvironment = null;
+    }
+    
+    public void edit(Environment environment) {
+        this.environment = environment;
+        this.dialogVisible = true;
+    }
+    
+    public Environment getEnvironment() {
+        return environment;
+    }
+
+    public void setEnvironment(Environment environment) {
+        this.environment = environment;
+    }
+    
+    public List<Environment> getListEnvironment() {
+        if (listEnvironment == null) {
+            listEnvironment = environmentService.findAll();
+        }
+        return listEnvironment;
+    }
+
+    public boolean isDialogVisible() {
+        return dialogVisible;
+    }
+
+    public void setDialogVisible(boolean dialogVisible) {
+        this.dialogVisible = dialogVisible;
     }
     
 }

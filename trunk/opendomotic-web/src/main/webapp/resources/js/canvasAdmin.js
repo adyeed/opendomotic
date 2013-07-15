@@ -1,7 +1,11 @@
-window.onload = initAdmin;
+//window.onload = initAdmin;
 
 function initAdmin() {
     initCanvas(true, mouseUpDevice);
+}
+
+function drawCanvas(idEnvironment, imageSrc) {
+    initCanvas(true, mouseUpDevice, idEnvironment, "../resources/images/"+imageSrc);
 }
 
 //------------------------------------------------------------------------------

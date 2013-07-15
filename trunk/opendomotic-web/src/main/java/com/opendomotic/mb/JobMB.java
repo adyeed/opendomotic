@@ -10,20 +10,22 @@ import com.opendomotic.service.JobService;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.List;
-import javax.ejb.EJB;
-import javax.faces.bean.ManagedBean;
+import javax.enterprise.context.RequestScoped;
+import javax.inject.Inject;
+import javax.inject.Named;
 
 /**
  *
  * @author jaques
  */
-@ManagedBean
+@Named
+@RequestScoped
 public class JobMB {
     
-    @EJB
+    @Inject
     private DeviceService deviceService;
     
-    @EJB
+    @Inject
     private JobService jobService;
     
     private String date;

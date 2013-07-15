@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
-import javax.ejb.EJB;
+import javax.inject.Inject;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import org.apache.catalina.websocket.StreamInbound;
@@ -28,7 +28,7 @@ public class DomoticWebsocket extends WebSocketServlet implements BroadcastWebso
     private static final Logger LOG = Logger.getLogger(DomoticWebsocket.class.getName());    
     private List<DomoticInBound> connections = new ArrayList<>();
 
-    @EJB
+    @Inject
     private TimerService timerService;
     
     @PostConstruct

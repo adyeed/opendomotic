@@ -7,4 +7,8 @@
 - copiar objectdb-jee para tomee/lib 
 - adicionar no rc.local: sudo /usr/local/apache-tomee-jaxrs-1.5.2/bin/startup.sh
 
+***************************
+ADICIONAR NO GOOGLE DOCS!!!
+***************************
+
 TO-DO: Criar uma imagem do raspbian com tudo configurado.

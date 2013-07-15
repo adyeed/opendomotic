@@ -8,8 +8,8 @@
 
     <h:head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-        <link href="./resources/css/default.css" rel="stylesheet" type="text/css" />
-        <link href="./resources/css/cssLayout.css" rel="stylesheet" type="text/css" />
+        <link href="../resources/css/default.css" rel="stylesheet" type="text/css" />
+        <link href="../resources/css/cssLayout.css" rel="stylesheet" type="text/css" />
         <title>opendomotic</title>
     </h:head>
 
@@ -26,6 +26,8 @@
                         <p:separator/>                        
                         <p:commandButton action="/admin/device" value="#{msg.Device}" ajax="false"/>
                         <p:commandButton action="/admin/environment" value="#{msg.Environment}" ajax="false"/>
+                        <p:commandButton action="/admin/image" value="#{msg.Image}" ajax="false"/>
+                        <p:commandButton action="/admin/position" value="#{msg.Position}" ajax="false"/>
                     </p:toolbarGroup>
                 </p:toolbar>
             </h:form>
@@ -44,7 +46,7 @@
 
         <p:ajaxStatus style="width:64px;height:64px;position:fixed;right:5px;top:5px">  
             <f:facet name="start">  
-                <p:graphicImage value="./resources/images/loading.gif" />  
+                <p:graphicImage value="../resources/images/loading.gif" />  
             </f:facet>  
 
             <f:facet name="complete">  

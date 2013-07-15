@@ -1,0 +1,65 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                template="./../template/default.xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://java.sun.com/jsf/core">
+
+    <ui:define name="content">
+        <h:form id="form">
+            <p:growl id="messages" showDetail="true"/> 
+            
+            <p:commandButton value="#{msg.New}" action="#{imageMB.create}" update="panel"/>
+            
+            <p:panel id="panel" header="#{msg.Image}" visible="#{imageMB.dialogVisible}">               
+                <h:panelGrid columns="2">
+                    <h:outputText value="#{msg.Name}"/>
+                    <p:inputText value="#{imageMB.entity.name}"/>
+                    
+                    <h:outputText value="#{msg.Image}"/>
+                    <h:panelGrid columns="2" rendered="#{imageMB.entity.id != null}">
+                        <p:graphicImage 
+                            value="../resources/images/#{imageMB.entity.fileName}" 
+                            rendered="#{!empty imageMB.entity.fileName}"/>
+                        
+                        <p:fileUpload 
+                            fileUploadListener="#{imageMB.handleFileUpload}"  
+                            label="#{msg.Upload}"
+                            mode="advanced"  
+                            update="panel,messages"  
+                            auto="true"  
+                            allowTypes="/(\.|\/)(gif|jpe?g|png)$/"/>
+                    </h:panelGrid>
+                </h:panelGrid>
+                
+                <p:commandButton value="#{msg.Save}" action="#{imageMB.save}" update="panel,table"/>
+            </p:panel>
+
+            <br/>
+            
+            <p:dataTable id="table" value="#{imageMB.listAll}" var="e">
+                <p:column>
+                    <f:facet name="header">
+                        #{msg.Name}
+                    </f:facet>
+                    #{e.name}
+                </p:column>
+                <p:column>
+                    <f:facet name="header">
+                        #{msg.Image}
+                    </f:facet>
+                    <p:graphicImage 
+                        value="../resources/images/#{e.fileName}" 
+                        rendered="#{!empty e.fileName}"/>
+                    #{e.fileName}
+                </p:column>
+                <p:column>
+                    <p:commandButton value="#{msg.Delete}" action="#{imageMB.delete(e)}" update="table" onclick="return confirm('#{msg.ConfirmsTheExclusion}');"/>
+                    <p:commandButton value="#{msg.Edit}" action="#{imageMB.edit(e)}" update="@form"/>
+                </p:column>
+            </p:dataTable>
+        </h:form>
+    </ui:define>
+
+</ui:composition>

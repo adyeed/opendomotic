@@ -1,14 +1,18 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
-                template="./../template.xhtml"
+                template="../template/default.xhtml"
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:p="http://primefaces.org/ui"
                 xmlns:f="http://java.sun.com/jsf/core">
 
     <ui:define name="content">
         <h:form id="form">
-            <p:panel header="#{msg.Device}">
+            <p:commandButton value="#{msg.New}" action="#{deviceMB.create()}" update="panel"/>
+            
+            <p:panel id="panel" header="#{msg.Device}" visible="#{deviceMB.dialogVisible}">
+                <h:inputHidden value="#{deviceMB.config.id}"/>
+                
                 <h:panelGrid columns="2">
                     #{msg.Name}
                     <p:inputText value="#{deviceMB.config.name}"/>
@@ -25,9 +29,9 @@
                     </p:selectOneMenu> 
                 </h:panelGrid>
                 
-                <p:commandButton value="#{msg.Add}" action="#{deviceMB.add}" ajax="false"/>
+                <p:commandButton value="#{msg.Save}" action="#{deviceMB.save}" update="panel,table"/>
             </p:panel>
-
+            
             <br/>
 
             <p:dataTable id="table" value="#{deviceMB.listConfig}" var="config">
@@ -56,7 +60,8 @@
                     #{config.protocol}
                 </p:column>
                 <p:column>
-                    <p:commandButton value="#{msg.Remove}" action="#{deviceMB.remove(config)}" update="table"/>
+                    <p:commandButton value="#{msg.Delete}" action="#{deviceMB.delete(config)}" update="table" onclick="return confirm('#{msg.ConfirmsTheExclusion}');"/>
+                    <p:commandButton value="#{msg.Edit}" action="#{deviceMB.edit(config)}" update="@form"/>
                 </p:column>
             </p:dataTable>
         </h:form>
