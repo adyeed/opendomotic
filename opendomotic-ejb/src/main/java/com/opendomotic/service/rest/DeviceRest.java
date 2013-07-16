@@ -65,7 +65,6 @@ public class DeviceRest {
         Environment environment = environmentService.findById(idEnvironment);
         if (environment != null) {
             for (DevicePosition position : environment.getListDevicePosition()) {  
-               System.out.println("yyy!!!!!!!!!!");
                list.add(new GraphicDevice(
                    position.getId(), 
                    position.getX(),
