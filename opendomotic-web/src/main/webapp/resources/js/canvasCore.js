@@ -78,6 +78,7 @@ function drawLoading() {
 }
 
 function updateValues() {
+    drawLoading();
     $.getJSON(getUrl('device/value'), null, function(data) {
         for (var device in data) {
             for (var index in data[device]) {
