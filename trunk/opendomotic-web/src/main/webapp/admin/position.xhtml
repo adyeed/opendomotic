@@ -36,18 +36,16 @@
                 
                 <p:commandButton value="#{msg.Add}" action="#{positionMB.add}" update="panelGroupCanvas"/>
                 <p:commandButton value="#{msg.Clear}" action="#{positionMB.clear}" update="panelGroupCanvas"/>
-                <p:commandButton value="#{msg.Refresh}" action="#{positionMB.refresh}" ajax="false"/>
             </p:panel>
             
             <br/>
             
             <h:panelGroup id="panelGroupCanvas">
-                fileName: <h:outputText value="#{positionMB.environment.fileName}"/>
                 <div id="divCanvas" style="width: 100%; height: 100%; overflow: auto;">
                     <canvas id="canvas"></canvas>
                 </div>
                 <script>
-                    drawCanvas(#{positionMB.idEnvironment}, '#{positionMB.environment.fileName}');
+                    drawCanvas(#{positionMB.idEnvironment});
                 </script>
             </h:panelGroup>            
             

@@ -4,7 +4,6 @@
  */
 package com.opendomotic.mb;
 
-import com.opendomotic.model.entity.Environment;
 import com.opendomotic.service.EnvironmentService;
 import com.opendomotic.service.DevicePositionService;
 import java.io.Serializable;
@@ -31,27 +30,17 @@ public class PositionMB implements Serializable {
     @Inject 
     private DevicePositionService positionService;
     
-    private Environment environment; //To-DO: eliminar e usar só o id
     private Integer idEnvironment;    
     private Integer idConfig;    
     private Integer idImage;
     
     @PostConstruct
     public void init() {
-        environment = environmentService.findFirst();
-        idEnvironment = environment.getId();
+        idEnvironment = environmentService.findFirst().getId();
     }
     
     public void valueChangeMethod(ValueChangeEvent e) {
         idEnvironment = (Integer) e.getNewValue();
-        LOG.info("xxx idEnvironment="+idEnvironment);
-        refresh();
-    }
-    
-    public void refresh() {
-        environment = environmentService.findById(idEnvironment);
-        System.out.println("teste");
-        System.out.println("size="+environment.getListDevicePosition().size());
     }
     
     public void add() {
@@ -60,14 +49,6 @@ public class PositionMB implements Serializable {
     
     public void clear() {
         positionService.deleteByIdEnvironment(idEnvironment);
-    }
-    
-    public Environment getEnvironment() {
-        return environment;
-    }
-
-    public void setEnvironment(Environment environment) {
-        this.environment = environment;
     }
 
     public Integer getIdEnvironment() {
