@@ -1,7 +1,11 @@
-window.onload = initUser;
+//window.onload = initUser;
 
 function initUser() {
-    initCanvas(null, mouseUpDevice, 2, "../resources/images/planta.jpg");
+
+}
+
+function drawCanvas(idEnvironment) {
+    initCanvas(false, mouseUpDevice, idEnvironment);
     connect();
 }
 

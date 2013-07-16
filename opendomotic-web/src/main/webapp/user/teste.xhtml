@@ -12,14 +12,6 @@
             <p:toolbar>
                 <p:toolbarGroup>
                     <p:commandButton id="buttonAtualizar" action="#{domoticMB.atualizar()}" value="Atualizar" update="form"/>
-                    <p:separator/>
-                    
-                    <ui:repeat value="#{domoticMB.listDeviceButton}" var="device"> 
-                        <p:commandButton action="#{domoticMB.toogleDevice(device)}" value="#{device.value == 1 ? 'Desligar' : 'Ligar'} #{device.name}" update="@form"/>
-                    </ui:repeat>
-                    
-                    <p:separator/>
-                    <p:commandButton id="buttonTudo" action="#{domoticMB.toggleAll()}" value="#{domoticMB.captionAll}" update="form" onclick="return confirm('Confirma #{domoticMB.captionAll}?');"/>
                 </p:toolbarGroup>
             </p:toolbar>
 
