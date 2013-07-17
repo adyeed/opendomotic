@@ -4,9 +4,13 @@
  */
 package com.opendomotic.service.rest;
 
+import com.opendomotic.model.entity.DevicePosition;
 import com.opendomotic.model.entity.Environment;
+import com.opendomotic.model.rest.DevicePositionRest;
 import com.opendomotic.model.rest.EnvironmentRest;
 import com.opendomotic.service.EnvironmentService;
+import java.util.ArrayList;
+import java.util.List;
 import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -29,8 +33,21 @@ public class EnvironmentRestService {
     public EnvironmentRest getListGraphicDevice(@QueryParam("id") int idEnvironment) {
         Environment environment = environmentService.findById(idEnvironment);
         if (environment != null) {
-            EnvironmentRest e = new EnvironmentRest();
+            EnvironmentRest e = new EnvironmentRest();            
+            List<DevicePositionRest> list = new ArrayList<>();
+            
+            for (DevicePosition position : environment.getListDevicePosition()) {  
+               list.add(new DevicePositionRest(
+                   position.getId(), 
+                   position.getX(),
+                   position.getY(),
+                   position.getDeviceConfig().getName(), 
+                   "../resources/images/" + position.getDeviceImage().getFileName(), //TO-DO: lista de imagens
+                   null));            
+            }            
+            
             e.setFileName("../resources/images/" + environment.getFileName()); //TO-DO: como resolver caminho?
+            e.setListDevicePositionRest(list);
             return e;
         }
         return null;
