@@ -5,19 +5,14 @@
 package com.opendomotic.mb;
 
 import com.opendomotic.model.entity.Environment;
-import com.opendomotic.model.rest.GraphicDevice;
-import com.opendomotic.service.DeviceService;
 import com.opendomotic.service.EnvironmentService;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
-import javax.faces.event.ValueChangeEvent;
-import javax.faces.model.SelectItem;
 import javax.inject.Inject;
 import javax.inject.Named;
 import org.primefaces.event.FileUploadEvent;
