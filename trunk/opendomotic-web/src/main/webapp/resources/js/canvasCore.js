@@ -17,7 +17,6 @@ function initCanvas(canDrag, onMouseUpDevice, idEnvironment) {
     this.onMouseUpDevice = onMouseUpDevice;
     
     canvas = document.getElementById("canvas");    
-    
     canvas.onmousedown = mouseDown;
     canvas.onmousemove = mouseMove;
     canvas.onmouseup = mouseUp;
@@ -28,24 +27,27 @@ function initCanvas(canDrag, onMouseUpDevice, idEnvironment) {
     drawLoading();
     
     $.getJSON(getUrl('environment?id='+idEnvironment), null, function(data) {
-        for (var item in data) {
-            imagePlanta.src = data[item].fileName;
+        for (var environment in data) {
+            imagePlanta.src = data[environment].fileName;
             imagePlanta.onload = function() {
                 draw();
             };
-        }
-    });
-    
-    arrayImage = new Array(); //para limpar em caso de ajax update
-    $.getJSON(getUrl('device/list?idEnvironment='+idEnvironment), null, function(data) {
-        for (var device in data) {
-            for (var index in data[device]) {
-                d = data[device][index];                
-                arrayImage[countImage++] = new ImageShape(d.id, d.x, d.y, d.name, d.src0, d.src1);
-            }
+
+            list = data[environment].listDevicePositionRest; //returns array only when > 1
+            if (list instanceof Array) {
+                for (var index in list) {
+                    addDevicePosition(list[index]);                    
+                }
+            } else {
+                addDevicePosition(list);
+            }                
         }
         updateValues();
     });
+}
+
+function addDevicePosition(p) {
+    arrayImage[countImage++] = new ImageShape(p.id, p.x, p.y, p.name, p.src0, p.src1);
 }
 
 function draw() {
