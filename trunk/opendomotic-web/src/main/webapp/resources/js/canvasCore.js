@@ -33,6 +33,10 @@ function initCanvas(canDrag, onMouseUpDevice, idEnvironment) {
                 draw();
             };
 
+            //para limpar em caso de ajax update:
+            arrayImage = new Array(); 
+            countImage = 0;
+            
             list = data[environment].listDevicePositionRest; //returns array only when > 1
             if (list instanceof Array) {
                 for (var index in list) {
