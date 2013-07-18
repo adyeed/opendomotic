@@ -10,7 +10,6 @@ import com.opendomotic.service.DeviceService;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
-import javax.annotation.PostConstruct;
 import javax.enterprise.context.RequestScoped;
 import javax.faces.model.SelectItem;
 import javax.inject.Inject;
@@ -36,28 +35,21 @@ public class DeviceMB {
     private List<SelectItem> listProtocol;
     private boolean dialogVisible = false;
     
-    @PostConstruct
-    public void init() {
-        LOG.info("DeviceMB.init...");
-        //config = new DeviceConfig();
-    }
-    
     public void create() {
-        config = new DeviceConfig();
-        dialogVisible = true;
+        edit(new DeviceConfig());
     }    
     
     public void save() {
         LOG.info(config.toString());
         deviceConfigService.save(config);
-        deviceService.addDevice(config.createDevice());
+        deviceService.loadDevices();
         dialogVisible = false;
     }
         
     public void delete(DeviceConfig config) {
         LOG.info(config.toString());
         deviceConfigService.delete(config);
-        deviceService.removeDevice(config.getName());
+        deviceService.loadDevices();
     }
     
     public void edit(DeviceConfig config) {

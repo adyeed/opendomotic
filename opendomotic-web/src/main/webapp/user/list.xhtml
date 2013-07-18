@@ -11,13 +11,13 @@
         <h:form id="form">
             <p:toolbar>
                 <p:toolbarGroup>
-                    <p:commandButton id="buttonAtualizar" action="#{domoticMB.atualizar()}" value="Atualizar" update="form"/>
+                    <p:commandButton id="buttonAtualizar" action="#{listMB.atualizar}" value="#{msg.Refresh}" update="form"/>
                 </p:toolbarGroup>
             </p:toolbar>
 
             <br/>
 
-            <p:dataTable id="table" value="#{domoticMB.listDevice}" var="device">
+            <p:dataTable id="table" value="#{listMB.listDevice}" var="device">
                 <p:column>
                     <f:facet name="header">
                         #{msg.Device}
@@ -31,12 +31,6 @@
                     #{device.value}
                 </p:column>
             </p:dataTable>
-            
-            <br/>
-            
-            <h:commandButton value="adicionar" action="#{domoticMB.adicionarTeste()}"/>
-            <h:commandButton value="excluir" action="#{domoticMB.excluirTeste()}"/>
-            <h:outputText value="#{domoticMB.teste}"/>
         </h:form>
     </ui:define>
 
