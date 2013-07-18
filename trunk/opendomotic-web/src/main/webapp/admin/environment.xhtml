@@ -18,6 +18,7 @@
                     <p:inputText value="#{environmentMB.environment.name}"/>
 
                     <h:outputText value="#{msg.Image}"/>
+                    <h:outputText value="#{msg.SaveToEnableUpload}" rendered="#{environmentMB.environment.id == null}"/>
                     <h:panelGroup rendered="#{environmentMB.environment.id != null}">
                         <p:graphicImage 
                             value="../resources/images/#{environmentMB.environment.fileName}" 
