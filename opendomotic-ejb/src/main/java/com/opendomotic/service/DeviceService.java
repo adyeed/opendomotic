@@ -27,57 +27,48 @@ public class DeviceService {
     
     private static final Logger LOG = Logger.getLogger(DeviceService.class.getName());
     
-    private Map<String, DeviceProxy> mapDevice = new HashMap<>();
-    private List<DeviceProxy> listDevice = new ArrayList<>(); //contém a lista por causa da iteração do jsf que não funciona com map
+    private Map<String, DeviceProxy> mapDevice;
     
     @Inject
     private DeviceConfigService deviceConfigService;
     
     @PostConstruct
-    public void init() {
-        LOG.info("DeviceService init...");        
+    public void init() {    
         loadDevices();
     }
     
-    private void loadDevices() {
-        System.out.println(deviceConfigService);
+    public void loadDevices() {
+        LOG.info("loading devices..."); 
+        
+        mapDevice = new HashMap<>();            
         for (DeviceConfig config : deviceConfigService.findAll()) {
             Device device = config.createDevice();
             if (device != null) {
-                addDevice(device);
+                mapDevice.put(device.getName(), new DeviceProxy(device));
             }
         }
     }
     
-    public void addDevice(Device device) {
-        DeviceProxy deviceProxy = new DeviceProxy(device);
-        mapDevice.put(device.getName(), deviceProxy);
-        listDevice.add(deviceProxy);
-    } 
-    
-    public void removeDevice(String name) {
-        mapDevice.remove(name);
-        
-        for (DeviceProxy deviceProxy : listDevice) {
-            if (deviceProxy.getName().equals(name)) {
-                listDevice.remove(deviceProxy);
-                break;
-            }
+    public void updateDevices() {
+        for (DeviceProxy device : mapDevice.values()) {
+            device.updateValue();
         }
     }
     
     public Device getDevice(String name) {
         return mapDevice.get(name);
     }
-    
-    public void updateDevices() {
-        for (DeviceProxy device : listDevice) {
-            device.updateValue();
-        }
+
+    public Map<String, DeviceProxy> getMapDevice() {
+        return mapDevice;
     }
     
-    public List<DeviceProxy> getListDevice() {
-        return listDevice;
+    public List<DeviceProxy> createListDevice() {
+        List<DeviceProxy> list = new ArrayList();
+        for (DeviceProxy device : mapDevice.values()) {
+            list.add(device);
+        }
+        return list;
     }
     
 }

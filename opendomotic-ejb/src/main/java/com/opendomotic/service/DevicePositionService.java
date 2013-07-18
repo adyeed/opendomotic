@@ -5,7 +5,6 @@
 package com.opendomotic.service;
 
 import com.opendomotic.model.entity.DevicePosition;
-import java.util.List;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
