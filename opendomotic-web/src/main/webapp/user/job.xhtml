@@ -16,7 +16,7 @@
                     <p:inputMask value="#{jobMB.date}" mask="99/99/9999 99:99"/>
                     Device:
                     <p:selectOneMenu value="#{jobMB.deviceName}">
-                        <f:selectItems value="#{domoticMB.listDevice}" var="device" itemLabel="#{device.name}" itemValue="#{device.name}"/>
+                        <f:selectItems value="#{listMB.listDevice}" var="device" itemLabel="#{device.name}" itemValue="#{device.name}"/>
                     </p:selectOneMenu>
                     Valor:
                     <p:inputText value="#{jobMB.value}"/>
