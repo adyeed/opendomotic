@@ -40,7 +40,7 @@ public class DeviceRest {
     @Path(value = "/value")
     public List<DeviceValue> getListValue() {
         List<DeviceValue> list = new ArrayList<>();
-        for (DeviceProxy device : deviceService.getListDevice()) {
+        for (DeviceProxy device : deviceService.getMapDevice().values()) {
             String value = "";
             try {
                 device.updateValue();
