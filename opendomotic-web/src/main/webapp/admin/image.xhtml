@@ -18,6 +18,7 @@
                     <p:inputText value="#{imageMB.entity.name}"/>
                     
                     <h:outputText value="#{msg.Image}"/>
+                    <h:outputText value="#{msg.SaveToEnableUpload}" rendered="#{imageMB.entity.id == null}"/>
                     <h:panelGrid columns="2" rendered="#{imageMB.entity.id != null}">
                         <p:graphicImage 
                             value="../resources/images/#{imageMB.entity.fileName}" 
