@@ -10,6 +10,7 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
+import javax.enterprise.context.SessionScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -18,6 +19,7 @@ import javax.inject.Named;
  * @author Jaques
  */
 @Named
+@SessionScoped
 public class ListMB implements Serializable {
     
     private static final Logger LOG = Logger.getLogger(ListMB.class.getName());
