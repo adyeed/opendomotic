@@ -11,15 +11,15 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Jaques Claudino
  */
 @XmlRootElement
-public class DeviceValue {
+public class DeviceValueRest {
     
     private String name;
     private String value;
 
-    public DeviceValue() {
+    public DeviceValueRest() {
     }
 
-    public DeviceValue(String name, String value) {
+    public DeviceValueRest(String name, String value) {
         this.name = name;
         this.value = value;
     }
