@@ -7,7 +7,7 @@ package com.opendomotic.service.rest;
 import com.opendomotic.api.Device;
 import com.opendomotic.model.DeviceProxy;
 import com.opendomotic.model.entity.DevicePosition;
-import com.opendomotic.model.rest.DeviceValue;
+import com.opendomotic.model.rest.DeviceValueRest;
 import com.opendomotic.service.DevicePositionService;
 import com.opendomotic.service.DeviceService;
 import java.util.ArrayList;
@@ -25,9 +25,9 @@ import javax.ws.rs.core.MediaType;
  * @author Jaques
  */
 @Path("/device")
-public class DeviceRest {
+public class DeviceRestService {
     
-    private static final Logger LOG = Logger.getLogger(DeviceRest.class.getName());
+    private static final Logger LOG = Logger.getLogger(DeviceRestService.class.getName());
 
     @Inject
     private DeviceService deviceService;
@@ -38,8 +38,8 @@ public class DeviceRest {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path(value = "/value")
-    public List<DeviceValue> getListValue() {
-        List<DeviceValue> list = new ArrayList<>();
+    public List<DeviceValueRest> getListValue() {
+        List<DeviceValueRest> list = new ArrayList<>();
         for (DeviceProxy device : deviceService.getMapDevice().values()) {
             String value = "";
             try {
@@ -48,7 +48,7 @@ public class DeviceRest {
             } catch (Exception e) {
                 LOG.warning(e.toString());
             }            
-            list.add(new DeviceValue(device.getName(), value));
+            list.add(new DeviceValueRest(device.getName(), value));
         }
         return list;
     }
