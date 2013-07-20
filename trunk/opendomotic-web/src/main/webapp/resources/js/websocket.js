@@ -14,7 +14,13 @@ function connect() {
         log('Info: Conexao aberta.');
     };
     ws.onmessage = function (event) {
-        log('Recebido: ' + event.data);
+        msg = event.data;
+        log('Recebido: ' + msg);
+        
+        //algum dispositivo mudou de estado, então servidor notificou:
+        if (msg === 'update') {
+            updateValues();
+        }        
     };
     ws.onclose = function () {
         log('Info: Conexao fechada.');
