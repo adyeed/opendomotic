@@ -8,33 +8,33 @@
 
     <ui:define name="content">
         <h:form id="form">
-            <p:commandButton value="#{msg.New}" action="#{deviceMB.create()}" update="panel"/>
+            <p:commandButton value="#{msg.New}" action="#{configMB.create()}" update="panel"/>
             
-            <p:panel id="panel" header="#{msg.Device}" visible="#{deviceMB.dialogVisible}">
-                <h:inputHidden value="#{deviceMB.config.id}"/>
+            <p:panel id="panel" header="#{msg.Device}" visible="#{configMB.visible}">
+                <h:inputHidden value="#{configMB.entity.id}"/>
                 
                 <h:panelGrid columns="2">
                     #{msg.Name}
-                    <p:inputText value="#{deviceMB.config.name}"/>
+                    <p:inputText value="#{configMB.entity.name}"/>
                     
                     #{msg.Address}
-                    <p:inputText value="#{deviceMB.config.address}"/>
+                    <p:inputText value="#{configMB.entity.address}"/>
                     
                     #{msg.Param}
-                    <p:inputText value="#{deviceMB.config.param}"/>
+                    <p:inputText value="#{configMB.entity.param}"/>
                     
                     #{msg.Protocol}
-                    <p:selectOneMenu value="#{deviceMB.config.protocol}">
-                        <f:selectItems value="#{deviceMB.listProtocol}"/>
+                    <p:selectOneMenu value="#{configMB.entity.protocol}">
+                        <f:selectItems value="#{configMB.listProtocol}"/>
                     </p:selectOneMenu> 
                 </h:panelGrid>
                 
-                <p:commandButton value="#{msg.Save}" action="#{deviceMB.save}" update="panel,table"/>
+                <p:commandButton value="#{msg.Save}" action="#{configMB.save}" update="panel,table"/>
             </p:panel>
             
             <br/>
 
-            <p:dataTable id="table" value="#{deviceMB.listConfig}" var="config">
+            <p:dataTable id="table" value="#{configMB.listAll}" var="config">
                 <p:column>
                     <f:facet name="header">
                         #{msg.Name}
@@ -60,8 +60,8 @@
                     #{config.protocol}
                 </p:column>
                 <p:column>
-                    <p:commandButton value="#{msg.Delete}" action="#{deviceMB.delete(config)}" update="table" onclick="return confirm('#{msg.ConfirmsTheExclusion}');"/>
-                    <p:commandButton value="#{msg.Edit}" action="#{deviceMB.edit(config)}" update="@form"/>
+                    <p:commandButton value="#{msg.Delete}" action="#{configMB.delete(config)}" update="table" onclick="return confirm('#{msg.ConfirmsTheExclusion}');"/>
+                    <p:commandButton value="#{msg.Edit}" action="#{configMB.edit(config)}" update="@form"/>
                 </p:column>
             </p:dataTable>
         </h:form>

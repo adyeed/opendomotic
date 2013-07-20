@@ -132,5 +132,6 @@ function mouseUp(e) {
     }
     imagePressed = null;
     
-    setTimeout(function() {updateValues();}, 500);
+    //já é notificado por websocket, entao nao precisa disso:
+    //setTimeout(function() {updateValues();}, 500);
 }

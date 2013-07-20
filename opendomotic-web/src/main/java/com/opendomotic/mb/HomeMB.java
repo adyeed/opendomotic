@@ -4,7 +4,7 @@
  */
 package com.opendomotic.mb;
 
-import com.opendomotic.service.EnvironmentService;
+import com.opendomotic.service.dao.EnvironmentDAO;
 import java.io.Serializable;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
@@ -23,13 +23,13 @@ public class HomeMB implements Serializable {
     private static final Logger LOG = Logger.getLogger(HomeMB.class.getName());
     
     @Inject
-    private EnvironmentService environmentService;
+    private EnvironmentDAO environmentDAO;
     
     private Integer idEnvironment;
     
     @PostConstruct
     public void init() {
-        idEnvironment = environmentService.findFirst().getId();
+        idEnvironment = environmentDAO.findFirst().getId();
         LOG.info("HomeMB init id="+idEnvironment);
     }
     
