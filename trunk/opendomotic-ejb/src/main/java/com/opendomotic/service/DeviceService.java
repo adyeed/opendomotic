@@ -4,6 +4,7 @@
  */
 package com.opendomotic.service;
 
+import com.opendomotic.service.dao.DeviceConfigDAO;
 import com.opendomotic.api.Device;
 import com.opendomotic.model.DeviceProxy;
 import com.opendomotic.model.entity.DeviceConfig;
@@ -30,7 +31,7 @@ public class DeviceService {
     private Map<String, DeviceProxy> mapDevice;
     
     @Inject
-    private DeviceConfigService deviceConfigService;
+    private DeviceConfigDAO deviceConfigService;
 
     @Inject
     private WebSocketService webSocketService;
