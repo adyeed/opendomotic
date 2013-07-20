@@ -5,10 +5,10 @@
 package com.opendomotic.model.entity;
 
 import com.opendomotic.api.Device;
-import com.opendomotic.ethernet.HttpDevice;
-import com.opendomotic.serial.SerialDevice;
 import java.util.logging.Logger;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 
 /**
  *
@@ -21,14 +21,15 @@ public class DeviceConfig extends AbstractEntityName {
     
     private String address;
     private String param;
-    private String protocol;
+    
+    @Enumerated(EnumType.STRING)
+    private DeviceProtocol protocol;
 
     //TO-DO: factory method para enum de protocol
     public Device createDevice() {
         try {
-            switch (protocol) {
-                case "RS485": return new SerialDevice(getName(), Integer.parseInt(address), Integer.parseInt(param));
-                case "HTTP":  return new HttpDevice(getName(), address, param);
+            if (protocol != null) {
+                return protocol.createDevice(this);
             }
         } catch (Exception e) {
             LOG.severe("Error on create device");
@@ -52,11 +53,11 @@ public class DeviceConfig extends AbstractEntityName {
         this.param = param;
     }
 
-    public String getProtocol() {
+    public DeviceProtocol getProtocol() {
         return protocol;
     }
 
-    public void setProtocol(String protocol) {
+    public void setProtocol(DeviceProtocol protocol) {
         this.protocol = protocol;
     }
 

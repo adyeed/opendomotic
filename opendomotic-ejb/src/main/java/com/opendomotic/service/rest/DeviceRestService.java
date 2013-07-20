@@ -8,7 +8,7 @@ import com.opendomotic.api.Device;
 import com.opendomotic.model.DeviceProxy;
 import com.opendomotic.model.entity.DevicePosition;
 import com.opendomotic.model.rest.DeviceValueRest;
-import com.opendomotic.service.DevicePositionService;
+import com.opendomotic.service.dao.DevicePositionDAO;
 import com.opendomotic.service.DeviceService;
 import com.opendomotic.service.WebSocketService;
 import java.util.ArrayList;
@@ -34,7 +34,7 @@ public class DeviceRestService {
     private DeviceService deviceService;
 
     @Inject
-    private DevicePositionService positionService;
+    private DevicePositionDAO positionDAO;
     
     @Inject
     private WebSocketService webSocketService;
@@ -67,11 +67,11 @@ public class DeviceRestService {
         
         LOG.info(String.format("id=%d x=%d y=%d", id, x, y));
         
-        DevicePosition position = positionService.findById(id);
+        DevicePosition position = positionDAO.findById(id);
         if (position != null) {
             position.setX(x);
             position.setY(y);
-            positionService.save(position);
+            positionDAO.save(position);
             return "OK";
         }
         return "Device não encontrado";

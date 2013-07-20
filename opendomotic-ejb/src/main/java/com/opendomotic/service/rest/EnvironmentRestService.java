@@ -8,7 +8,7 @@ import com.opendomotic.model.entity.DevicePosition;
 import com.opendomotic.model.entity.Environment;
 import com.opendomotic.model.rest.DevicePositionRest;
 import com.opendomotic.model.rest.EnvironmentRest;
-import com.opendomotic.service.EnvironmentService;
+import com.opendomotic.service.dao.EnvironmentDAO;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
@@ -26,12 +26,12 @@ import javax.ws.rs.core.MediaType;
 public class EnvironmentRestService {
     
     @Inject
-    private EnvironmentService environmentService;
+    private EnvironmentDAO environmentDAO;
     
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public EnvironmentRest getListGraphicDevice(@QueryParam("id") int idEnvironment) {
-        Environment environment = environmentService.findById(idEnvironment);
+        Environment environment = environmentDAO.findById(idEnvironment);
         if (environment != null) {
             EnvironmentRest e = new EnvironmentRest();            
             List<DevicePositionRest> list = new ArrayList<>();

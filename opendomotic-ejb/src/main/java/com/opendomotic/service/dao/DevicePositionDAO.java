@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.opendomotic.service;
+package com.opendomotic.service.dao;
 
 import com.opendomotic.model.entity.DevicePosition;
 import javax.ejb.Stateless;
@@ -15,24 +15,19 @@ import javax.persistence.PersistenceContext;
  * @author jaques
  */
 @Stateless
-public class DevicePositionService extends AbstractSessionFacade<DevicePosition> {
+public class DevicePositionDAO extends AbstractDAO<DevicePosition> {
 
     @PersistenceContext
     private EntityManager em;
     
     @Inject 
-    private EnvironmentService environmentService;
+    private EnvironmentDAO environmentService;
     
     @Inject 
-    private DeviceConfigService configService;
+    private DeviceConfigDAO configService;
     
     @Inject 
-    private DeviceImageService imageService;
-    
-    @Override
-    public EntityManager getEntityManager() {
-        return em;
-    }
+    private DeviceImageDAO imageService;
 
     @Override
     public Class getEntityClass() {
