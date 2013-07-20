@@ -8,9 +8,9 @@
 
     <ui:define name="content">
         <h:form id="form">
-            <p:commandButton value="#{msg.New}" action="#{configMB.create()}" update="panel"/>
+            <p:commandButton value="#{msg.New}" action="#{configMB.create()}" update="dialog"/>
             
-            <p:panel id="panel" header="#{msg.Device}" visible="#{configMB.visible}">
+            <p:dialog id="dialog" header="#{msg.Device}" visible="#{configMB.visible}">
                 <h:inputHidden value="#{configMB.entity.id}"/>
                 
                 <h:panelGrid columns="2">
@@ -29,8 +29,9 @@
                     </p:selectOneMenu> 
                 </h:panelGrid>
                 
-                <p:commandButton value="#{msg.Save}" action="#{configMB.save}" update="panel,table"/>
-            </p:panel>
+                <p:commandButton value="#{msg.Save}" action="#{configMB.save}" update="dialog,table"/>
+                <p:commandButton value="#{msg.Cancel}" action="#{configMB.cancel}" update="dialog"/>
+            </p:dialog>
             
             <br/>
 
