@@ -10,9 +10,9 @@
         <h:form id="form">
             <p:growl id="messages" showDetail="true"/> 
             
-            <p:commandButton value="#{msg.New}" action="#{imageMB.create}" update="panel"/>
+            <p:commandButton value="#{msg.New}" action="#{imageMB.create}" update="dialog"/>
             
-            <p:panel id="panel" header="#{msg.Image}" visible="#{imageMB.visible}">               
+            <p:dialog id="dialog" header="#{msg.Image}" visible="#{imageMB.visible}">               
                 <h:panelGrid columns="2">
                     <h:outputText value="#{msg.Name}"/>
                     <p:inputText value="#{imageMB.entity.name}"/>
@@ -28,14 +28,15 @@
                             fileUploadListener="#{imageMB.handleFileUpload}"  
                             label="#{msg.Upload}"
                             mode="advanced"  
-                            update="panel,messages"  
+                            update="dialog,messages"  
                             auto="true"  
                             allowTypes="/(\.|\/)(gif|jpe?g|png)$/"/>
                     </h:panelGrid>
                 </h:panelGrid>
                 
-                <p:commandButton value="#{msg.Save}" action="#{imageMB.save}" update="panel,table"/>
-            </p:panel>
+                <p:commandButton value="#{msg.Save}" action="#{imageMB.save}" update="dialog,table"/>
+                <p:commandButton value="#{msg.Cancel}" action="#{imageMB.cancel}" update="dialog"/>
+            </p:dialog>
 
             <br/>
             
