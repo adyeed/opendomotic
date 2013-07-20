@@ -12,7 +12,7 @@
             
             <p:commandButton value="#{msg.New}" action="#{imageMB.create}" update="panel"/>
             
-            <p:panel id="panel" header="#{msg.Image}" visible="#{imageMB.dialogVisible}">               
+            <p:panel id="panel" header="#{msg.Image}" visible="#{imageMB.visible}">               
                 <h:panelGrid columns="2">
                     <h:outputText value="#{msg.Name}"/>
                     <p:inputText value="#{imageMB.entity.name}"/>

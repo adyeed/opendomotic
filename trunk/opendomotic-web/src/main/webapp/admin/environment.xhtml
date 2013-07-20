@@ -12,18 +12,18 @@
             
             <p:commandButton value="#{msg.New}" action="#{environmentMB.create}" update="panel"/>
             
-            <p:panel id="panel" header="#{msg.Environment}" visible="#{environmentMB.dialogVisible}">                   
+            <p:panel id="panel" header="#{msg.Environment}" visible="#{environmentMB.visible}">                   
                 <h:panelGrid columns="2">
                     <h:outputText value="#{msg.Name}"/>
-                    <p:inputText value="#{environmentMB.environment.name}"/>
+                    <p:inputText value="#{environmentMB.entity.name}"/>
 
                     <h:outputText value="#{msg.Image}"/>
-                    <h:outputText value="#{msg.SaveToEnableUpload}" rendered="#{environmentMB.environment.id == null}"/>
-                    <h:panelGroup rendered="#{environmentMB.environment.id != null}">
+                    <h:outputText value="#{msg.SaveToEnableUpload}" rendered="#{environmentMB.entity.id == null}"/>
+                    <h:panelGroup rendered="#{environmentMB.entity.id != null}">
                         <p:graphicImage 
-                            value="../resources/images/#{environmentMB.environment.fileName}" 
+                            value="../resources/images/#{environmentMB.entity.fileName}" 
                             width="200" 
-                            rendered="#{!empty environmentMB.environment.fileName}"/>
+                            rendered="#{!empty environmentMB.entity.fileName}"/>
                         
                         <p:fileUpload fileUploadListener="#{environmentMB.handleFileUpload}"  
                             label="#{msg.Upload}"
@@ -39,7 +39,7 @@
             
             <br/>
             
-            <p:dataTable id="table" value="#{environmentMB.listEnvironment}" var="item">
+            <p:dataTable id="table" value="#{environmentMB.listAll}" var="item">
                 <p:column>
                     <f:facet name="header">
                         #{msg.Name}

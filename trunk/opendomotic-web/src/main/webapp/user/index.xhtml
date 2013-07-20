@@ -19,7 +19,7 @@
                     <h:panelGrid columns="2" style="height: 48px;">
                         <h:outputText value="#{msg.Environment}"/> 
                         <p:selectOneMenu value="#{homeMB.idEnvironment}">
-                            <f:selectItems value="#{environmentMB.listEnvironment}" var="e" itemValue="#{e.id}" itemLabel="#{e.name}"/>
+                            <f:selectItems value="#{environmentMB.listAll}" var="e" itemValue="#{e.id}" itemLabel="#{e.name}"/>
                             <p:ajax update="panelGroupCanvas"/>
                         </p:selectOneMenu>                      
                     </h:panelGrid>

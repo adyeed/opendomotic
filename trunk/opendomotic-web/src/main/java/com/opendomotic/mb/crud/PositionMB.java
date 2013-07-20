@@ -2,12 +2,11 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.opendomotic.mb;
+package com.opendomotic.mb.crud;
 
-import com.opendomotic.service.EnvironmentService;
-import com.opendomotic.service.DevicePositionService;
+import com.opendomotic.service.dao.EnvironmentDAO;
+import com.opendomotic.service.dao.DevicePositionDAO;
 import java.io.Serializable;
-import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.event.ValueChangeEvent;
@@ -22,13 +21,11 @@ import javax.inject.Named;
 @SessionScoped
 public class PositionMB implements Serializable {
     
-    private static final Logger LOG = Logger.getLogger(PositionMB.class.getName());
+    @Inject 
+    private EnvironmentDAO environmentDAO;
     
     @Inject 
-    private EnvironmentService environmentService;
-    
-    @Inject 
-    private DevicePositionService positionService;
+    private DevicePositionDAO positionDAO;
     
     private Integer idEnvironment;    
     private Integer idConfig;    
@@ -36,7 +33,7 @@ public class PositionMB implements Serializable {
     
     @PostConstruct
     public void init() {
-        idEnvironment = environmentService.findFirst().getId();
+        idEnvironment = environmentDAO.findFirst().getId();
     }
     
     public void valueChangeMethod(ValueChangeEvent e) {
@@ -44,11 +41,11 @@ public class PositionMB implements Serializable {
     }
     
     public void add() {
-        positionService.save(idEnvironment, idConfig, idImage);       
+        positionDAO.save(idEnvironment, idConfig, idImage);       
     }
     
     public void clear() {
-        positionService.deleteByIdEnvironment(idEnvironment);
+        positionDAO.deleteByIdEnvironment(idEnvironment);
     }
 
     public Integer getIdEnvironment() {
