@@ -19,23 +19,19 @@ import javax.inject.Inject;
 public class TimerService {
 
     private static final Logger LOG = Logger.getLogger(TimerService.class.getName());
-    private BroadcastWebsocket broadcastWebsocket;
     
     @Inject
     private JobService jobService;
+    
+    @Inject
+    private WebSocketService webSocketService;
     
     @Schedule(minute = "*/1", hour = "*")
     public void doWork() {       
         //LOG.info("Timer trigger");
         jobService.checkJobs();
         
-        if (broadcastWebsocket != null) {
-            broadcastWebsocket.sendBroadcast(new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(new Date()));
-        }
-    }
-
-    public void setBroadcastWebsocket(BroadcastWebsocket broadcastWebsocket) {
-        this.broadcastWebsocket = broadcastWebsocket;
+        webSocketService.send(new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(new Date()));
     }
 
 }

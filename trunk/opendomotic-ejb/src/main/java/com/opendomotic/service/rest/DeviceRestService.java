@@ -10,6 +10,7 @@ import com.opendomotic.model.entity.DevicePosition;
 import com.opendomotic.model.rest.DeviceValueRest;
 import com.opendomotic.service.DevicePositionService;
 import com.opendomotic.service.DeviceService;
+import com.opendomotic.service.WebSocketService;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
@@ -35,6 +36,9 @@ public class DeviceRestService {
     @Inject
     private DevicePositionService positionService;
     
+    @Inject
+    private WebSocketService webSocketService;
+    
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path(value = "/value")
@@ -43,7 +47,7 @@ public class DeviceRestService {
         for (DeviceProxy device : deviceService.getMapDevice().values()) {
             String value = "";
             try {
-                device.updateValue();
+                //device.updateValue();
                 value = device.getValue().toString();
             } catch (Exception e) {
                 LOG.warning(e.toString());
@@ -80,6 +84,7 @@ public class DeviceRestService {
         Device device = deviceService.getDevice(name);
         if (device != null) {
             device.setValue(device.getValue() == 1 ? 0 : 1);
+            webSocketService.send("update");
             return "OK";
         } else {
             return "Device não encontrado";
