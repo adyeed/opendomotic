@@ -39,7 +39,6 @@ public class ListMB implements Serializable {
     }
     
     public void atualizar() {
-        LOG.info("updating...");
         deviceService.updateDevices();
     }
 
