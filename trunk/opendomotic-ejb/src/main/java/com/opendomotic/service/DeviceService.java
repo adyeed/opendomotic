@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
+import javax.ejb.Asynchronous;
 import javax.ejb.Schedule;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
@@ -57,7 +58,7 @@ public class DeviceService {
     public void executeUpdate() {
         updateDevices();
     }
-
+    
     public void updateDevices() {
         boolean changed = false;
         for (DeviceProxy device : mapDevice.values()) {
@@ -70,6 +71,12 @@ public class DeviceService {
             //TO-DO: se alterou estado, notificar apenas os devices correspondentes:
             webSocketService.send("update");
         }
+    }
+    
+    @Asynchronous
+    public void toggleDevice(Device device) {
+        device.setValue(device.getValue() == 1 ? 0 : 1);
+        updateDevices(); //atualiza pq toggle pode afetar outros devices.
     }
 
     public Device getDevice(String name) {
