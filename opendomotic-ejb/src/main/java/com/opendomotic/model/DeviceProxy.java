@@ -35,6 +35,12 @@ public class DeviceProxy implements Device {
         return value;
     }
     
+    public String getValueStr() {
+        if (value != null)
+            return value.toString();
+        return "";
+    }
+    
     public boolean updateValue() {
         Object oldValue = value;
         value = device.getValue();

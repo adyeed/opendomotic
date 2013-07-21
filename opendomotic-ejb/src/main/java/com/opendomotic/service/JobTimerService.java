@@ -16,9 +16,9 @@ import javax.inject.Inject;
  * @author jaques
  */
 @Singleton
-public class TimerService {
+public class JobTimerService {
 
-    private static final Logger LOG = Logger.getLogger(TimerService.class.getName());
+    private static final Logger LOG = Logger.getLogger(JobTimerService.class.getName());
     
     @Inject
     private JobService jobService;
