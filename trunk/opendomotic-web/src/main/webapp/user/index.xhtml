@@ -26,8 +26,10 @@
                 </p:toolbarGroup> 
                 
                 <p:toolbarGroup>
-                    <p:commandButton value="#{msg.Refresh}" onclick="updateDeviceValues();"/>
-                </p:toolbarGroup>
+                    <p:commandButton value="#{msg.Refresh}" onclick="updateDeviceValues();" update="temperaturaMin"/>
+                    <p:separator/>
+                    <h:outputText id="temperaturaMin" value="Mínima: #{homeMB.temperaturaMin}"/>
+                </p:toolbarGroup> 
             </p:toolbar>
             
             <br/>
