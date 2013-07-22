@@ -81,9 +81,9 @@ public class DeviceService {
     
     //temporário:
     private void checkTemperaturaMin(DeviceProxy device) {
-        if (device.getName().equals("Temperatura")) {
+        if (device.getName().equals("Temperatura") && device.getValue() != null) {
             Integer temperatura = (Integer) device.getValue();
-            if (temperatura < temperaturaMinValue || temperaturaMinValue == null) {
+            if (temperaturaMinValue == null || temperatura < temperaturaMinValue) {
                 temperaturaMinValue = temperatura;
                 temperaturaMinDate = new Date();
             }
