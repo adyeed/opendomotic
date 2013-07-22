@@ -4,8 +4,10 @@
  */
 package com.opendomotic.mb;
 
+import com.opendomotic.service.DeviceService;
 import com.opendomotic.service.dao.EnvironmentDAO;
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.SessionScoped;
@@ -25,6 +27,9 @@ public class HomeMB implements Serializable {
     @Inject
     private EnvironmentDAO environmentDAO;
     
+    @Inject
+    private DeviceService deviceService;
+    
     private Integer idEnvironment;
     
     @PostConstruct
@@ -39,6 +44,15 @@ public class HomeMB implements Serializable {
 
     public void setIdEnvironment(Integer idEnvironment) {
         this.idEnvironment = idEnvironment;
+    }
+    
+    public String getTemperaturaMin() {
+        if (deviceService.getTemperaturaMinValue() != null) {        
+            return deviceService.getTemperaturaMinValue() + "°C | " + 
+                new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(deviceService.getTemperaturaMinDate());
+        } else {
+            return "";
+        }
     }
     
 }
