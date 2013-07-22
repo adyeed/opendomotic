@@ -46,7 +46,7 @@ function initCanvas(canDrag, onMouseUpDevice, idEnvironment) {
                 addDevicePosition(list);
             }                
         }
-        updateValues();
+        updateDeviceValues();
     });
 }
 
@@ -83,7 +83,7 @@ function drawLoading() {
     context.fillText("carregando...", 10, 30);
 }
 
-function updateValues() {
+function updateDeviceValues() {
     drawLoading();
     $.getJSON(getUrl('device/value'), null, function(data) {
         for (var device in data) {
@@ -133,5 +133,5 @@ function mouseUp(e) {
     imagePressed = null;
     
     //já é notificado por websocket, entao nao precisa disso:
-    //setTimeout(function() {updateValues();}, 500);
+    //setTimeout(function() {updateDeviceValues();}, 500);
 }
