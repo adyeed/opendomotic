@@ -41,8 +41,8 @@ public class HttpDevice implements Device {
             HttpResponse response = new DefaultHttpClient().execute(request);
             BufferedReader rd = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
             String value = rd.readLine();
-            String log = url + " Response=" + value;
-            LOG.info(log);
+            //String log = url + " Response=" + value;
+            //LOG.info(log);
             return Integer.parseInt(value);            
         } catch (IOException ex) {
             LOG.severe(ex.toString());

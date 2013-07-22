@@ -118,10 +118,14 @@ public class SerialBus {
                 break;
             }
         }
-        log.append(System.currentTimeMillis()-millisStart);
-        log.append(" ms");
-        LOG.info(log.toString());
-
+        
+        long tempo = System.currentTimeMillis()-millisStart;
+        if (tempo > 30) {
+            log.append(tempo);
+            log.append(" ms");
+            LOG.info(log.toString());
+        }
+        
         if (indexRx > 0 && isCheckSumOK(bufferRx))
             return Arrays.copyOf(bufferRx, indexRx);
         return null;        
