@@ -9,6 +9,7 @@ import com.opendomotic.api.Device;
 import com.opendomotic.model.DeviceProxy;
 import com.opendomotic.model.entity.DeviceConfig;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -37,6 +38,10 @@ public class DeviceService {
     @Inject
     private WebSocketService webSocketService;
     
+    //temporário:
+    private Integer temperaturaMinValue;
+    private Date temperaturaMinDate;
+    
     @PostConstruct
     public void init() {
         loadDevices();
@@ -63,6 +68,7 @@ public class DeviceService {
         boolean changed = false;
         for (DeviceProxy device : mapDevice.values()) {
             if (device.updateValue()) {
+                checkTemperaturaMin(device);                
                 changed = true;
             }
         }
@@ -70,6 +76,17 @@ public class DeviceService {
         if (changed) {
             //TO-DO: se alterou estado, notificar apenas os devices correspondentes:
             webSocketService.sendUpdateDeviceValues("all");
+        }
+    }
+    
+    //temporário:
+    private void checkTemperaturaMin(DeviceProxy device) {
+        if (device.getName().equals("Temperatura")) {
+            Integer temperatura = (Integer) device.getValue();
+            if (temperatura < temperaturaMinValue || temperaturaMinValue == null) {
+                temperaturaMinValue = temperatura;
+                temperaturaMinDate = new Date();
+            }
         }
     }
     
@@ -100,4 +117,13 @@ public class DeviceService {
         }
         return list;
     }
+
+    public Integer getTemperaturaMinValue() {
+        return temperaturaMinValue;
+    }
+
+    public Date getTemperaturaMinDate() {
+        return temperaturaMinDate;
+    }
+    
 }
