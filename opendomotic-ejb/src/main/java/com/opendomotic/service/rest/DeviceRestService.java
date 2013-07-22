@@ -70,9 +70,10 @@ public class DeviceRestService {
     @Produces(MediaType.APPLICATION_JSON)
     @Path(value = "/toggle")
     public String toggle(@QueryParam("name") String name) {
+        LOG.info("name="+name);
         Device device = deviceService.getDevice(name);
         if (device != null) {
-            deviceService.toggleDevice(device);
+            deviceService.toggleDeviceValue(device);
             return "OK";
         } else {
             return "Device não encontrado";

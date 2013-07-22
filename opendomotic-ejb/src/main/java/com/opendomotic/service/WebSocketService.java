@@ -12,13 +12,19 @@ import javax.ejb.Singleton;
  */
 @Singleton
 public class WebSocketService {
+        
+    private static final String UPDATE_DEVICE_VALUES = "updateDeviceValues";
     
     private BroadcastWebsocket broadcastWebsocket;
-
+    
     public void send(String msg) {
         if (broadcastWebsocket != null) {
             broadcastWebsocket.sendBroadcast(msg);
         }
+    }
+    
+    public void sendUpdateDeviceValues(String origin) {
+        send(UPDATE_DEVICE_VALUES + ": " + origin);
     }
     
     public void setBroadcastWebsocket(BroadcastWebsocket broadcastWebsocket) {
