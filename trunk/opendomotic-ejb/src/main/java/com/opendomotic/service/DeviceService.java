@@ -60,11 +60,16 @@ public class DeviceService {
     }
 
     @Schedule(second = "*/30", minute = "*", hour = "*")
-    public void timerUpdateDeviceValues() {
-        updateDeviceValues();
+    public void updateDeviceValuesTimer() {
+        updateDeviceValues("timer");
     }
     
-    public void updateDeviceValues() {
+    @Asynchronous
+    public void updateDeviceValuesAsync() {
+        updateDeviceValues("async");
+    }
+    
+    public void updateDeviceValues(String origin) {
         boolean changed = false;
         for (DeviceProxy device : mapDevice.values()) {
             if (device.updateValue()) {
@@ -75,7 +80,7 @@ public class DeviceService {
         
         if (changed) {
             //TO-DO: se alterou estado, notificar apenas os devices correspondentes:
-            webSocketService.sendUpdateDeviceValues("all");
+            webSocketService.sendUpdateDeviceValues(origin);
         }
     }
     
@@ -89,17 +94,9 @@ public class DeviceService {
             }
         }
     }
-    
-    @Asynchronous
+        
     public void toggleDeviceValue(Device device) {
-        device.setValue(device.getValue() == 1 ? 0 : 1);
-        
-        //já envia a atualizacao do device pq a leitura de todos os outros é demorada.
-        webSocketService.sendUpdateDeviceValues("toggle " + device.getName()); //TO-DO: Enviar com idPosition? Não precisa atualizar todos.
-        
-        //atualiza pq toggle pode afetar outros devices:
-        //se habilitar, travará o DeviceRestService.getListValue. Usar jms?
-        //updateDeviceValues();
+        device.setValue(device.getValue() == 1 ? 0 : 1);     
     }
 
     public Device getDevice(String name) {

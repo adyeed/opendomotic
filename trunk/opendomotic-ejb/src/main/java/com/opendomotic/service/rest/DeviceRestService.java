@@ -74,7 +74,8 @@ public class DeviceRestService {
         Device device = deviceService.getDevice(name);
         if (device != null) {
             deviceService.toggleDeviceValue(device);
-            return "OK";
+            deviceService.updateDeviceValuesAsync();   
+            return device.getValue().toString();
         } else {
             return "Device não encontrado";
         }
