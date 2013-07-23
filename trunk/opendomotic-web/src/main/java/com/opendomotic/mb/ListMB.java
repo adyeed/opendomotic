@@ -39,7 +39,7 @@ public class ListMB implements Serializable {
     }
     
     public void atualizar() {
-        deviceService.updateDeviceValues();
+        deviceService.updateDeviceValues("listmb");
     }
 
     public List<DeviceProxy> getListDevice() {    

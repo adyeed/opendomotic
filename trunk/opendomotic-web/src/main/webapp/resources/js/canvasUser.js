@@ -11,5 +11,10 @@ function drawCanvas(idEnvironment) {
 //------------------------------------------------------------------------------
 
 function mouseUpDevice() {
-    $.getJSON(getUrl('device/toggle?name='+imagePressed.name), null, null);
+    deviceName = imagePressed.name;
+    $.getJSON(getUrl('device/toggle?name='+deviceName), null, function(data) {
+        newValue = data;
+        updateDeviceValue(deviceName, newValue);
+        draw();
+    }); 
 }

@@ -89,16 +89,26 @@ function updateDeviceValues() {
         for (var device in data) {
             for (var index in data[device]) {
                 d = data[device][index]; //d.name; d.value;
-                for (var i in arrayImage) {
+                updateDeviceValue(d.name, d.value);
+                /*for (var i in arrayImage) {
                     if (arrayImage[i].name === d.name) {
                         arrayImage[i].value = d.value;
                     }
-                }
+                }*/
             }
         }
         loading = false;
         draw();
     });    
+}
+
+function updateDeviceValue(name, value) {
+    for (var i in arrayImage) {
+        if (arrayImage[i].name === name) {
+            arrayImage[i].value = value;
+            //break; não posso dar break pq talvez tenha outras imagens para o mesmo device
+        }
+    }
 }
 
 //------------------------------------------------------------------------------
