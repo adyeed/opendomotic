@@ -1,7 +1,13 @@
 var ws = null;
 
 function connect() {
-    url = 'ws://' + window.location.host + '/opendomotic-web-0.0.1/websocket';
+    if (window.location.protocol === "https:") {
+        wsProtocol = "wss://";
+    } else {
+        wsProtocol = "ws://";
+    }
+    url = wsProtocol + window.location.host + '/opendomotic-web-0.0.1/websocket';
+
     if ('WebSocket' in window) {
         ws = new WebSocket(url);
     } else if ('MozWebSocket' in window) {
