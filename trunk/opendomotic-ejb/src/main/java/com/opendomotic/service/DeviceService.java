@@ -25,8 +25,8 @@ import javax.inject.Inject;
  *
  * @author jaques
  */
-@Startup
 @Singleton
+//@Startup
 public class DeviceService {
 
     private static final Logger LOG = Logger.getLogger(DeviceService.class.getName());
