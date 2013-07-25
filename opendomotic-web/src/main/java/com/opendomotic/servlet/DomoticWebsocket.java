@@ -27,13 +27,14 @@ import org.apache.catalina.websocket.WebSocketServlet;
 public class DomoticWebsocket extends WebSocketServlet implements BroadcastWebsocket {
     
     private static final Logger LOG = Logger.getLogger(DomoticWebsocket.class.getName());    
-    private List<DomoticInBound> connections = new ArrayList<>();
+    private List<DomoticInBound> connections;
 
     @Inject
     private WebSocketService webSocketService;
     
     @PostConstruct
     public void initialize() {
+        connections = new ArrayList<>();
         webSocketService.setBroadcastWebsocket(this);
     }
     
