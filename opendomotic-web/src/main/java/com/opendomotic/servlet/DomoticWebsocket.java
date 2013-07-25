@@ -5,7 +5,6 @@
 package com.opendomotic.servlet;
 
 import com.opendomotic.service.BroadcastWebsocket;
-import com.opendomotic.service.DeviceService;
 import com.opendomotic.service.WebSocketService;
 import java.io.IOException;
 import java.nio.CharBuffer;
@@ -48,8 +47,7 @@ public class DomoticWebsocket extends WebSocketServlet implements BroadcastWebso
         for (DomoticInBound client : connections) {
             try {
                 client.getWsOutbound().writeTextMessage(CharBuffer.wrap(message));
-                String log = "Enviando mensagem: " + message;
-                LOG.info(log);
+                //LOG.info("Enviando mensagem: " + message);
             } catch (IOException ex) {
                 LOG.severe(ex.toString());
             }
