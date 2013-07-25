@@ -16,6 +16,9 @@ import java.util.Map;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.Asynchronous;
+import javax.ejb.ConcurrencyManagement;
+import javax.ejb.ConcurrencyManagementType;
+import javax.ejb.Lock;
 import javax.ejb.Schedule;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
@@ -25,8 +28,9 @@ import javax.inject.Inject;
  *
  * @author jaques
  */
+@ConcurrencyManagement(ConcurrencyManagementType.CONTAINER)
 @Singleton
-//@Startup
+@Startup
 public class DeviceService {
 
     private static final Logger LOG = Logger.getLogger(DeviceService.class.getName());
@@ -69,6 +73,7 @@ public class DeviceService {
         updateDeviceValues("async");
     }
     
+    @Lock
     public void updateDeviceValues(String origin) {
         boolean changed = false;
         for (DeviceProxy device : mapDevice.values()) {
@@ -84,6 +89,11 @@ public class DeviceService {
         }
     }
     
+    @Lock
+    public void toggleDeviceValue(Device device) {
+        device.setValue(device.getValue() == 1 ? 0 : 1);    
+    }
+    
     //temporário:
     private void checkTemperaturaMin(DeviceProxy device) {
         if (device.getName().equals("Temperatura") && device.getValue() != null) {
@@ -93,10 +103,6 @@ public class DeviceService {
                 temperaturaMinDate = new Date();
             }
         }
-    }
-        
-    public void toggleDeviceValue(Device device) {
-        device.setValue(device.getValue() == 1 ? 0 : 1);     
     }
 
     public Device getDevice(String name) {
