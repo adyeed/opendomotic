@@ -16,7 +16,7 @@ public class DeviceProxy implements Device {
 
     private static final Logger LOG = Logger.getLogger(DeviceProxy.class.getName());
 
-    private Device device;
+    private final Device device;
     private Object value;
 
     public DeviceProxy(Device device) {
