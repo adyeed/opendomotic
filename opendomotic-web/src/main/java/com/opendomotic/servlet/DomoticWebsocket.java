@@ -32,12 +32,8 @@ public class DomoticWebsocket extends WebSocketServlet implements BroadcastWebso
     @Inject
     private WebSocketService webSocketService;
     
-    @Inject
-    private DeviceService deviceService;
-    
     @PostConstruct
     public void initialize() {
-        LOG.info("setBroadcastWebsocket on " + webSocketService);
         webSocketService.setBroadcastWebsocket(this);
     }
     
