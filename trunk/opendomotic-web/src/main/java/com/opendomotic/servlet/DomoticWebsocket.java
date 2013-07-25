@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.nio.CharBuffer;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
@@ -47,7 +48,7 @@ public class DomoticWebsocket extends WebSocketServlet implements BroadcastWebso
         for (DomoticInBound client : connections) {
             try {
                 client.getWsOutbound().writeTextMessage(CharBuffer.wrap(message));
-                //LOG.info("Enviando mensagem: " + message);
+                LOG.log(Level.INFO, "Enviando mensagem: {0}", message);
             } catch (IOException ex) {
                 LOG.severe(ex.toString());
             }
