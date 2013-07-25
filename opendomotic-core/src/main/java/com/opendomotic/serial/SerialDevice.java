@@ -34,8 +34,8 @@ public class SerialDevice implements Device {
 
     @Override
     public Object getValue() {
-        //return -1;
-        return SerialBus.getInstance().readDevice(address, device);
+        int value = SerialBus.getInstance().readDevice(address, device);
+        return value != -1 ? value : null;
     }
     
 }

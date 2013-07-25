@@ -44,11 +44,11 @@ public class HttpDevice implements Device {
             HttpResponse response = new DefaultHttpClient().execute(request);
             BufferedReader rd = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
             String value = rd.readLine();
-            //LOG.log(Level.INFO, "{0} Response={1}", new Object[] {url, value});
+            //LOG.log(Level.INFO, "{0} HttpResponse={1}", new Object[] {url, value});
             return Integer.parseInt(value);
         } catch (IOException ex) {
             LOG.severe(ex.toString());
-            return -1;
+            return null;
         }
     }
 
@@ -69,7 +69,7 @@ public class HttpDevice implements Device {
             while ((line = rd.readLine()) != null) {
                 response.append(line);
             }
-            LOG.log(Level.INFO, "Response {0} | {1} ms", new Object[] {response.toString(), System.currentTimeMillis() - tempo});
+            LOG.log(Level.INFO, "HttpResponse {0} | {1} ms", new Object[] {response.toString(), System.currentTimeMillis() - tempo});
         } catch (IOException ex) {
             LOG.severe(ex.toString());
         }
