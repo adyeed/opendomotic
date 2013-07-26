@@ -42,7 +42,7 @@ function initCanvas(canDrag, onMouseUpDevice, idEnvironment) {
                 for (var index in list) {
                     addDevicePosition(list[index]);                    
                 }
-            } else {
+            } else if (list !== undefined) {
                 addDevicePosition(list);
             }                
         }
@@ -90,11 +90,6 @@ function updateDeviceValues() {
             for (var index in data[device]) {
                 d = data[device][index]; //d.name; d.value;
                 updateDeviceValue(d.name, d.value);
-                /*for (var i in arrayImage) {
-                    if (arrayImage[i].name === d.name) {
-                        arrayImage[i].value = d.value;
-                    }
-                }*/
             }
         }
         loading = false;

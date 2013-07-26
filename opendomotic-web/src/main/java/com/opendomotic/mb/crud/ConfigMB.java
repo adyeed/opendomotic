@@ -9,6 +9,7 @@ import com.opendomotic.model.entity.DeviceProtocol;
 import com.opendomotic.service.dao.AbstractDAO;
 import com.opendomotic.service.dao.DeviceConfigDAO;
 import com.opendomotic.service.DeviceService;
+import com.opendomotic.service.dao.DeviceImageDAO;
 import java.util.Arrays;
 import java.util.List;
 import javax.enterprise.context.RequestScoped;
@@ -29,8 +30,13 @@ public class ConfigMB extends AbstractCRUD<DeviceConfig> {
     @Inject 
     private DeviceConfigDAO dao;
     
+    @Inject 
+    private DeviceImageDAO deviceImageDAO;
+    
     private List<DeviceProtocol> listProtocol;
-
+    private Integer idImageDefault;
+    private Integer idImageToggle;
+    
     @Override
     public AbstractDAO<DeviceConfig> getDAO() {
         return dao;
@@ -38,6 +44,12 @@ public class ConfigMB extends AbstractCRUD<DeviceConfig> {
     
     @Override
     public void save() {
+        if (idImageDefault != null) {
+            entity.setDeviceImageDefault(deviceImageDAO.findById(idImageDefault));
+        }
+        if (idImageToggle != null) {
+            entity.setDeviceImageToggle(deviceImageDAO.findById(idImageToggle));
+        }        
         super.save();
         deviceService.loadDevices();
     }
@@ -53,6 +65,26 @@ public class ConfigMB extends AbstractCRUD<DeviceConfig> {
             listProtocol = Arrays.asList(DeviceProtocol.values());
         }
         return listProtocol;
+    }
+
+    public Integer getIdImageDefault() {
+        if (entity.getDeviceImageDefault() != null)
+            return entity.getDeviceImageDefault().getId();
+        return idImageDefault;
+    }
+
+    public void setIdImageDefault(Integer idImageDefault) {
+        this.idImageDefault = idImageDefault;
+    }
+
+    public Integer getIdImageToggle() {
+        if (entity.getDeviceImageToggle() != null)
+            return entity.getDeviceImageToggle().getId();
+        return idImageToggle;
+    }
+
+    public void setIdImageToggle(Integer idImageToggle) {
+        this.idImageToggle = idImageToggle;
     }
     
 }

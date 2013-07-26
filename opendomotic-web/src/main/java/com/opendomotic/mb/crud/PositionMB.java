@@ -28,8 +28,7 @@ public class PositionMB implements Serializable {
     private DevicePositionDAO positionDAO;
     
     private Integer idEnvironment;    
-    private Integer idConfig;    
-    private Integer idImage;
+    private Integer idConfig;
     
     @PostConstruct
     public void init() {
@@ -41,7 +40,7 @@ public class PositionMB implements Serializable {
     }
     
     public void add() {
-        positionDAO.save(idEnvironment, idConfig, idImage);       
+        positionDAO.save(idEnvironment, idConfig);       
     }
     
     public void clear() {
@@ -62,14 +61,6 @@ public class PositionMB implements Serializable {
 
     public void setIdConfig(Integer idConfig) {
         this.idConfig = idConfig;
-    }
-    
-    public Integer getIdImage() {
-        return idImage;
-    }
-
-    public void setIdImage(Integer idImage) {
-        this.idImage = idImage;
     }
     
 }
