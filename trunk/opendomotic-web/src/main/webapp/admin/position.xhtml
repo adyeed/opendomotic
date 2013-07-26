@@ -27,11 +27,6 @@
                     <p:selectOneMenu value="#{positionMB.idConfig}">
                         <f:selectItems value="#{configMB.listAll}" var="d" itemValue="#{d.id}" itemLabel="#{d.name}"/>
                     </p:selectOneMenu>    
-
-                    <h:outputText value="#{msg.Image}"/>
-                    <p:selectOneMenu value="#{positionMB.idImage}">
-                        <f:selectItems value="#{imageMB.listAll}" var="i" itemValue="#{i.id}" itemLabel="#{i.name}"/>                         
-                    </p:selectOneMenu>      
                 </h:panelGrid>
                 
                 <p:commandButton value="#{msg.Add}" action="#{positionMB.add}" update="panelGroupCanvas"/>

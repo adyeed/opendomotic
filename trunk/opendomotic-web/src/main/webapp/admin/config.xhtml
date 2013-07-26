@@ -26,7 +26,19 @@
                     #{msg.Protocol}
                     <p:selectOneMenu value="#{configMB.entity.protocol}">
                         <f:selectItems value="#{configMB.listProtocol}"/>
-                    </p:selectOneMenu> 
+                    </p:selectOneMenu>
+                    
+                    <h:outputText value="#{msg.DefaultImage}"/>
+                    <p:selectOneMenu value="#{configMB.idImageDefault}">
+                        <f:selectItem itemLabel="#{msg.Select}"/>
+                        <f:selectItems value="#{imageMB.listAll}" var="i" itemValue="#{i.id}" itemLabel="#{i.name}"/>                         
+                    </p:selectOneMenu>
+                    
+                    <h:outputText value="#{msg.ToggleImage}"/>
+                    <p:selectOneMenu value="#{configMB.idImageToggle}">
+                        <f:selectItem itemLabel="#{msg.None}"/>
+                        <f:selectItems value="#{imageMB.listAll}" var="i" itemValue="#{i.id}" itemLabel="#{i.name}"/>                         
+                    </p:selectOneMenu>  
                 </h:panelGrid>
                 
                 <p:commandButton value="#{msg.Save}" action="#{configMB.save}" update="dialog,table"/>
