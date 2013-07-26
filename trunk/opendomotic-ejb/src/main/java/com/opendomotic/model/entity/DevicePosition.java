@@ -20,9 +20,6 @@ public class DevicePosition extends AbstractEntityId {
     @ManyToOne
     private DeviceConfig deviceConfig;
     
-    @ManyToOne
-    private DeviceImage deviceImage;
-    
     private Integer x;
     private Integer y;
 
@@ -40,14 +37,6 @@ public class DevicePosition extends AbstractEntityId {
 
     public void setDeviceConfig(DeviceConfig deviceConfig) {
         this.deviceConfig = deviceConfig;
-    }
-    
-    public DeviceImage getDeviceImage() {
-        return deviceImage;
-    }
-
-    public void setDeviceImage(DeviceImage deviceImage) {
-        this.deviceImage = deviceImage;
     }
 
     public Integer getX() {

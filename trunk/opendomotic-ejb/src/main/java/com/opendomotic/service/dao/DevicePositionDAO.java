@@ -25,22 +25,18 @@ public class DevicePositionDAO extends AbstractDAO<DevicePosition> {
     
     @Inject 
     private DeviceConfigDAO configService;
-    
-    @Inject 
-    private DeviceImageDAO imageService;
 
     @Override
     public Class getEntityClass() {
         return DevicePosition.class;
     } 
     
-    public void save(Integer idEnvironment, Integer idDeviceConfig, Integer idDeviceImage) {
+    public void save(Integer idEnvironment, Integer idDeviceConfig) {
         DevicePosition position = new DevicePosition();
         position.setX(0);
         position.setY(0);
         position.setEnvironment(environmentService.findById(idEnvironment));
         position.setDeviceConfig(configService.findById(idDeviceConfig));
-        position.setDeviceImage(imageService.findById(idDeviceImage));
         em.persist(position);
     }
     
