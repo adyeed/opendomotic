@@ -9,6 +9,7 @@ import java.util.logging.Logger;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.ManyToOne;
 
 /**
  *
@@ -18,6 +19,12 @@ import javax.persistence.Enumerated;
 public class DeviceConfig extends AbstractEntityName {
     
     private static final Logger LOG = Logger.getLogger(DeviceConfig.class.getName());
+    
+    @ManyToOne
+    private DeviceImage deviceImageDefault;
+    
+    @ManyToOne
+    private DeviceImage deviceImageToggle;
     
     private String address;
     private String param;
@@ -35,6 +42,22 @@ public class DeviceConfig extends AbstractEntityName {
             LOG.severe("Error on create device");
         }
         return null;
+    }
+
+    public DeviceImage getDeviceImageDefault() {
+        return deviceImageDefault;
+    }
+
+    public void setDeviceImageDefault(DeviceImage deviceImageDefault) {
+        this.deviceImageDefault = deviceImageDefault;
+    }
+
+    public DeviceImage getDeviceImageToggle() {
+        return deviceImageToggle;
+    }
+
+    public void setDeviceImageToggle(DeviceImage deviceImageToggle) {
+        this.deviceImageToggle = deviceImageToggle;
     }
 
     public String getAddress() {

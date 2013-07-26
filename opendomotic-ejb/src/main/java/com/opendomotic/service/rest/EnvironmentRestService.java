@@ -4,6 +4,7 @@
  */
 package com.opendomotic.service.rest;
 
+import com.opendomotic.model.entity.DeviceImage;
 import com.opendomotic.model.entity.DevicePosition;
 import com.opendomotic.model.entity.Environment;
 import com.opendomotic.model.rest.DevicePositionRest;
@@ -25,6 +26,8 @@ import javax.ws.rs.core.MediaType;
 @Path("/environment")
 public class EnvironmentRestService {
     
+    private static final String IMAGE_PATH = "../resources/images/"; //TO-DO: como resolver caminho?
+    
     @Inject
     private EnvironmentDAO environmentDAO;
     
@@ -42,15 +45,21 @@ public class EnvironmentRestService {
                    position.getX(),
                    position.getY(),
                    position.getDeviceConfig().getName(), 
-                   "../resources/images/" + position.getDeviceImage().getFileName(), //TO-DO: lista de imagens
-                   null));            
+                   getDeviceImageFileName(position.getDeviceConfig().getDeviceImageDefault()), //TO-DO: lista de image-value?
+                   getDeviceImageFileName(position.getDeviceConfig().getDeviceImageToggle())));            
             }            
             
-            e.setFileName("../resources/images/" + environment.getFileName()); //TO-DO: como resolver caminho?
+            e.setFileName(IMAGE_PATH + environment.getFileName()); 
             e.setListDevicePositionRest(list);
             return e;
         }
         return null;
+    }
+    
+    private String getDeviceImageFileName(DeviceImage deviceImage) {
+        if (deviceImage == null)
+            return null;
+        return IMAGE_PATH + deviceImage.getFileName();
     }
     
 }
