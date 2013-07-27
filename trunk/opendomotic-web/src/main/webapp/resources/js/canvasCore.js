@@ -2,6 +2,7 @@ var canvas, context;
 var xMouseDown, yMouseDown;
 
 var imagePlanta = new Image();
+var imagePressed = null;
 var arrayImage = new Array();
 var countImage = 0;
 var canDrag = false;

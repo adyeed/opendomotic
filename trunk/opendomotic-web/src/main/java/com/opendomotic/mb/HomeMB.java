@@ -8,6 +8,7 @@ import com.opendomotic.service.DeviceService;
 import com.opendomotic.service.dao.EnvironmentDAO;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.SessionScoped;
@@ -35,7 +36,11 @@ public class HomeMB implements Serializable {
     @PostConstruct
     public void init() {
         idEnvironment = environmentDAO.findFirst().getId();
-        LOG.info("HomeMB init id="+idEnvironment);
+        LOG.log(Level.INFO, "HomeMB init id={0}", idEnvironment);
+    }
+    
+    public void updateDevices() {
+        deviceService.updateDeviceValuesAsync();
     }
     
     public Integer getIdEnvironment() {
