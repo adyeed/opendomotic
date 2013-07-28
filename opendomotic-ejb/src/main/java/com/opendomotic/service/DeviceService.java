@@ -4,6 +4,7 @@
  */
 package com.opendomotic.service;
 
+import com.opendomotic.service.websocket.WebSocketService;
 import com.opendomotic.service.dao.DeviceConfigDAO;
 import com.opendomotic.api.Device;
 import com.opendomotic.model.DeviceProxy;
@@ -92,6 +93,14 @@ public class DeviceService {
     @Lock
     public void toggleDeviceValue(Device device) {
         device.setValue(device.getValue() == 1 ? 0 : 1);    
+    }
+    
+    @Lock
+    public void setDeviceValue(String deviceName, Object value) {
+        Device device = getDevice(deviceName);
+        if (device != null) {
+            device.setValue(value);
+        }
     }
     
     //temporário:
