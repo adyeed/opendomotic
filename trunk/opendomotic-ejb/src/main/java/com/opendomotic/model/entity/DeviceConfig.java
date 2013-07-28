@@ -86,7 +86,7 @@ public class DeviceConfig extends AbstractEntityName {
 
     @Override
     public String toString() {
-        return "DeviceConfig{" + "address=" + address + ", param=" + param + ", protocol=" + protocol + '}';
+        return "DeviceConfig{name=" + getName() + "address=" + address + ", param=" + param + ", protocol=" + protocol + '}';
     }
     
 }

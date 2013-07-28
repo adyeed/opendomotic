@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.opendomotic.service;
+package com.opendomotic.service.websocket;
 
 import javax.ejb.Singleton;
 
