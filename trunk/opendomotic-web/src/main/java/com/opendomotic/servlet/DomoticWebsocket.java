@@ -4,8 +4,8 @@
  */
 package com.opendomotic.servlet;
 
-import com.opendomotic.service.BroadcastWebsocket;
-import com.opendomotic.service.WebSocketService;
+import com.opendomotic.service.websocket.BroadcastWebsocket;
+import com.opendomotic.service.websocket.WebSocketService;
 import java.io.IOException;
 import java.nio.CharBuffer;
 import java.util.ArrayList;
