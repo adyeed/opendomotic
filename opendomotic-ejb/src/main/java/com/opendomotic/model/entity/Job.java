@@ -123,14 +123,7 @@ public class Job extends AbstractEntityId {
 
     @Override
     public String toString() {
-        return "Job{" + "input=" + input + 
-                ", inputDate=" + inputDate + 
-                ", operator=" + operator + 
-                ", expectValue=" + expectValue + 
-                ", expectValueClass=" + expectValue.getClass() + 
-                ", actionValue=" + actionValue + 
-                ", actionValueClass=" + actionValue.getClass() + 
-                ", output=" + output + '}';
+        return getInputDescription() + " | " + getOutputDescription();
     }
 
 }
