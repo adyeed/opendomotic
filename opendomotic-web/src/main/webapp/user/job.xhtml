@@ -9,14 +9,13 @@
 
     <ui:define name="content">
         <h:form>
-            <p:commandButton value="#{msg.New}" action="#{jobMB.create()}" update="dialog"/>
-            
-            
+            <p:commandButton value="#{msg.New}" action="#{jobMB.create()}" update="dialog" ajax="false"/>
+                        
             <p:dialog id="dialog" header="#{msg.Job}" visible="#{jobMB.visible}">
                 <h:inputHidden value="#{jobMB.entity.id}"/>
    
                 <p:panel header="#{msg.Input}">
-                    <p:tabView id="tabView">    
+                    <p:tabView id="tabView" activeIndex="#{jobMB.tabActiveIndex}">    
                         <p:tab id="tab1" title="#{msg.Device}">  
                             <h:panelGrid columns="2">
                                 <h:outputText value="#{msg.Device}"/>
@@ -38,7 +37,8 @@
                         <p:tab id="tab2" title="#{msg.Date}">  
                             <h:panelGrid columns="2">
                                 <h:outputText value="#{msg.Date}"/>
-                                <p:calendar value="#{jobMB.entity.inputDate}" pattern="dd/MM/yyyy HH:mm:ss" stepHour="1" stepMinute="1" stepSecond="1"/>                    
+                                <p:calendar value="#{jobMB.entity.inputDate}" pattern="dd/MM/yyyy HH:mm:ss" 
+                                            stepHour="1" stepMinute="1" stepSecond="1" showOn="button"/>                    
                             </h:panelGrid>  
                         </p:tab>   
                     </p:tabView>
