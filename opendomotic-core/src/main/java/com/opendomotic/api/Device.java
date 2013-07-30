@@ -4,13 +4,11 @@
  */
 package com.opendomotic.api;
 
-import java.io.Serializable;
-
 /**
  *
  * @author jaques
  */
-public interface Device extends Serializable {
+public interface Device {
 
     String getName();
     Object getValue();
