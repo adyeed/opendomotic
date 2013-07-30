@@ -27,7 +27,7 @@ function initCanvas(canDrag, onMouseUpDevice, idEnvironment) {
     context.font = "bold 26px verdana";
     drawLoading();
     
-    $.getJSON(getUrl('environment?id='+idEnvironment), null, function(data) {
+    $.getJSON(getUrl('environment?id='+idEnvironment), function(data) {
         for (var environment in data) {
             imagePlanta.src = data[environment].fileName;
             imagePlanta.onload = function() {
@@ -86,7 +86,7 @@ function drawLoading() {
 
 function updateDeviceValues() {
     drawLoading();
-    $.getJSON(getUrl('device/value'), null, function(data) {
+    $.getJSON(getUrl('device/value'), function(data) {
         for (var device in data) {
             for (var index in data[device]) {
                 d = data[device][index]; //d.name; d.value;

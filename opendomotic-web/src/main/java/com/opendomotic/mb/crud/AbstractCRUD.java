@@ -17,6 +17,7 @@ public abstract class AbstractCRUD<T extends AbstractEntityId> implements Serial
     
     protected T entity;
     private List<T> listAll;
+    private String[] orderBy;
     protected boolean visible = false;
  
     public abstract AbstractDAO<T> getDAO();
@@ -62,9 +63,13 @@ public abstract class AbstractCRUD<T extends AbstractEntityId> implements Serial
     
     public List<T> getListAll() {
         if (listAll == null) {
-            listAll = getDAO().findAll();
+            listAll = getDAO().findAll(orderBy);
         }
         return listAll;
+    }
+
+    public void setOrderBy(String[] orderBy) {
+        this.orderBy = orderBy;
     }
     
 }
