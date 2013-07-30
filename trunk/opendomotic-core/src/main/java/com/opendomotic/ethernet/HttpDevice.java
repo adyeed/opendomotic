@@ -25,13 +25,22 @@ public class HttpDevice implements Device {
 
     private static final Logger LOG = Logger.getLogger(HttpDevice.class.getName());
     private String name;
-    private String url;
+    private String ip;
+    private String path;
 
+    public HttpDevice() {
+    }
+    
     public HttpDevice(String name, String ip, String path) {
         this.name = name;
-        this.url = "http://" + ip + "/" + path;
+        this.ip = ip;
+        this.path = path;
     }
-
+    
+    public String getURL() {
+        return "http://" + ip + "/" + path;
+    }
+    
     @Override
     public String getName() {
         return name;
@@ -40,11 +49,11 @@ public class HttpDevice implements Device {
     @Override
     public Object getValue() {
         try {
-            HttpGet request = new HttpGet(url);
+            HttpGet request = new HttpGet(getURL());
             HttpResponse response = new DefaultHttpClient().execute(request);
             BufferedReader rd = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
             String value = rd.readLine();
-            //LOG.log(Level.INFO, "{0} HttpResponse={1}", new Object[] {url, value});
+            //LOG.log(Level.INFO, "Response={0} | {1}", new Object[] {value, url});
             return Integer.parseInt(value);
         } catch (IOException ex) {
             LOG.severe(ex.toString());
@@ -60,14 +69,27 @@ public class HttpDevice implements Device {
             HttpParams httpParameters = httpClient.getParams();
             HttpConnectionParams.setTcpNoDelay(httpParameters, true);
 
-            HttpGet request = new HttpGet(url + "=" + value);
+            HttpGet request = new HttpGet(getURL() + "=" + value);
             HttpResponse response = httpClient.execute(request);
 
             BufferedReader rd = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
             String responseStr = rd.readLine();
-            LOG.log(Level.INFO, "HttpResponse {0} | {1} ms", new Object[] {responseStr, System.currentTimeMillis() - tempo});
+            LOG.log(Level.INFO, "Response={0} | {1} ms", new Object[] {responseStr, System.currentTimeMillis() - tempo});
         } catch (IOException ex) {
             LOG.severe(ex.toString());
         }
     }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setIp(String ip) {
+        this.ip = ip;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
+    }
+    
 }
