@@ -8,6 +8,8 @@
 
     <ui:define name="content">
         <h:form id="form">
+            <p:growl id="messages" showDetail="true"/> 
+            
             <p:commandButton value="#{msg.New}" action="#{configMB.create()}" update="dialog"/>
             
             <p:dialog id="dialog" header="#{msg.Device}" visible="#{configMB.visible}">
@@ -86,6 +88,7 @@
                 <p:column>
                     <p:commandButton value="#{msg.Delete}" action="#{configMB.delete(config)}" update="table" onclick="return confirm('#{msg.ConfirmsTheExclusion}');"/>
                     <p:commandButton value="#{msg.Edit}" action="#{configMB.edit(config)}" update="@form"/>
+                    <p:commandButton value="#{msg.Test}" action="#{configMB.test(config)}" update="@form"/>
                 </p:column>
             </p:dataTable>
         </h:form>

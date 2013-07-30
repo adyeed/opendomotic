@@ -25,7 +25,7 @@ function connect() {
         
         //algum dispositivo mudou de estado, então servidor notificou:
         if (msg.indexOf('updateDeviceValues') !== -1) {
-            updateDeviceValues();
+            updateDeviceValues();         
         }        
     };
     ws.onclose = function () {

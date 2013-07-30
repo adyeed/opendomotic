@@ -4,6 +4,7 @@
  */
 package com.opendomotic.mb.crud;
 
+import com.opendomotic.api.Device;
 import com.opendomotic.model.entity.DeviceConfig;
 import com.opendomotic.model.entity.DeviceProtocol;
 import com.opendomotic.service.dao.AbstractDAO;
@@ -12,7 +13,10 @@ import com.opendomotic.service.DeviceService;
 import com.opendomotic.service.dao.DeviceImageDAO;
 import java.util.Arrays;
 import java.util.List;
+import javax.annotation.PostConstruct;
 import javax.enterprise.context.RequestScoped;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -37,6 +41,11 @@ public class ConfigMB extends AbstractCRUD<DeviceConfig> {
     private Integer idImageDefault;
     private Integer idImageToggle;
     
+    @PostConstruct
+    public void init() {
+        setOrderBy(new String[] {"name"});
+    }
+    
     @Override
     public AbstractDAO<DeviceConfig> getDAO() {
         return dao;
@@ -58,6 +67,19 @@ public class ConfigMB extends AbstractCRUD<DeviceConfig> {
     public void delete(DeviceConfig config) {
         super.delete(config);
         deviceService.loadDevices();
+    }
+    
+    public void test(DeviceConfig config) {
+        System.out.println("----- test begin");
+        FacesMessage msg;
+        try {
+            Device device = config.createDevice();            
+            msg = new FacesMessage("Success", "Value="+device.getValue().toString());
+        } catch (Exception ex) {
+            msg = new FacesMessage("Error", ex.getLocalizedMessage() + "|\n" + ex.getMessage() + "|\n" + ex.toString());  
+        }
+        FacesContext.getCurrentInstance().addMessage(null, msg);
+        System.out.println("----- test end");
     }
     
     public List<DeviceProtocol> getListProtocol() {

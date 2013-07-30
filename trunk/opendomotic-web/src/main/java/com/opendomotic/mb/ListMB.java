@@ -8,9 +8,7 @@ import com.opendomotic.model.DeviceProxy;
 import com.opendomotic.service.DeviceService;
 import java.io.Serializable;
 import java.util.List;
-import java.util.logging.Logger;
-import javax.annotation.PostConstruct;
-import javax.enterprise.context.SessionScoped;
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -19,24 +17,13 @@ import javax.inject.Named;
  * @author Jaques
  */
 @Named
-@SessionScoped
+@RequestScoped
 public class ListMB implements Serializable {
-    
-    private static final Logger LOG = Logger.getLogger(ListMB.class.getName());
 
     @Inject
     private DeviceService deviceService;
     
     private List<DeviceProxy> listDevice;
-    
-    @PostConstruct()
-    public void init() {
-        try {         
-            atualizar();            
-        } catch (Exception e) {
-            LOG.severe(e.getMessage());
-        }
-    }
     
     public void atualizar() {
         deviceService.updateDeviceValues("listmb");

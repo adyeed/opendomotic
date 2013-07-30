@@ -71,7 +71,7 @@
             
             <br/>
 
-            <p:dataTable id="table" value="#{jobMB.listAll}" var="job" emptyMessage="Sem agendamentos">
+            <p:dataTable id="table" value="#{jobMB.listAll}" var="job" emptyMessage="#{msg.WithoutJobs}">
                 <p:column>
                     <f:facet name="header">
                         <h:outputText value="#{msg.Input}"/>
