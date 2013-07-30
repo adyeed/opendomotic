@@ -49,14 +49,16 @@ public class JobService {
             boolean canChange = false;
             
             if (job.getInput() != null) {
-                Device input = deviceService.getDevice(job.getInput().getName());                
-                switch (job.getOperator()) {
-                    case EQUAL:             canChange = input.getValue().equals(job.getExpectValueAsInt()); break;
-                    case DIFERENT:          canChange = !input.getValue().equals(job.getExpectValueAsInt()); break;
-                    case GREATHER:          canChange = (Integer) input.getValue() >  job.getExpectValueAsInt(); break;
-                    case GREATHER_EQUAL:    canChange = (Integer) input.getValue() >= job.getExpectValueAsInt(); break;
-                    case LESS:              canChange = (Integer) input.getValue() <  job.getExpectValueAsInt(); break;
-                    case LESS_EQUAL:        canChange = (Integer) input.getValue() <= job.getExpectValueAsInt(); break;
+                Device input = deviceService.getDevice(job.getInput().getName());  
+                if (input != null) {
+                    switch (job.getOperator()) {
+                        case EQUAL:             canChange = input.getValue().equals(job.getExpectValueAsInt()); break;
+                        case DIFERENT:          canChange = !input.getValue().equals(job.getExpectValueAsInt()); break;
+                        case GREATHER:          canChange = (Integer) input.getValue() >  job.getExpectValueAsInt(); break;
+                        case GREATHER_EQUAL:    canChange = (Integer) input.getValue() >= job.getExpectValueAsInt(); break;
+                        case LESS:              canChange = (Integer) input.getValue() <  job.getExpectValueAsInt(); break;
+                        case LESS_EQUAL:        canChange = (Integer) input.getValue() <= job.getExpectValueAsInt(); break;
+                    }
                 }
             } else if (job.getInputDate() != null && job.getInputDate().compareTo(now) <= 0) {
                 canChange = true;
