@@ -13,10 +13,10 @@ import javax.ejb.Stateless;
  */
 @Stateless
 public class DeviceConfigDAO extends AbstractDAO<DeviceConfig> {
-
+    
     @Override
     public Class getEntityClass() {
         return DeviceConfig.class;
-    }    
+    }
     
 }

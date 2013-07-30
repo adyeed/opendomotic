@@ -11,9 +11,10 @@ import com.opendomotic.model.DeviceProxy;
 import com.opendomotic.model.entity.DeviceConfig;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.Asynchronous;
@@ -55,11 +56,15 @@ public class DeviceService {
     public void loadDevices() {
         LOG.info("loading devices...");
 
-        mapDevice = new HashMap<>();
-        for (DeviceConfig config : deviceConfigService.findAll()) {
-            Device device = config.createDevice();
-            if (device != null) {
-                mapDevice.put(device.getName(), new DeviceProxy(device));
+        mapDevice = new LinkedHashMap<>();
+        for (DeviceConfig config : deviceConfigService.findAll(new String[] {"protocol","address","param","name"})) {
+            try {
+                Device device = config.createDevice();
+                if (device != null) {
+                    mapDevice.put(device.getName(), new DeviceProxy(device));
+                }
+            } catch (Exception ex) {
+                LOG.log(Level.SEVERE, "Error on create device: {0}", ex.toString());
             }
         }
     }

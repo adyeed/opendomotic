@@ -4,12 +4,15 @@
  */
 package com.opendomotic.service.dao;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Order;
+import javax.persistence.criteria.Root;
 
 /**
  *
@@ -24,17 +27,35 @@ public abstract class AbstractDAO<T> {
     
     public abstract Class<T> getEntityClass(); 
 
-    protected CriteriaQuery<T> createCriteriaQuery() {
+    public EntityManager getEntityManager() {
+        return em;
+    }
+    
+    protected CriteriaQuery<T> createCriteriaQuery(String[] orderBy) {
         Class<T> entityClass = getEntityClass();        
         CriteriaQuery<T> cq = em.getCriteriaBuilder().createQuery(entityClass);
-        cq.select(cq.from(entityClass));
+        Root<T> from = cq.from(entityClass);
+        cq.select(from);
+        
+        if (orderBy != null) {
+            List<Order> listOrder = new ArrayList<>();
+            for (String fieldName : orderBy) {
+                listOrder.add(em.getCriteriaBuilder().asc(from.get(fieldName)));
+            }  
+            cq.orderBy(listOrder);    
+        }
+        
         return cq;
     }
     
-    public List<T> findAll() {
+    public List<T> findAll(String[] orderBy) {
         return em
-                .createQuery(createCriteriaQuery())
+                .createQuery(createCriteriaQuery(orderBy))
                 .getResultList();
+    }
+    
+    public List<T> findAll() {
+        return findAll(null);
     }
     
     public T findById(Integer id) {
@@ -44,7 +65,7 @@ public abstract class AbstractDAO<T> {
     public T findFirst() {
         try {
             return em
-                    .createQuery(createCriteriaQuery())
+                    .createQuery(createCriteriaQuery(null))
                     .setMaxResults(1)
                     .getSingleResult();
         } catch (NoResultException e) {

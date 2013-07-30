@@ -5,6 +5,7 @@
 package com.opendomotic.model.entity;
 
 import com.opendomotic.api.Device;
+import java.lang.reflect.InvocationTargetException;
 import java.util.logging.Logger;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -28,18 +29,32 @@ public class DeviceConfig extends AbstractEntityName {
     
     private String address;
     private String param;
+    //private String className;
     
     @Enumerated(EnumType.STRING)
     private DeviceProtocol protocol;
 
     //TO-DO: factory method para enum de protocol
-    public Device createDevice() {
-        try {
-            if (protocol != null) {
-                return protocol.createDevice(this);
+    public Device createDevice() throws ClassNotFoundException, InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException {
+        /*if (className != null && !className.isEmpty()) {
+            System.out.println("***** begin");
+            Device device = (Device) Class.forName(className).newInstance();
+            
+            for (Method method : device.getClass().getDeclaredMethods()) {
+                System.out.println(method);
+                if (method.getName().equals("setName")) {
+                    method.invoke(device, "Ldr escritório");
+                } else if (method.getName().equals("setIp")) {
+                    method.invoke(device, "192.168.10.47");
+                } else if (method.getName().equals("setPath")) {
+                    method.invoke(device, "?ldr");
+                }                
             }
-        } catch (Exception e) {
-            LOG.severe("Error on create device");
+            
+            return device;            
+        }*/    
+        if (protocol != null) {
+            return protocol.createDevice(this);
         }
         return null;
     }
@@ -83,6 +98,14 @@ public class DeviceConfig extends AbstractEntityName {
     public void setProtocol(DeviceProtocol protocol) {
         this.protocol = protocol;
     }
+
+    /*public String getClassName() {
+        return className;
+    }
+
+    public void setClassName(String className) {
+        this.className = className;
+    }*/
 
     @Override
     public String toString() {
