@@ -24,27 +24,8 @@ import org.apache.http.params.HttpParams;
 public class HttpDevice implements Device {
 
     private static final Logger LOG = Logger.getLogger(HttpDevice.class.getName());
-    private String name;
     private String ip;
     private String path;
-
-    public HttpDevice() {
-    }
-    
-    public HttpDevice(String name, String ip, String path) {
-        this.name = name;
-        this.ip = ip;
-        this.path = path;
-    }
-    
-    public String getURL() {
-        return "http://" + ip + "/" + path;
-    }
-    
-    @Override
-    public String getName() {
-        return name;
-    }
 
     @Override
     public Object getValue() {
@@ -79,9 +60,9 @@ public class HttpDevice implements Device {
             LOG.severe(ex.toString());
         }
     }
-
-    public void setName(String name) {
-        this.name = name;
+    
+    public String getURL() {
+        return "http://" + ip + "/" + path;
     }
 
     public void setIp(String ip) {
