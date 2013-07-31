@@ -33,5 +33,10 @@ public class SerialDevice implements Device {
     public void setDevice(int device) {
         this.device = device;
     }
+
+    @Override
+    public String toString() {
+        return "SerialDevice{" + "address=" + address + ", device=" + device + '}';
+    }
     
 }
