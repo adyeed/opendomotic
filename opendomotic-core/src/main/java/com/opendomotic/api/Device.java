@@ -10,7 +10,6 @@ package com.opendomotic.api;
  */
 public interface Device {
 
-    String getName();
     Object getValue();
     void setValue(Object value);
     

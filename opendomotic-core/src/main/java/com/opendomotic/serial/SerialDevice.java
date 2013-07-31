@@ -12,20 +12,8 @@ import com.opendomotic.api.Device;
  */
 public class SerialDevice implements Device {
 
-    private String name;
     private int address;
     private int device;
-
-    public SerialDevice(String name, int address, int device) {
-        this.name = name;
-        this.address = address;
-        this.device = device;
-    }
-    
-    @Override
-    public String getName() {
-        return name;
-    }
 
     @Override
     public void setValue(Object value) {
@@ -36,6 +24,14 @@ public class SerialDevice implements Device {
     public Object getValue() {
         int value = SerialBus.getInstance().readDevice(address, device);
         return value != -1 ? value : null;
+    }
+
+    public void setAddress(int address) {
+        this.address = address;
+    }
+
+    public void setDevice(int device) {
+        this.device = device;
     }
     
 }
