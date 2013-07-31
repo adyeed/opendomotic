@@ -5,12 +5,17 @@
 package com.opendomotic.model.entity;
 
 import com.opendomotic.api.Device;
+import com.opendomotic.factory.DeviceFactory;
+import com.opendomotic.factory.DevicePropertyNotFoundException;
 import java.lang.reflect.InvocationTargetException;
-import java.util.logging.Logger;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 /**
  *
@@ -19,44 +24,27 @@ import javax.persistence.ManyToOne;
 @Entity
 public class DeviceConfig extends AbstractEntityName {
     
-    private static final Logger LOG = Logger.getLogger(DeviceConfig.class.getName());
-    
     @ManyToOne
     private DeviceImage deviceImageDefault;
     
     @ManyToOne
     private DeviceImage deviceImageToggle;
-    
-    private String address;
-    private String param;
-    //private String className;
-    
-    @Enumerated(EnumType.STRING)
-    private DeviceProtocol protocol;
 
-    //TO-DO: factory method para enum de protocol
-    public Device createDevice() throws ClassNotFoundException, InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException {
-        /*if (className != null && !className.isEmpty()) {
-            System.out.println("***** begin");
-            Device device = (Device) Class.forName(className).newInstance();
-            
-            for (Method method : device.getClass().getDeclaredMethods()) {
-                System.out.println(method);
-                if (method.getName().equals("setName")) {
-                    method.invoke(device, "Ldr escritório");
-                } else if (method.getName().equals("setIp")) {
-                    method.invoke(device, "192.168.10.47");
-                } else if (method.getName().equals("setPath")) {
-                    method.invoke(device, "?ldr");
-                }                
-            }
-            
-            return device;            
-        }*/    
-        if (protocol != null) {
-            return protocol.createDevice(this);
+    @OneToMany(mappedBy = "deviceConfig", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private List<DeviceProperty> listDeviceProperty;
+    
+    private String deviceClassName;
+
+    public Device createDevice() throws ClassNotFoundException, InstantiationException, IllegalAccessException, DevicePropertyNotFoundException, IllegalArgumentException, InvocationTargetException {
+        return DeviceFactory.createDevice(deviceClassName, createDeviceProperties());
+    }
+    
+    private Map<String,Object> createDeviceProperties() {
+        Map<String,Object> map = new LinkedHashMap<>();
+        for (DeviceProperty property : listDeviceProperty) {
+            map.put(property.getName(), property.getValue());
         }
-        return null;
+        return map;
     }
 
     public DeviceImage getDeviceImageDefault() {
@@ -75,41 +63,20 @@ public class DeviceConfig extends AbstractEntityName {
         this.deviceImageToggle = deviceImageToggle;
     }
 
-    public String getAddress() {
-        return address;
+    public List<DeviceProperty> getListDeviceProperty() {
+        return listDeviceProperty;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
+    public void setListDeviceProperty(List<DeviceProperty> listDeviceProperty) {
+        this.listDeviceProperty = listDeviceProperty;
     }
 
-    public String getParam() {
-        return param;
+    public String getDeviceClassName() {
+        return deviceClassName;
     }
 
-    public void setParam(String param) {
-        this.param = param;
-    }
-
-    public DeviceProtocol getProtocol() {
-        return protocol;
-    }
-
-    public void setProtocol(DeviceProtocol protocol) {
-        this.protocol = protocol;
-    }
-
-    /*public String getClassName() {
-        return className;
-    }
-
-    public void setClassName(String className) {
-        this.className = className;
-    }*/
-
-    @Override
-    public String toString() {
-        return "DeviceConfig{name=" + getName() + "address=" + address + ", param=" + param + ", protocol=" + protocol + '}';
+    public void setDeviceClassName(String deviceClassName) {
+        this.deviceClassName = deviceClassName;
     }
     
 }

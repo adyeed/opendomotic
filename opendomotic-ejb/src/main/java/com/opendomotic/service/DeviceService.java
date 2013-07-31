@@ -14,6 +14,7 @@ import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
@@ -57,11 +58,11 @@ public class DeviceService {
         LOG.info("loading devices...");
 
         mapDevice = new LinkedHashMap<>();
-        for (DeviceConfig config : deviceConfigService.findAll(new String[] {"protocol","address","param","name"})) {
+        for (DeviceConfig config : deviceConfigService.findAll()) {//new String[] {"protocol","address","param","name"})) {
             try {
                 Device device = config.createDevice();
                 if (device != null) {
-                    mapDevice.put(device.getName(), new DeviceProxy(device));
+                    mapDevice.put(config.getName(), new DeviceProxy(device));
                 }
             } catch (Exception ex) {
                 LOG.log(Level.SEVERE, "Error on create device: {0}", ex.toString());
@@ -82,9 +83,11 @@ public class DeviceService {
     @Lock
     public void updateDeviceValues(String origin) {
         boolean changed = false;
-        for (DeviceProxy device : mapDevice.values()) {
+        for (Entry<String, DeviceProxy> entry : mapDevice.entrySet()) {
+            String deviceName = entry.getKey();
+            DeviceProxy device = entry.getValue();
             if (device.updateValue()) {
-                checkTemperaturaMin(device);                
+                checkTemperaturaMin(deviceName, device);                
                 changed = true;
             }
         }
@@ -109,8 +112,8 @@ public class DeviceService {
     }
     
     //temporário:
-    private void checkTemperaturaMin(DeviceProxy device) {
-        if (device.getName().equals("Temperatura") && device.getValue() != null) {
+    private void checkTemperaturaMin(String deviceName, DeviceProxy device) {
+        if (deviceName.equals("Temperatura") && device.getValue() != null) {
             Integer temperatura = (Integer) device.getValue();
             if (temperaturaMinValue == null || temperatura < temperaturaMinValue) {
                 temperaturaMinValue = temperatura;

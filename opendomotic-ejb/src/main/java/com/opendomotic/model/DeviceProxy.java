@@ -22,11 +22,6 @@ public class DeviceProxy implements Device {
     public DeviceProxy(Device device) {
         this.device = device;
     }
-    
-    @Override
-    public String getName() {
-        return device.getName();
-    }
 
     @Override
     public void setValue(Object value) {
@@ -48,7 +43,7 @@ public class DeviceProxy implements Device {
     public boolean updateValue() {
         Object newValue = device.getValue();
         if (newValue == null) {
-            LOG.log(Level.SEVERE, "Error on reading {0}", getName());
+            LOG.log(Level.SEVERE, "Error on reading {0}", device.toString());
             return false;
         }
         boolean changed = !newValue.equals(value);

@@ -12,6 +12,8 @@ import com.opendomotic.service.dao.DevicePositionDAO;
 import com.opendomotic.service.DeviceService;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map.Entry;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.inject.Inject;
 import javax.ws.rs.GET;
@@ -40,8 +42,10 @@ public class DeviceRestService {
     @Path(value = "/value")
     public List<DeviceValueRest> getListValue() {
         List<DeviceValueRest> list = new ArrayList<>();
-        for (DeviceProxy device : deviceService.getMapDevice().values()) {
-            list.add(new DeviceValueRest(device.getName(), device.getValueStr()));
+        for (Entry<String, DeviceProxy> entry : deviceService.getMapDevice().entrySet()) {
+            String deviceName = entry.getKey();
+            DeviceProxy device = entry.getValue();
+            list.add(new DeviceValueRest(deviceName, device.getValueStr()));
         }
         return list;
     }
@@ -70,7 +74,7 @@ public class DeviceRestService {
     @Produces(MediaType.APPLICATION_JSON)
     @Path(value = "/toggle")
     public String toggle(@QueryParam("name") String name) {
-        LOG.info("name="+name);
+        LOG.log(Level.INFO, "name={0}", name);
         Device device = deviceService.getDevice(name);
         if (device != null) {
             deviceService.toggleDeviceValue(device);
