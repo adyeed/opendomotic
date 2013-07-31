@@ -19,16 +19,8 @@
                     #{msg.Name}
                     <p:inputText value="#{configMB.entity.name}"/>
                     
-                    #{msg.Address}
-                    <p:inputText value="#{configMB.entity.address}"/>
-                    
-                    #{msg.Param}
-                    <p:inputText value="#{configMB.entity.param}"/>
-                    
-                    #{msg.Protocol}
-                    <p:selectOneMenu value="#{configMB.entity.protocol}">
-                        <f:selectItems value="#{configMB.listProtocol}"/>
-                    </p:selectOneMenu>
+                    #{msg.ClassName}
+                    <p:inputText value="#{configMB.entity.deviceClassName}"/>
                     
                     <h:outputText value="#{msg.DefaultImage}"/>
                     <p:selectOneMenu value="#{configMB.idImageDefault}">
@@ -40,10 +32,26 @@
                     <p:selectOneMenu value="#{configMB.idImageToggle}">
                         <f:selectItem itemLabel="#{msg.None}"/>
                         <f:selectItems value="#{imageMB.listAll}" var="i" itemValue="#{i.id}" itemLabel="#{i.name}"/>                         
-                    </p:selectOneMenu>  
+                    </p:selectOneMenu>
                 </h:panelGrid>
                 
-                <p:commandButton value="#{msg.Save}" action="#{configMB.save}" update="dialog,table"/>
+                <p:separator/>
+                
+                <h:panelGrid columns="2">
+                    <h:outputText value="#{msg.Name}"/>
+                    <h:outputText value="#{msg.Value}"/>
+                    
+                    <p:inputText value="#{configMB.name1}"/>
+                    <p:inputText value="#{configMB.value1}"/>
+                    
+                    <p:inputText value="#{configMB.name2}"/>
+                    <p:inputText value="#{configMB.value2}"/>
+                    
+                    <p:inputText value="#{configMB.name3}"/>
+                    <p:inputText value="#{configMB.value3}"/>
+                </h:panelGrid>
+                
+                <p:commandButton value="#{msg.Save}" action="#{configMB.save}" update="dialog,table" ajax="false"/>
                 <p:commandButton value="#{msg.Cancel}" action="#{configMB.cancel}" update="dialog"/>
             </p:dialog>
             
@@ -58,21 +66,15 @@
                 </p:column>
                 <p:column>
                     <f:facet name="header">
-                        #{msg.Address}
+                        #{msg.ClassName}
                     </f:facet>
-                    #{config.address}
+                    #{config.deviceClassName}
                 </p:column>
                 <p:column>
                     <f:facet name="header">
-                        #{msg.Param}
+                        #{msg.Properties}
                     </f:facet>
-                    #{config.param}
-                </p:column>
-                <p:column>
-                    <f:facet name="header">
-                        #{msg.Protocol}
-                    </f:facet>
-                    #{config.protocol}
+                    #{config.listDeviceProperty}
                 </p:column>
                 <p:column>
                     <f:facet name="header">
