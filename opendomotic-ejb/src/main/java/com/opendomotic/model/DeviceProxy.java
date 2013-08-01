@@ -50,5 +50,10 @@ public class DeviceProxy implements Device {
         value = newValue;
         return changed;
     }
+
+    @Override
+    public String toString() {
+        return device.toString();
+    }
     
 }
