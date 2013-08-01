@@ -10,18 +10,18 @@ import com.opendomotic.api.Device;
 import com.opendomotic.model.DeviceProxy;
 import com.opendomotic.model.entity.DeviceConfig;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
+import javax.ejb.AccessTimeout;
 import javax.ejb.Asynchronous;
-import javax.ejb.ConcurrencyManagement;
-import javax.ejb.ConcurrencyManagementType;
 import javax.ejb.Lock;
+import javax.ejb.LockType;
 import javax.ejb.Schedule;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
@@ -31,9 +31,10 @@ import javax.inject.Inject;
  *
  * @author jaques
  */
-@ConcurrencyManagement(ConcurrencyManagementType.CONTAINER)
 @Singleton
 @Startup
+@Lock(LockType.WRITE)
+@AccessTimeout(value = 10, unit = TimeUnit.SECONDS)
 public class DeviceService {
 
     private static final Logger LOG = Logger.getLogger(DeviceService.class.getName());
@@ -44,22 +45,19 @@ public class DeviceService {
 
     @Inject
     private WebSocketService webSocketService;
-    
-    //temporário:
-    private Integer temperaturaMinValue;
-    private Date temperaturaMinDate;
-    
+       
     @PostConstruct
     public void init() {
         loadDevices();
     }
-
+    
     public void loadDevices() {
         LOG.info("loading devices...");
 
         mapDevice = new LinkedHashMap<>();
-        for (DeviceConfig config : deviceConfigService.findAll()) {//new String[] {"protocol","address","param","name"})) {
+        for (DeviceConfig config : deviceConfigService.findAll()) {
             try {
+                LOG.log(Level.INFO, "creating {0}", config.getName());
                 Device device = config.createDevice();
                 if (device != null) {
                     mapDevice.put(config.getName(), new DeviceProxy(device));
@@ -80,14 +78,11 @@ public class DeviceService {
         updateDeviceValues("async");
     }
     
-    @Lock
     public void updateDeviceValues(String origin) {
         boolean changed = false;
         for (Entry<String, DeviceProxy> entry : mapDevice.entrySet()) {
-            String deviceName = entry.getKey();
             DeviceProxy device = entry.getValue();
-            if (device.updateValue()) {
-                checkTemperaturaMin(deviceName, device);                
+            if (device.updateValue()) {              
                 changed = true;
             }
         }
@@ -98,12 +93,10 @@ public class DeviceService {
         }
     }
     
-    @Lock
     public void toggleDeviceValue(Device device) {
         device.setValue(device.getValue() == 1 ? 0 : 1);    
     }
     
-    @Lock
     public void setDeviceValue(String deviceName, Object value) {
         Device device = getDevice(deviceName);
         if (device != null) {
@@ -111,25 +104,6 @@ public class DeviceService {
         }
     }
     
-    //temporário:
-    private void checkTemperaturaMin(String deviceName, DeviceProxy device) {
-        if (deviceName.equals("Temperatura") && device.getValue() != null) {
-            Integer temperatura = (Integer) device.getValue();
-            if (temperaturaMinValue == null || temperatura < temperaturaMinValue) {
-                temperaturaMinValue = temperatura;
-                temperaturaMinDate = new Date();
-            }
-        }
-    }
-
-    public Device getDevice(String name) {
-        return mapDevice.get(name);
-    }
-
-    public Map<String, DeviceProxy> getMapDevice() {
-        return mapDevice;
-    }
-
     public List<DeviceProxy> createListDevice() {
         List<DeviceProxy> list = new ArrayList();
         for (DeviceProxy device : mapDevice.values()) {
@@ -138,12 +112,14 @@ public class DeviceService {
         return list;
     }
 
-    public Integer getTemperaturaMinValue() {
-        return temperaturaMinValue;
+    @Lock(LockType.READ)
+    public Device getDevice(String name) {
+        return mapDevice.get(name);
     }
 
-    public Date getTemperaturaMinDate() {
-        return temperaturaMinDate;
+    @Lock(LockType.READ)
+    public Map<String, DeviceProxy> getMapDevice() {
+        return mapDevice;
     }
     
 }
