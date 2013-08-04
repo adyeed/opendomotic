@@ -4,7 +4,7 @@
  */
 package com.opendomotic.model;
 
-import com.opendomotic.api.Device;
+import com.opendomotic.device.Device;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 

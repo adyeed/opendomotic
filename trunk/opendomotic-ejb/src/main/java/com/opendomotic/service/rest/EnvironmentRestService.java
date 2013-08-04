@@ -33,7 +33,7 @@ public class EnvironmentRestService {
     
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public EnvironmentRest getListGraphicDevice(@QueryParam("id") int idEnvironment) {
+    public EnvironmentRest getEnvironmentRest(@QueryParam("id") int idEnvironment) {
         Environment environment = environmentDAO.findById(idEnvironment);
         if (environment != null) {
             EnvironmentRest e = new EnvironmentRest();            
