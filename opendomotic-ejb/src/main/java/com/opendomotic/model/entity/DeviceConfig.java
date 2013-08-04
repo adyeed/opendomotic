@@ -4,9 +4,9 @@
  */
 package com.opendomotic.model.entity;
 
-import com.opendomotic.api.Device;
-import com.opendomotic.factory.DeviceFactory;
-import com.opendomotic.factory.DevicePropertyNotFoundException;
+import com.opendomotic.device.Device;
+import com.opendomotic.device.factory.DeviceFactory;
+import com.opendomotic.device.factory.DevicePropertyNotFoundException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.LinkedHashMap;
 import java.util.List;

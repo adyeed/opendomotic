@@ -4,7 +4,7 @@
  */
 package com.opendomotic.service;
 
-import com.opendomotic.api.Device;
+import com.opendomotic.device.Device;
 import com.opendomotic.service.websocket.WebSocketService;
 import com.opendomotic.model.entity.Job;
 import com.opendomotic.service.dao.JobDAO;

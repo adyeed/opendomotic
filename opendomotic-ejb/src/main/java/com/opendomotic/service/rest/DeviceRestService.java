@@ -4,7 +4,7 @@
  */
 package com.opendomotic.service.rest;
 
-import com.opendomotic.api.Device;
+import com.opendomotic.device.Device;
 import com.opendomotic.model.DeviceProxy;
 import com.opendomotic.model.entity.DevicePosition;
 import com.opendomotic.model.rest.DeviceValueRest;

@@ -6,7 +6,7 @@ package com.opendomotic.service;
 
 import com.opendomotic.service.websocket.WebSocketService;
 import com.opendomotic.service.dao.DeviceConfigDAO;
-import com.opendomotic.api.Device;
+import com.opendomotic.device.Device;
 import com.opendomotic.model.DeviceProxy;
 import com.opendomotic.model.entity.DeviceConfig;
 import java.util.ArrayList;
