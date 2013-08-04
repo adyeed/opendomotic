@@ -2,9 +2,9 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.opendomotic.ethernet;
+package com.opendomotic.device.impl;
 
-import com.opendomotic.api.Device;
+import com.opendomotic.device.Device;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
