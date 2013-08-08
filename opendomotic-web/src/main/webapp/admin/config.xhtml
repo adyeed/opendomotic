@@ -13,8 +13,6 @@
             <p:commandButton value="#{msg.New}" action="#{configMB.create()}" update="dialog"/>
             
             <p:dialog id="dialog" header="#{msg.Device}" visible="#{configMB.visible}">
-                <h:inputHidden value="#{configMB.entity.id}"/>
-                
                 <h:panelGrid columns="2">
                     #{msg.Name}
                     <p:inputText value="#{configMB.entity.name}"/>
@@ -23,33 +21,30 @@
                     <p:inputText value="#{configMB.entity.deviceClassName}"/>
                     
                     <h:outputText value="#{msg.DefaultImage}"/>
-                    <p:selectOneMenu value="#{configMB.idImageDefault}">
+                    <p:selectOneMenu value="#{configMB.entity.deviceImageDefault}" converter="#{entityConverter}">
                         <f:selectItem itemLabel="#{msg.Select}"/>
-                        <f:selectItems value="#{imageMB.listAll}" var="i" itemValue="#{i.id}" itemLabel="#{i.name}"/>                         
+                        <f:selectItems value="#{imageMB.listAll}" var="i" itemLabel="#{i.name}" itemValue="#{i}"/>                         
                     </p:selectOneMenu>
                     
                     <h:outputText value="#{msg.ToggleImage}"/>
-                    <p:selectOneMenu value="#{configMB.idImageToggle}">
+                    <p:selectOneMenu value="#{configMB.entity.deviceImageToggle}" converter="#{entityConverter}">
                         <f:selectItem itemLabel="#{msg.None}"/>
-                        <f:selectItems value="#{imageMB.listAll}" var="i" itemValue="#{i.id}" itemLabel="#{i.name}"/>                         
+                        <f:selectItems value="#{imageMB.listAll}" var="i" itemLabel="#{i.name}"/>                         
                     </p:selectOneMenu>
                 </h:panelGrid>
                 
                 <p:separator/>
                 
-                <h:panelGrid columns="2">
-                    <h:outputText value="#{msg.Name}"/>
-                    <h:outputText value="#{msg.Value}"/>
-                    
-                    <p:inputText value="#{configMB.name1}"/>
-                    <p:inputText value="#{configMB.value1}"/>
-                    
-                    <p:inputText value="#{configMB.name2}"/>
-                    <p:inputText value="#{configMB.value2}"/>
-                    
-                    <p:inputText value="#{configMB.name3}"/>
-                    <p:inputText value="#{configMB.value3}"/>
-                </h:panelGrid>
+                <p:dataTable value="#{configMB.listDeviceProperty}" var="p">
+                    <p:column>
+                        <f:facet name="header">#{msg.Property}</f:facet>
+                        <p:inputText value="#{p.name}"/>
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">#{msg.Value}</f:facet>
+                        <p:inputText value="#{p.value}"/>
+                    </p:column>
+                </p:dataTable>
                 
                 <p:commandButton value="#{msg.Save}" action="#{configMB.save}" update="dialog,table" ajax="false"/>
                 <p:commandButton value="#{msg.Cancel}" action="#{configMB.cancel}" update="dialog"/>
@@ -63,6 +58,12 @@
                         #{msg.Name}
                     </f:facet>
                     #{config.name}
+                </p:column>
+                <p:column>
+                    <f:facet name="header">
+                        #{msg.Value}
+                    </f:facet>
+                    #{configMB.getDeviceValue(config)}
                 </p:column>
                 <p:column>
                     <f:facet name="header">
@@ -89,7 +90,7 @@
                 </p:column>
                 <p:column>
                     <p:commandButton value="#{msg.Delete}" action="#{configMB.delete(config)}" update="table" onclick="return confirm('#{msg.ConfirmsTheExclusion}');"/>
-                    <p:commandButton value="#{msg.Edit}" action="#{configMB.edit(config)}" update="@form"/>
+                    <p:commandButton value="#{msg.Edit}" action="#{configMB.edit(config)}" update="@form" ajax="false"/>
                     <p:commandButton value="#{msg.Test}" action="#{configMB.test(config)}" update="@form"/>
                 </p:column>
             </p:dataTable>
