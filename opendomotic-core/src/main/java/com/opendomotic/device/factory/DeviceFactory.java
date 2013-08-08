@@ -39,8 +39,8 @@ public class DeviceFactory {
         return device;
     }
     
-    private static Method getMethod(Device device, String name) { //TO-DO: get from superclasses
-        for (Method method : device.getClass().getDeclaredMethods()) {
+    private static Method getMethod(Device device, String name) {
+        for (Method method : device.getClass().getMethods()) {
             if (method.getName().equalsIgnoreCase("set"+name)){
                 return method;
             }
