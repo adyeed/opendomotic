@@ -5,7 +5,7 @@
  */
 package com.opendomotic;
 
-import com.opendomotic.api.Device;
+import com.opendomotic.device.Device;
 import java.util.Date;
 
 /**

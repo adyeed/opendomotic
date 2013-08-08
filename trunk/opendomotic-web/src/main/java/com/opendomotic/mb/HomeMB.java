@@ -4,6 +4,7 @@
  */
 package com.opendomotic.mb;
 
+import com.opendomotic.model.entity.Environment;
 import com.opendomotic.service.DeviceService;
 import com.opendomotic.service.dao.EnvironmentDAO;
 import java.io.Serializable;
@@ -30,11 +31,14 @@ public class HomeMB implements Serializable {
     @Inject
     private DeviceService deviceService;
     
-    private Integer idEnvironment;
+    private int idEnvironment;
     
     @PostConstruct
     public void init() {
-        idEnvironment = environmentDAO.findFirst().getId();
+        Environment environment = environmentDAO.findFirst();
+        if (environment != null) {
+            idEnvironment = environment.getId();
+        }
         LOG.log(Level.INFO, "HomeMB init id={0}", idEnvironment);
     }
     
@@ -42,11 +46,11 @@ public class HomeMB implements Serializable {
         deviceService.updateDeviceValuesAsync();
     }
     
-    public Integer getIdEnvironment() {
+    public int getIdEnvironment() {
         return idEnvironment;
     }
 
-    public void setIdEnvironment(Integer idEnvironment) {
+    public void setIdEnvironment(int idEnvironment) {
         this.idEnvironment = idEnvironment;
     }
     
