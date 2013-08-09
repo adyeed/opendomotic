@@ -7,61 +7,58 @@
                 xmlns:f="http://java.sun.com/jsf/core">
 
     <ui:define name="content">
-        <h:form id="form">
-            <p:growl id="messages" showDetail="true"/> 
             
-            <p:commandButton value="#{msg.New}" action="#{imageMB.create}" update="dialog"/>
-            
-            <p:dialog id="dialog" header="#{msg.Image}" visible="#{imageMB.visible}">               
-                <h:panelGrid columns="2">
-                    <h:outputText value="#{msg.Name}"/>
-                    <p:inputText value="#{imageMB.entity.name}"/>
-                    
-                    <h:outputText value="#{msg.Image}"/>
-                    <h:outputText value="#{msg.SaveToEnableUpload}" rendered="#{imageMB.entity.id == null}"/>
-                    <h:panelGrid columns="2" rendered="#{imageMB.entity.id != null}">
-                        <p:graphicImage 
-                            value="../resources/images/#{imageMB.entity.fileName}" 
-                            rendered="#{!empty imageMB.entity.fileName}"/>
-                        
-                        <p:fileUpload 
-                            fileUploadListener="#{imageMB.handleFileUpload}"  
-                            label="#{msg.Upload}"
-                            mode="advanced"  
-                            update="dialog,messages"  
-                            auto="true"  
-                            allowTypes="/(\.|\/)(gif|jpe?g|png)$/"/>
-                    </h:panelGrid>
-                </h:panelGrid>
-                
-                <p:commandButton value="#{msg.Save}" action="#{imageMB.save}" update="dialog,table"/>
-                <p:commandButton value="#{msg.Cancel}" action="#{imageMB.cancel}" update="dialog"/>
-            </p:dialog>
+        <p:commandButton value="#{msg.New}" action="#{imageMB.create}" update="dialog"/>
 
-            <br/>
-            
-            <p:dataTable id="table" value="#{imageMB.listAll}" var="e">
-                <p:column>
-                    <f:facet name="header">
-                        #{msg.Name}
-                    </f:facet>
-                    #{e.name}
-                </p:column>
-                <p:column>
-                    <f:facet name="header">
-                        #{msg.Image}
-                    </f:facet>
+        <p:dialog id="dialog" header="#{msg.Image}" visible="#{imageMB.visible}">               
+            <h:panelGrid columns="2">
+                <h:outputText value="#{msg.Name}"/>
+                <p:inputText value="#{imageMB.entity.name}"/>
+
+                <h:outputText value="#{msg.Image}"/>
+                <h:outputText value="#{msg.SaveToEnableUpload}" rendered="#{imageMB.entity.id == null}"/>
+                <h:panelGrid columns="2" rendered="#{imageMB.entity.id != null}">
                     <p:graphicImage 
-                        value="../resources/images/#{e.fileName}" 
-                        rendered="#{!empty e.fileName}"/>
-                    #{e.fileName}
-                </p:column>
-                <p:column>
-                    <p:commandButton value="#{msg.Delete}" action="#{imageMB.delete(e)}" update="table" onclick="return confirm('#{msg.ConfirmsTheExclusion}');"/>
-                    <p:commandButton value="#{msg.Edit}" action="#{imageMB.edit(e)}" update="@form"/>
-                </p:column>
-            </p:dataTable>
-        </h:form>
+                        value="../resources/images/#{imageMB.entity.fileName}" 
+                        rendered="#{!empty imageMB.entity.fileName}"/>
+
+                    <p:fileUpload 
+                        fileUploadListener="#{imageMB.handleFileUpload}"  
+                        label="#{msg.Upload}"
+                        mode="advanced"  
+                        update="dialog,messages"  
+                        auto="true"  
+                        allowTypes="/(\.|\/)(gif|jpe?g|png)$/"/>
+                </h:panelGrid>
+            </h:panelGrid>
+
+            <p:commandButton value="#{msg.Save}" action="#{imageMB.save}" update="dialog,table"/>
+            <p:commandButton value="#{msg.Cancel}" action="#{imageMB.cancel}" update="dialog"/>
+        </p:dialog>
+
+        <br/>
+
+        <p:dataTable id="table" value="#{imageMB.listAll}" var="e">
+            <p:column>
+                <f:facet name="header">
+                    #{msg.Name}
+                </f:facet>
+                #{e.name}
+            </p:column>
+            <p:column>
+                <f:facet name="header">
+                    #{msg.Image}
+                </f:facet>
+                <p:graphicImage 
+                    value="../resources/images/#{e.fileName}" 
+                    rendered="#{!empty e.fileName}"/>
+                #{e.fileName}
+            </p:column>
+            <p:column>
+                <p:commandButton value="#{msg.Delete}" action="#{imageMB.delete(e)}" update="table" onclick="return confirm('#{msg.ConfirmsTheExclusion}');"/>
+                <p:commandButton value="#{msg.Edit}" action="#{imageMB.edit(e)}" update="@form"/>
+            </p:column>
+        </p:dataTable>
     </ui:define>
 
 </ui:composition>

@@ -43,6 +43,10 @@ public class PositionMB implements Serializable {
         positionDAO.save(idEnvironment, idConfig);       
     }
     
+    public void remove() {
+        positionDAO.delete(idEnvironment, idConfig);       
+    }
+    
     public void clear() {
         positionDAO.deleteByIdEnvironment(idEnvironment);
     }

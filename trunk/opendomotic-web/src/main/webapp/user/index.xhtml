@@ -8,39 +8,22 @@
                 xmlns:h="http://java.sun.com/jsf/html">
 
     <ui:define name="content">
-        <h:form id="form">
-            <h:outputScript library="js" name="websocket.js"/>
-            <h:outputScript library="js" name="imageShape.js"/>
-            <h:outputScript library="js" name="canvasCore.js"/>
-            <h:outputScript library="js" name="canvasUser.js"/>
-            
-            <p:toolbar>
-                <p:toolbarGroup>
-                    <h:panelGrid columns="2" style="height: 48px;">
-                        <h:outputText value="#{msg.Environment}"/> 
-                        <p:selectOneMenu value="#{homeMB.idEnvironment}">
-                            <f:selectItems value="#{environmentMB.listAll}" var="e" itemValue="#{e.id}" itemLabel="#{e.name}"/>
-                            <p:ajax update="panelGroupCanvas"/>
-                        </p:selectOneMenu>                      
-                    </h:panelGrid>
-                </p:toolbarGroup> 
-                
-                <p:toolbarGroup>
-                    <p:commandButton value="#{msg.Refresh}" action="#{homeMB.updateDevices}"/>
-                </p:toolbarGroup> 
-            </p:toolbar>
-            
-            <br/>
-            
-            <h:panelGroup id="panelGroupCanvas">
-                <div style="width: 100%; height: 100%; overflow: auto;">
-                    <canvas id="canvas"></canvas>
-                </div>
-                <script>
-                    drawCanvas(#{homeMB.idEnvironment});
-                </script>
-            </h:panelGroup>
-        </h:form>
+        
+        <h:outputScript library="js" name="websocket.js"/>
+        <h:outputScript library="js" name="imageShape.js"/>
+        <h:outputScript library="js" name="canvasCore.js"/>
+        <h:outputScript library="js" name="canvasUser.js"/>
+
+        <br/>
+
+        <h:panelGroup id="panelGroupCanvas">
+            <div style="width: 100%; height: 100%; overflow: auto;">
+                <canvas id="canvas"></canvas>
+            </div>
+            <script>
+                drawCanvas(#{homeMB.idEnvironment});
+            </script>
+        </h:panelGroup>
         
         <div>
             <input id="message" type="text"></input>
