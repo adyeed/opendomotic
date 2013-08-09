@@ -40,6 +40,13 @@ public class DevicePositionDAO extends AbstractDAO<DevicePosition> {
         em.persist(position);
     }
     
+    public void delete(Integer idEnvironment, Integer idDeviceConfig) {
+        em.createQuery("delete from DevicePosition p where p.environment.id = ?1 and p.deviceConfig.id = ?2")
+                .setParameter(1, idEnvironment)
+                .setParameter(2, idDeviceConfig)
+                .executeUpdate();
+    }
+    
     public void deleteByIdEnvironment(Integer idEnvironment) {
         em.createQuery("delete from DevicePosition p where p.environment.id = ?1")
                 .setParameter(1, idEnvironment)
