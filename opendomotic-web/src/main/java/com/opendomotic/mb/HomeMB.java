@@ -42,10 +42,6 @@ public class HomeMB implements Serializable {
         LOG.log(Level.INFO, "HomeMB init id={0}", idEnvironment);
     }
     
-    public void updateDevices() {
-        deviceService.updateDeviceValuesAsync();
-    }
-    
     public int getIdEnvironment() {
         return idEnvironment;
     }

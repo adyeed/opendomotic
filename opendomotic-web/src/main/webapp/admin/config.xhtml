@@ -7,94 +7,91 @@
                 xmlns:f="http://java.sun.com/jsf/core">
 
     <ui:define name="content">
-        <h:form id="form">
-            <p:growl id="messages" showDetail="true"/> 
-            
-            <p:commandButton value="#{msg.New}" action="#{configMB.create()}" update="dialog"/>
-            
-            <p:dialog id="dialog" header="#{msg.Device}" visible="#{configMB.visible}">
-                <h:panelGrid columns="2">
-                    #{msg.Name}
-                    <p:inputText value="#{configMB.entity.name}"/>
-                    
-                    #{msg.ClassName}
-                    <p:inputText value="#{configMB.entity.deviceClassName}"/>
-                    
-                    <h:outputText value="#{msg.DefaultImage}"/>
-                    <p:selectOneMenu value="#{configMB.entity.deviceImageDefault}" converter="#{entityConverter}">
-                        <f:selectItem itemLabel="#{msg.Select}"/>
-                        <f:selectItems value="#{imageMB.listAll}" var="i" itemLabel="#{i.name}" itemValue="#{i}"/>                         
-                    </p:selectOneMenu>
-                    
-                    <h:outputText value="#{msg.ToggleImage}"/>
-                    <p:selectOneMenu value="#{configMB.entity.deviceImageToggle}" converter="#{entityConverter}">
-                        <f:selectItem itemLabel="#{msg.None}"/>
-                        <f:selectItems value="#{imageMB.listAll}" var="i" itemLabel="#{i.name}"/>                         
-                    </p:selectOneMenu>
-                </h:panelGrid>
-                
-                <p:separator/>
-                
-                <p:dataTable value="#{configMB.listDeviceProperty}" var="p">
-                    <p:column>
-                        <f:facet name="header">#{msg.Property}</f:facet>
-                        <p:inputText value="#{p.name}"/>
-                    </p:column>
-                    <p:column>
-                        <f:facet name="header">#{msg.Value}</f:facet>
-                        <p:inputText value="#{p.value}"/>
-                    </p:column>
-                </p:dataTable>
-                
-                <p:commandButton value="#{msg.Save}" action="#{configMB.save}" update="dialog,table" ajax="false"/>
-                <p:commandButton value="#{msg.Cancel}" action="#{configMB.cancel}" update="dialog"/>
-            </p:dialog>
-            
-            <br/>
+        
+        <p:commandButton value="#{msg.New}" action="#{configMB.create()}" update="dialog"/>
+        <p:commandButton action="/admin/image" value="#{msg.UploadImages}" ajax="false"/>
 
-            <p:dataTable id="table" value="#{configMB.listAll}" var="config">
+        <p:dialog id="dialog" header="#{msg.Device}" visible="#{configMB.visible}">
+            <h:panelGrid columns="2">
+                #{msg.Name}
+                <p:inputText value="#{configMB.entity.name}"/>
+
+                #{msg.ClassName}
+                <p:inputText value="#{configMB.entity.deviceClassName}"/>
+
+                <h:outputText value="#{msg.DefaultImage}"/>
+                <p:selectOneMenu value="#{configMB.entity.deviceImageDefault}" converter="#{entityConverter}">
+                    <f:selectItem itemLabel="#{msg.Select}"/>
+                    <f:selectItems value="#{imageMB.listAll}" var="i" itemLabel="#{i.name}" itemValue="#{i}"/>                         
+                </p:selectOneMenu>
+
+                <h:outputText value="#{msg.ToggleImage}"/>
+                <p:selectOneMenu value="#{configMB.entity.deviceImageToggle}" converter="#{entityConverter}">
+                    <f:selectItem itemLabel="#{msg.None}"/>
+                    <f:selectItems value="#{imageMB.listAll}" var="i" itemLabel="#{i.name}"/>                         
+                </p:selectOneMenu>
+            </h:panelGrid>
+
+            <p:dataTable value="#{configMB.listDeviceProperty}" var="p">
                 <p:column>
-                    <f:facet name="header">
-                        #{msg.Name}
-                    </f:facet>
-                    #{config.name}
+                    <f:facet name="header">#{msg.Property}</f:facet>
+                    <p:inputText value="#{p.name}"/>
                 </p:column>
                 <p:column>
-                    <f:facet name="header">
-                        #{msg.Value}
-                    </f:facet>
-                    #{configMB.getDeviceValue(config)}
-                </p:column>
-                <p:column>
-                    <f:facet name="header">
-                        #{msg.ClassName}
-                    </f:facet>
-                    #{config.deviceClassName}
-                </p:column>
-                <p:column>
-                    <f:facet name="header">
-                        #{msg.Properties}
-                    </f:facet>
-                    #{config.listDeviceProperty}
-                </p:column>
-                <p:column>
-                    <f:facet name="header">
-                        #{msg.Image}
-                    </f:facet>
-                    <p:graphicImage 
-                        value="../resources/images/#{config.deviceImageDefault.fileName}" 
-                        rendered="#{!empty config.deviceImageDefault}"/>
-                    <p:graphicImage 
-                        value="../resources/images/#{config.deviceImageToggle.fileName}" 
-                        rendered="#{!empty config.deviceImageToggle}"/>
-                </p:column>
-                <p:column>
-                    <p:commandButton value="#{msg.Delete}" action="#{configMB.delete(config)}" update="table" onclick="return confirm('#{msg.ConfirmsTheExclusion}');"/>
-                    <p:commandButton value="#{msg.Edit}" action="#{configMB.edit(config)}" update="@form" ajax="false"/>
-                    <p:commandButton value="#{msg.Test}" action="#{configMB.test(config)}" update="@form"/>
+                    <f:facet name="header">#{msg.Value}</f:facet>
+                    <p:inputText value="#{p.value}"/>
                 </p:column>
             </p:dataTable>
-        </h:form>
+
+            <p:commandButton value="#{msg.Save}" action="#{configMB.save}" update="dialog,table"/>
+            <p:commandButton value="#{msg.Cancel}" action="#{configMB.cancel}" update="dialog"/>
+        </p:dialog>
+
+        <br/>
+
+        <p:dataTable id="table" value="#{configMB.listAll}" var="config">
+            <p:column>
+                <f:facet name="header">
+                    #{msg.Name}
+                </f:facet>
+                #{config.name}
+            </p:column>
+            <p:column>
+                <f:facet name="header">
+                    #{msg.Value}
+                </f:facet>
+                #{configMB.getDeviceValue(config)}
+            </p:column>
+            <p:column>
+                <f:facet name="header">
+                    #{msg.ClassName}
+                </f:facet>
+                #{config.deviceClassName}
+            </p:column>
+            <p:column>
+                <f:facet name="header">
+                    #{msg.Properties}
+                </f:facet>
+                #{config.listDeviceProperty}
+            </p:column>
+            <p:column>
+                <f:facet name="header">
+                    #{msg.Image}
+                </f:facet>
+                <p:graphicImage 
+                    value="../resources/images/#{config.deviceImageDefault.fileName}" 
+                    rendered="#{!empty config.deviceImageDefault}"/>
+                <p:graphicImage 
+                    value="../resources/images/#{config.deviceImageToggle.fileName}" 
+                    rendered="#{!empty config.deviceImageToggle}"/>
+            </p:column>
+            <p:column>
+                <p:commandButton value="#{msg.Delete}" action="#{configMB.delete(config)}" update="table" onclick="return confirm('#{msg.ConfirmsTheExclusion}');"/>
+                <p:commandButton value="#{msg.Edit}" action="#{configMB.edit(config)}" update="@form"/>
+                <p:commandButton value="#{msg.Test}" action="#{configMB.test(config)}" update="@form"/>
+            </p:column>
+        </p:dataTable>
+
     </ui:define>
 
 </ui:composition>

@@ -8,94 +8,93 @@
                 xmlns:f="http://java.sun.com/jsf/core">
 
     <ui:define name="content">
-        <h:form>
-            <p:commandButton value="#{msg.New}" action="#{jobMB.create()}" update="dialog" ajax="false"/>
-                        
-            <p:dialog id="dialog" header="#{msg.Job}" visible="#{jobMB.visible}">
-                <h:inputHidden value="#{jobMB.entity.id}"/>
-   
-                <p:panel header="#{msg.Input}">
-                    <p:tabView id="tabView" activeIndex="#{jobMB.tabActiveIndex}">    
-                        <p:tab id="tab1" title="#{msg.Device}">  
-                            <h:panelGrid columns="2">
-                                <h:outputText value="#{msg.Device}"/>
-                                <p:selectOneMenu value="#{jobMB.idInput}">
-                                    <f:selectItem itemLabel="#{msg.None}" itemValue="#{null}"/>
-                                    <f:selectItems value="#{configMB.listAll}" var="d" itemValue="#{d.id}" itemLabel="#{d.name}"/>
-                                </p:selectOneMenu>  
 
-                                <h:outputText value="#{msg.Operator}"/>
-                                <p:selectOneMenu value="#{jobMB.entity.operator}">
-                                    <f:selectItems value="#{jobMB.listOperator}"/>
-                                </p:selectOneMenu>  
+        <p:commandButton value="#{msg.New}" action="#{jobMB.create()}" update="dialog"/>
 
-                                <h:outputText value="#{msg.ExpectValue}"/>
-                                <p:inputText value="#{jobMB.entity.expectValue}"/>
-                            </h:panelGrid>  
-                        </p:tab>  
+        <p:dialog id="dialog" header="#{msg.Job}" visible="#{jobMB.visible}">
+            <h:inputHidden value="#{jobMB.entity.id}"/>
 
-                        <p:tab id="tab2" title="#{msg.Date}">  
-                            <h:panelGrid columns="2">
-                                <h:outputText value="#{msg.Date}"/>
-                                <p:calendar value="#{jobMB.entity.inputDate}" pattern="dd/MM/yyyy HH:mm:ss" 
-                                            stepHour="1" stepMinute="1" stepSecond="1" showOn="button"/>                    
-                            </h:panelGrid>  
-                        </p:tab>   
-                    </p:tabView>
-                        
-                </p:panel>
+            <p:panel header="#{msg.Input}">
+                <p:tabView id="tabView" activeIndex="#{jobMB.tabActiveIndex}">    
+                    <p:tab id="tab1" title="#{msg.Device}">  
+                        <h:panelGrid columns="2">
+                            <h:outputText value="#{msg.Device}"/>
+                            <p:selectOneMenu value="#{jobMB.idInput}">
+                                <f:selectItem itemLabel="#{msg.None}" itemValue="#{null}"/>
+                                <f:selectItems value="#{configMB.listAll}" var="d" itemValue="#{d.id}" itemLabel="#{d.name}"/>
+                            </p:selectOneMenu>  
 
-                <br/>
-                
-                <p:panel header="#{msg.Output}">
-                    <h:panelGrid columns="2">
-                        <h:outputText value="#{msg.Device}"/>
-                        <p:selectOneMenu value="#{jobMB.idOutput}">
-                            <f:selectItems value="#{configMB.listAll}" var="d" itemValue="#{d.id}" itemLabel="#{d.name}"/>
-                        </p:selectOneMenu>  
+                            <h:outputText value="#{msg.Operator}"/>
+                            <p:selectOneMenu value="#{jobMB.entity.operator}">
+                                <f:selectItems value="#{jobMB.listOperator}"/>
+                            </p:selectOneMenu>  
 
-                        <h:outputText value="#{msg.ActionValue}"/>
-                        <p:inputText value="#{jobMB.entity.actionValue}"/>
-                        
-                        <h:outputText value="#{msg.DeleteAfterExecute}"/>
-                    <p:selectBooleanCheckbox value="#{jobMB.entity.deleteAfterExecute}"/>
-                    </h:panelGrid>          
-                </p:panel>
-                
-                <br/>
-                
-                <p:commandButton value="#{msg.Save}" action="#{jobMB.save}" update="dialog,table"/>
-                <p:commandButton value="#{msg.Cancel}" action="#{jobMB.cancel}" update="dialog"/>
-            </p:dialog>
-                
-            
+                            <h:outputText value="#{msg.ExpectValue}"/>
+                            <p:inputText value="#{jobMB.entity.expectValue}"/>
+                        </h:panelGrid>  
+                    </p:tab>  
+
+                    <p:tab id="tab2" title="#{msg.Date}">  
+                        <h:panelGrid columns="2">
+                            <h:outputText value="#{msg.Date}"/>
+                            <p:calendar value="#{jobMB.entity.inputDate}" pattern="dd/MM/yyyy HH:mm:ss" 
+                                        stepHour="1" stepMinute="1" stepSecond="1" showOn="button"/>                    
+                        </h:panelGrid>  
+                    </p:tab>   
+                </p:tabView>
+
+            </p:panel>
+
             <br/>
 
-            <p:dataTable id="table" value="#{jobMB.listAll}" var="job" emptyMessage="#{msg.WithoutJobs}">
-                <p:column>
-                    <f:facet name="header">
-                        <h:outputText value="#{msg.Input}"/>
-                    </f:facet>
-                    #{job.inputDescription}
-                </p:column>
-                <p:column>
-                    <f:facet name="header">
-                        <h:outputText value="#{msg.Output}"/>
-                    </f:facet>
-                    #{job.outputDescription}
-                </p:column>
-                <p:column>
-                    <f:facet name="header">
-                        <h:outputText value="#{msg.Delete}"/>
-                    </f:facet>
-                    #{job.deleteAfterExecute}
-                </p:column>
-                <p:column>
-                    <p:commandButton value="#{msg.Delete}" action="#{jobMB.delete(job)}" update="table" onclick="return confirm('#{msg.ConfirmsTheExclusion}');"/>
-                    <p:commandButton value="#{msg.Edit}" action="#{jobMB.edit(job)}" update="@form"/>
-                </p:column>
-            </p:dataTable> 
-        </h:form>
+            <p:panel header="#{msg.Output}">
+                <h:panelGrid columns="2">
+                    <h:outputText value="#{msg.Device}"/>
+                    <p:selectOneMenu value="#{jobMB.idOutput}">
+                        <f:selectItems value="#{configMB.listAll}" var="d" itemValue="#{d.id}" itemLabel="#{d.name}"/>
+                    </p:selectOneMenu>  
+
+                    <h:outputText value="#{msg.ActionValue}"/>
+                    <p:inputText value="#{jobMB.entity.actionValue}"/>
+
+                    <h:outputText value="#{msg.DeleteAfterExecute}"/>
+                <p:selectBooleanCheckbox value="#{jobMB.entity.deleteAfterExecute}"/>
+                </h:panelGrid>          
+            </p:panel>
+
+            <br/>
+
+            <p:commandButton value="#{msg.Save}" action="#{jobMB.save}" update="dialog,table"/>
+            <p:commandButton value="#{msg.Cancel}" action="#{jobMB.cancel}" update="dialog"/>
+        </p:dialog>
+
+        <br/>
+
+        <p:dataTable id="table" value="#{jobMB.listAll}" var="job" emptyMessage="#{msg.WithoutJobs}">
+            <p:column>
+                <f:facet name="header">
+                    <h:outputText value="#{msg.Input}"/>
+                </f:facet>
+                #{job.inputDescription}
+            </p:column>
+            <p:column>
+                <f:facet name="header">
+                    <h:outputText value="#{msg.Output}"/>
+                </f:facet>
+                #{job.outputDescription}
+            </p:column>
+            <p:column>
+                <f:facet name="header">
+                    <h:outputText value="#{msg.Delete}"/>
+                </f:facet>
+                #{job.deleteAfterExecute}
+            </p:column>
+            <p:column>
+                <p:commandButton value="#{msg.Delete}" action="#{jobMB.delete(job)}" update="table" onclick="return confirm('#{msg.ConfirmsTheExclusion}');"/>
+                <p:commandButton value="#{msg.Edit}" action="#{jobMB.edit(job)}" update="@form"/>
+            </p:column>
+        </p:dataTable> 
+
     </ui:define>
 
 </ui:composition>

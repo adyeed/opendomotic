@@ -6,64 +6,62 @@
                 xmlns:p="http://primefaces.org/ui"
                 xmlns:f="http://java.sun.com/jsf/core">
 
-    <ui:define name="content">
-        <h:form id="form" enctype="multipart/form-data">           
-            <p:growl id="messages" showDetail="true"/> 
+    <ui:define name="content">        
             
-            <p:commandButton value="#{msg.New}" action="#{environmentMB.create}" update="dialog"/>
-            
-            <p:dialog id="dialog" header="#{msg.Environment}" visible="#{environmentMB.visible}">                   
-                <h:panelGrid columns="2">
-                    <h:outputText value="#{msg.Name}"/>
-                    <p:inputText value="#{environmentMB.entity.name}"/>
+        <p:commandButton value="#{msg.New}" action="#{environmentMB.create}" update="dialog"/>
+        <p:commandButton action="/admin/position" value="#{msg.PositioningDevices}" ajax="false"/>
 
-                    <h:outputText value="#{msg.Image}"/>
-                    <h:outputText value="#{msg.SaveToEnableUpload}" rendered="#{environmentMB.entity.id == null}"/>
-                    <h:panelGroup rendered="#{environmentMB.entity.id != null}">
-                        <p:graphicImage 
-                            value="../resources/images/#{environmentMB.entity.fileName}" 
-                            height="200" 
-                            rendered="#{!empty environmentMB.entity.fileName}"/>
-                        
-                        <p:fileUpload fileUploadListener="#{environmentMB.handleFileUpload}"  
-                            label="#{msg.Upload}"
-                            mode="advanced"  
-                            update="dialog,messages"  
-                            auto="true"  
-                            allowTypes="/(\.|\/)(gif|jpe?g|png)$/"/>
-                    </h:panelGroup>
-                </h:panelGrid>                  
+        <p:dialog id="dialog" header="#{msg.Environment}" visible="#{environmentMB.visible}">                   
+            <h:panelGrid columns="2">
+                <h:outputText value="#{msg.Name}"/>
+                <p:inputText value="#{environmentMB.entity.name}"/>
 
-                <p:commandButton value="#{msg.Save}" action="#{environmentMB.save}" update="dialog,table"/>
-                <p:commandButton value="#{msg.Cancel}" action="#{environmentMB.cancel}" update="dialog"/>
-            </p:dialog>
-            
-            <br/>
-            
-            <p:dataTable id="table" value="#{environmentMB.listAll}" var="item">
-                <p:column>
-                    <f:facet name="header">
-                        #{msg.Name}
-                    </f:facet>
-                    #{item.name}
-                </p:column>
-                <p:column>
-                    <f:facet name="header">
-                        #{msg.Image}
-                    </f:facet>                    
+                <h:outputText value="#{msg.Image}"/>
+                <h:outputText value="#{msg.SaveToEnableUpload}" rendered="#{environmentMB.entity.id == null}"/>
+                <h:panelGroup rendered="#{environmentMB.entity.id != null}">
                     <p:graphicImage 
-                        value="../resources/images/#{item.fileName}" 
-                        height="100" 
-                        rendered="#{!empty item.fileName}"/>
-                    #{item.fileName}
-                </p:column>
-                <p:column>
-                    <p:commandButton value="#{msg.Delete}" action="#{environmentMB.delete(item)}" update="table" onclick="return confirm('#{msg.ConfirmsTheExclusion}');"/>
-                    <p:commandButton value="#{msg.Edit}" action="#{environmentMB.edit(item)}" update="@form"/>
-                </p:column>
-            </p:dataTable>
+                        value="../resources/images/#{environmentMB.entity.fileName}" 
+                        height="200" 
+                        rendered="#{!empty environmentMB.entity.fileName}"/>
+
+                    <p:fileUpload fileUploadListener="#{environmentMB.handleFileUpload}"  
+                        label="#{msg.Upload}"
+                        mode="advanced"  
+                        update="dialog,messages"  
+                        auto="true"  
+                        allowTypes="/(\.|\/)(gif|jpe?g|png)$/"/>
+                </h:panelGroup>
+            </h:panelGrid>                  
+
+            <p:commandButton value="#{msg.Save}" action="#{environmentMB.save}" update="dialog,table"/>
+            <p:commandButton value="#{msg.Cancel}" action="#{environmentMB.cancel}" update="dialog"/>
+        </p:dialog>
+
+        <br/>
+
+        <p:dataTable id="table" value="#{environmentMB.listAll}" var="item">
+            <p:column>
+                <f:facet name="header">
+                    #{msg.Name}
+                </f:facet>
+                #{item.name}
+            </p:column>
+            <p:column>
+                <f:facet name="header">
+                    #{msg.Image}
+                </f:facet>                    
+                <p:graphicImage 
+                    value="../resources/images/#{item.fileName}" 
+                    height="100" 
+                    rendered="#{!empty item.fileName}"/>
+                #{item.fileName}
+            </p:column>
+            <p:column>
+                <p:commandButton value="#{msg.Delete}" action="#{environmentMB.delete(item)}" update="table" onclick="return confirm('#{msg.ConfirmsTheExclusion}');"/>
+                <p:commandButton value="#{msg.Edit}" action="#{environmentMB.edit(item)}" update="@form"/>
+            </p:column>
+        </p:dataTable>
             
-        </h:form>
     </ui:define>
 
 </ui:composition>
