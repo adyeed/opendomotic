@@ -6,7 +6,6 @@
 package com.opendomotic.device.pi;
 
 import com.opendomotic.device.Device;
-import com.opendomotic.device.Device;
 import com.pi4j.io.gpio.GpioFactory;
 import com.pi4j.io.gpio.GpioPinDigitalOutput;
 import com.pi4j.io.gpio.Pin;
@@ -22,10 +21,12 @@ public class DigitalPin implements Device {
     private Integer pin = 0;    
     private GpioPinDigitalOutput digitalPin;
         
+    @Override
     public Object getValue() {   
         return getDigitalPin().isHigh() ? 1 : 0;
     }
 
+    @Override
     public void setValue(Object value) {
         getDigitalPin().setState((Integer) value == 1);
     }    
