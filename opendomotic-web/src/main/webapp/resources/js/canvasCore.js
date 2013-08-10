@@ -22,7 +22,7 @@ function initCanvas(canDrag, onMouseUpDevice, idEnvironment) {
     canvas.onmousemove = mouseMove;
     canvas.onmouseup = mouseUp;
     canvas.width = 1000;
-    canvas.height = 950;
+    canvas.height = 500;
     context = canvas.getContext("2d");    
     context.font = "bold 26px verdana";
     drawLoading();
@@ -31,6 +31,9 @@ function initCanvas(canDrag, onMouseUpDevice, idEnvironment) {
         for (var environment in data) {
             imagePlanta.src = data[environment].fileName;
             imagePlanta.onload = function() {
+                canvas.width = imagePlanta.width;
+                canvas.height = imagePlanta.height;
+                context.font = "bold 26px verdana";
                 draw();
             };
 

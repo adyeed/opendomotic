@@ -7,6 +7,7 @@ package com.opendomotic.servlet;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.catalina.websocket.MessageInbound;
 import org.apache.catalina.websocket.WsOutbound;
@@ -19,7 +20,7 @@ public class DomoticInBound extends MessageInbound {
  
     private static final Logger LOG = Logger.getLogger(DomoticInBound.class.getName());
  
-    private DomoticWebsocket servlet;
+    private final DomoticWebsocket servlet;
 
     public DomoticInBound(DomoticWebsocket domoticWebsocket) {
         servlet = domoticWebsocket;
@@ -28,15 +29,14 @@ public class DomoticInBound extends MessageInbound {
     @Override
     protected void onOpen(WsOutbound outbound) {
         servlet.getConnections().add(this);
-        servlet.sendBroadcast("novo cliente conectou");
+        servlet.sendBroadcast("new client connected");
     }
 
     @Override
     protected void onClose(int status) {
         super.onClose(status);
         
-        String log = "status="+status; 
-        LOG.info(log);
+        LOG.log(Level.INFO, "status={0}", status);
         
         servlet.getConnections().remove(this);
     }
@@ -48,7 +48,6 @@ public class DomoticInBound extends MessageInbound {
 
     @Override
     protected void onTextMessage(CharBuffer cb) throws IOException {
-        //getWsOutbound().writeTextMessage(servlet.process(cb));
         servlet.sendBroadcast(cb.toString());
     }
     
