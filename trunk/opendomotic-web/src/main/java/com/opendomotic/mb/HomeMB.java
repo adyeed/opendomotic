@@ -28,10 +28,8 @@ public class HomeMB implements Serializable {
     @Inject
     private EnvironmentDAO environmentDAO;
     
-    @Inject
-    private DeviceService deviceService;
-    
     private int idEnvironment;
+    private Boolean adminLogged;
     
     @PostConstruct
     public void init() {
@@ -48,6 +46,14 @@ public class HomeMB implements Serializable {
 
     public void setIdEnvironment(int idEnvironment) {
         this.idEnvironment = idEnvironment;
+    }
+
+    public Boolean getAdminLogged() {
+        return adminLogged;
+    }
+
+    public void setAdminLogged(Boolean adminLogged) {
+        this.adminLogged = adminLogged;
     }
     
 }

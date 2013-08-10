@@ -38,10 +38,10 @@
     </login-config>
     
     <security-role>
-        <role-name>USER-ROLE</role-name>
+        <role-name>user</role-name>
     </security-role>
     <security-role>
-        <role-name>ADMIN-ROLE</role-name>
+        <role-name>admin</role-name>
     </security-role> 
     
     <security-constraint>
@@ -50,7 +50,7 @@
             <url-pattern>/admin/*</url-pattern>
         </web-resource-collection>
         <auth-constraint>
-            <role-name>ADMIN-ROLE</role-name>
+            <role-name>admin</role-name>
         </auth-constraint>
         <!--<user-data-constraint>
             <transport-guarantee>CONFIDENTIAL</transport-guarantee>
@@ -63,8 +63,8 @@
             <url-pattern>/*</url-pattern>
         </web-resource-collection>
         <auth-constraint>
-            <role-name>USER-ROLE</role-name>
-            <role-name>ADMIN-ROLE</role-name>
+            <role-name>user</role-name>
+            <role-name>admin</role-name>
         </auth-constraint>
         <!--<user-data-constraint>
             <transport-guarantee>CONFIDENTIAL</transport-guarantee>

@@ -16,6 +16,7 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  *
@@ -35,12 +36,30 @@ public class AuthenticatorFilter implements Filter {
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+        HttpServletRequest httpRequest = (HttpServletRequest) request;
+        HttpServletResponse httpResponse = (HttpServletResponse) response;
+        
         if (homeMB != null && homeMB.getAdminLogged() == null) {
             LOG.info("logged in as admin");
-            HttpServletRequest httpRequest = (HttpServletRequest) request;
-            homeMB.setAdminLogged(httpRequest.isUserInRole("admin"));
-        }        
+            homeMB.setAdminLogged(httpRequest.isUserInRole("ADMIN-ROLE"));
+        }
+        
         chain.doFilter(request, response);
+        
+        //Está autorizado se existir o atributo na session
+        //OU página requisitada terminar com caminho raíz ou login.jsf
+        /*boolean autorizado = 
+                httpRequest.getSession().getAttribute("usuarioLogado") != null
+                || httpRequest.getRequestURI().endsWith("login.jsf")
+                || httpRequest.getRequestURI().contains("/javax.faces.resource/");
+        
+        if (autorizado) {
+            chain.doFilter(request, response);
+        } else {  
+            String log = "Acesso Negado: " + httpRequest.getRequestURI();
+            LOG.warning(log);
+            httpResponse.sendRedirect(httpRequest.getContextPath() + "/login.jsf");
+        }*/
     }
 
     @Override
