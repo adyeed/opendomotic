@@ -3,6 +3,7 @@ var xMouseDown, yMouseDown;
 
 var imagePlanta = new Image();
 var imagePressed = null;
+var imageTooltip = null;
 var arrayImage = new Array();
 var countImage = 0;
 var canDrag = false;
@@ -112,20 +113,41 @@ function updateDeviceValue(name, value) {
     }
 }
 
+function checkTooltip(x, y) {
+    image = getImage(x, y);
+    if (image !== null) {
+        if (imageTooltip === null) {
+            context.fillText(image.name, x, y);
+        }
+        imageTooltip = image;
+        
+    } else if (imageTooltip !== null) {
+        imageTooltip = null;
+        draw();
+    }
+}
+
+function getImage(x, y) {
+    for (var i in arrayImage) {
+        if (arrayImage[i].isIn(x, y)) {
+            return arrayImage[i];
+        }
+    }
+    return null;
+}
+
 //------------------------------------------------------------------------------
 
 function mouseDown(e) {
     var x = e.layerX;//e.pageX - canvas.offsetLeft;
     var y = e.layerY;//e.pageY - canvas.offsetTop;
 
-    for (var i in arrayImage) {
-        if (arrayImage[i].isIn(x, y)) {
-            imagePressed = arrayImage[i];
-            xMouseDown = x - imagePressed.x;
-            yMouseDown = y - imagePressed.y;
-            context.fillText("aguarde...", imagePressed.x, imagePressed.y);
-            break;
-        }
+    image = getImage(x, y);
+    if (image !== null) {
+        imagePressed = image;
+        xMouseDown = x - image.x;
+        yMouseDown = y - image.y;
+        context.fillText("aguarde...", image.x, image.y);
     }
 }
 
@@ -134,6 +156,12 @@ function mouseMove(e) {
         imagePressed.x = e.layerX - xMouseDown;
         imagePressed.y = e.layerY - yMouseDown;
         draw();
+    } else {
+        setTimeout(
+            function() {
+                checkTooltip(e.layerX, e.layerY);
+            },  
+            500);
     }
 }
 
@@ -142,7 +170,4 @@ function mouseUp(e) {
         onMouseUpDevice();
     }
     imagePressed = null;
-    
-    //já é notificado por websocket, entao nao precisa disso:
-    //setTimeout(function() {updateDeviceValues();}, 500);
 }
