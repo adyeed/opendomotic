@@ -99,7 +99,7 @@ public class ConfigMB extends AbstractCRUD<DeviceConfig> {
     
     public Object getDeviceValue(DeviceConfig config) {
         try {
-            return deviceService.getDevice(config.getName()).getValue();
+            return deviceService.getDeviceValue(config.getName());
         } catch (Exception ex) {
             LOG.severe(ex.toString());
             return null;
@@ -107,7 +107,6 @@ public class ConfigMB extends AbstractCRUD<DeviceConfig> {
     }
     
     public void test(DeviceConfig config) {
-        System.out.println("----- test begin");
         FacesMessage msg;
         try {
             Device device = config.createDevice();            
@@ -117,7 +116,6 @@ public class ConfigMB extends AbstractCRUD<DeviceConfig> {
             msg = new FacesMessage("Error", ex.toString());  
         }
         FacesContext.getCurrentInstance().addMessage(null, msg);
-        System.out.println("----- test end");
     }
 
     public List<DeviceProperty> getListDeviceProperty() {
