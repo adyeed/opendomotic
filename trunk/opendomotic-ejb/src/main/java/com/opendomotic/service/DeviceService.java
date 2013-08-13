@@ -9,9 +9,8 @@ import com.opendomotic.service.dao.DeviceConfigDAO;
 import com.opendomotic.device.Device;
 import com.opendomotic.model.DeviceProxy;
 import com.opendomotic.model.entity.DeviceConfig;
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.TimeUnit;
@@ -54,7 +53,7 @@ public class DeviceService {
     public void loadDevices() {
         LOG.info("loading devices...");
 
-        mapDevice = new LinkedHashMap<>();
+        mapDevice = Collections.synchronizedMap(new LinkedHashMap<String, DeviceProxy>());
         for (DeviceConfig config : deviceConfigService.findAll()) {
             try {
                 LOG.log(Level.INFO, "creating {0}", config.getName());
@@ -93,33 +92,28 @@ public class DeviceService {
         }
     }
     
-    public void toggleDeviceValue(Device device) {
-        device.setValue(device.getValue() == 1 ? 0 : 1);    
+    public void toggleDeviceValue(String deviceName) {
+        Device device = mapDevice.get(deviceName);
+        if (device != null) {
+            device.setValue(device.getValue() == 1 ? 0 : 1);
+        }
     }
     
     public void setDeviceValue(String deviceName, Object value) {
-        Device device = getDevice(deviceName);
+        Device device = mapDevice.get(deviceName);
         if (device != null) {
             device.setValue(value);
         }
     }
     
-    public List<DeviceProxy> createListDevice() {
-        List<DeviceProxy> list = new ArrayList();
-        for (DeviceProxy device : mapDevice.values()) {
-            list.add(device);
+    @Lock(LockType.READ)
+    public Object getDeviceValue(String deviceName) {
+        Device device = mapDevice.get(deviceName);
+        if (device != null) {
+            return device.getValue();
+        } else {
+            return null;
         }
-        return list;
-    }
-
-    @Lock(LockType.READ)
-    public Device getDevice(String name) {
-        return mapDevice.get(name);
-    }
-
-    @Lock(LockType.READ)
-    public Map<String, DeviceProxy> getMapDevice() {
-        return mapDevice;
     }
     
 }
