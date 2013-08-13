@@ -4,12 +4,13 @@
  */
 package com.opendomotic.service.rest;
 
-import com.opendomotic.device.Device;
 import com.opendomotic.model.DeviceProxy;
+import com.opendomotic.model.entity.DeviceConfig;
 import com.opendomotic.model.entity.DevicePosition;
 import com.opendomotic.model.rest.DeviceValueRest;
 import com.opendomotic.service.dao.DevicePositionDAO;
 import com.opendomotic.service.DeviceService;
+import com.opendomotic.service.dao.DeviceConfigDAO;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map.Entry;
@@ -35,6 +36,9 @@ public class DeviceRestService {
     private DeviceService deviceService;
 
     @Inject
+    private DeviceConfigDAO configDAO;
+    
+    @Inject
     private DevicePositionDAO positionDAO;
     
     @GET
@@ -42,10 +46,10 @@ public class DeviceRestService {
     @Path(value = "/value")
     public List<DeviceValueRest> getListValue() {
         List<DeviceValueRest> list = new ArrayList<>();
-        for (Entry<String, DeviceProxy> entry : deviceService.getMapDevice().entrySet()) {
-            String deviceName = entry.getKey();
-            DeviceProxy device = entry.getValue();
-            list.add(new DeviceValueRest(deviceName, device.getValueStr()));
+        for (DeviceConfig config : configDAO.findAll()) {
+            String name = config.getName();
+            Object value = deviceService.getDeviceValue(name);
+            list.add(new DeviceValueRest(name, String.valueOf(value)));
         }
         return list;
     }
@@ -75,14 +79,10 @@ public class DeviceRestService {
     @Path(value = "/toggle")
     public String toggle(@QueryParam("name") String name) {
         LOG.log(Level.INFO, "name={0}", name);
-        Device device = deviceService.getDevice(name);
-        if (device != null) {
-            deviceService.toggleDeviceValue(device);
-            deviceService.updateDeviceValuesAsync();   
-            return device.getValue().toString();
-        } else {
-            return "Device não encontrado";
-        }
+
+        deviceService.toggleDeviceValue(name);
+        deviceService.updateDeviceValuesAsync();   
+        return deviceService.getDeviceValue(name).toString();
     }
     
 }

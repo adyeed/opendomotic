@@ -36,46 +36,54 @@ public class JobService {
     
     @Schedule(minute = "*/1", hour = "*")
     public void timerJobs() {       
-        LOG.info("Timer trigger");
-        checkJobs();        
+        //LOG.info("Timer trigger");
+        if (checkExecuteJobs()) {
+            deviceService.updateDeviceValuesAsync();
+        }
         webSocketService.send(new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(new Date()));
     }
     
-    public void checkJobs() {
+    public boolean checkExecuteJobs() {
+        boolean executed = false;
         Date now = new Date();
         
         for (Job job : jobDAO.findAll()) {
-            LOG.log(Level.INFO, "checking job: {0}", job.toString());
-            boolean canChange = false;
+            //LOG.log(Level.INFO, "checking job: {0}", job.toString());
+            boolean canExecute = false;
             
             if (job.getInput() != null) {
-                Device input = deviceService.getDevice(job.getInput().getName());  
-                if (input != null) {
+                Object inputValue = deviceService.getDeviceValue(job.getInput().getName());  
+                if (inputValue != null) {
                     switch (job.getOperator()) {
-                        case EQUAL:             canChange = input.getValue().equals(job.getExpectValueAsInt()); break;
-                        case DIFERENT:          canChange = !input.getValue().equals(job.getExpectValueAsInt()); break;
-                        case GREATHER:          canChange = (Integer) input.getValue() >  job.getExpectValueAsInt(); break;
-                        case GREATHER_EQUAL:    canChange = (Integer) input.getValue() >= job.getExpectValueAsInt(); break;
-                        case LESS:              canChange = (Integer) input.getValue() <  job.getExpectValueAsInt(); break;
-                        case LESS_EQUAL:        canChange = (Integer) input.getValue() <= job.getExpectValueAsInt(); break;
+                        case EQUAL:             canExecute = inputValue.equals(job.getExpectValueAsInt()); break;
+                        case DIFERENT:          canExecute = !inputValue.equals(job.getExpectValueAsInt()); break;
+                        case GREATHER:          canExecute = (Integer) inputValue >  job.getExpectValueAsInt(); break;
+                        case GREATHER_EQUAL:    canExecute = (Integer) inputValue >= job.getExpectValueAsInt(); break;
+                        case LESS:              canExecute = (Integer) inputValue <  job.getExpectValueAsInt(); break;
+                        case LESS_EQUAL:        canExecute = (Integer) inputValue <= job.getExpectValueAsInt(); break;
                     }
                 }
             } else if (job.getInputDate() != null && job.getInputDate().compareTo(now) <= 0) {
-                canChange = true;
+                canExecute = true;
             }
             
-            if (canChange) {
-                LOG.info("running job!");
-                
-                deviceService.setDeviceValue(
-                        job.getOutput().getName(), 
-                        job.getActionValueAsInt());
-                
-                if (job.isDeleteAfterExecute()) {
-                    jobDAO.delete(job);
+            if (canExecute) {
+                Object outputValue = deviceService.getDeviceValue(job.getOutput().getName()); 
+                if (outputValue != null && !outputValue.equals(job.getActionValueAsInt())) {
+                    LOG.log(Level.INFO, "executing job: {0}", job.toString());
+
+                    deviceService.setDeviceValue(
+                            job.getOutput().getName(), 
+                            job.getActionValueAsInt());
+
+                    if (job.isDeleteAfterExecute()) {
+                        jobDAO.delete(job);
+                    }
+                    executed = true;
                 }
             }
         }
+        return executed;
     }
     
 }
