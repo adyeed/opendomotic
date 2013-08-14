@@ -4,7 +4,6 @@
  */
 package com.opendomotic.service;
 
-import com.opendomotic.device.Device;
 import com.opendomotic.service.websocket.WebSocketService;
 import com.opendomotic.model.entity.Job;
 import com.opendomotic.service.dao.JobDAO;
@@ -13,14 +12,14 @@ import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.Schedule;
-import javax.ejb.Singleton;
+import javax.ejb.Stateless;
 import javax.inject.Inject;
 
 /**
  *
  * @author jaques
  */
-@Singleton
+@Stateless
 public class JobService {
     
     private static final Logger LOG = Logger.getLogger(JobService.class.getName());
@@ -43,7 +42,7 @@ public class JobService {
         webSocketService.send(new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(new Date()));
     }
     
-    public boolean checkExecuteJobs() {
+    private boolean checkExecuteJobs() {
         boolean executed = false;
         Date now = new Date();
         

@@ -77,7 +77,7 @@ public class DeviceService {
         updateDeviceValues("async");
     }
     
-    public void updateDeviceValues(String origin) {
+    private void updateDeviceValues(String origin) {
         boolean changed = false;
         for (Entry<String, DeviceProxy> entry : mapDevice.entrySet()) {
             DeviceProxy device = entry.getValue();
@@ -89,13 +89,6 @@ public class DeviceService {
         if (changed) {
             //TO-DO: se alterou estado, notificar apenas os devices correspondentes:
             webSocketService.sendUpdateDeviceValues(origin);
-        }
-    }
-    
-    public void toggleDeviceValue(String deviceName) {
-        Device device = mapDevice.get(deviceName);
-        if (device != null) {
-            device.setValue(device.getValue() == 1 ? 0 : 1);
         }
     }
     
@@ -111,6 +104,17 @@ public class DeviceService {
         Device device = mapDevice.get(deviceName);
         if (device != null) {
             return device.getValue();
+        } else {
+            return null;
+        }
+    }
+    
+    public Object toggleDeviceValue(String deviceName) {
+        Device device = mapDevice.get(deviceName);
+        if (device != null) {
+            Object value = device.getValue() == 1 ? 0 : 1;
+            device.setValue(value);
+            return value;
         } else {
             return null;
         }
