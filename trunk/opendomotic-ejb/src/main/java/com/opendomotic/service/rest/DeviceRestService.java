@@ -4,7 +4,6 @@
  */
 package com.opendomotic.service.rest;
 
-import com.opendomotic.model.DeviceProxy;
 import com.opendomotic.model.entity.DeviceConfig;
 import com.opendomotic.model.entity.DevicePosition;
 import com.opendomotic.model.rest.DeviceValueRest;
@@ -13,7 +12,6 @@ import com.opendomotic.service.DeviceService;
 import com.opendomotic.service.dao.DeviceConfigDAO;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map.Entry;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.inject.Inject;
@@ -80,9 +78,26 @@ public class DeviceRestService {
     public String toggle(@QueryParam("name") String name) {
         LOG.log(Level.INFO, "name={0}", name);
 
-        deviceService.toggleDeviceValue(name);
+        Object value = deviceService.toggleDeviceValue(name);
         deviceService.updateDeviceValuesAsync();   
-        return deviceService.getDeviceValue(name).toString();
+        return value.toString();
+    }
+    
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path(value = "/set")
+    public String set(
+            @QueryParam("name") String name, 
+            @QueryParam("value") int value) {
+        LOG.log(Level.INFO, "name={0} enabled={1}", new Object[] {name, value});
+        
+        for (DeviceConfig config : configDAO.findByName(name)) {
+            LOG.info(config.getName());
+            deviceService.setDeviceValue(config.getName(), value);
+        }
+       
+        deviceService.updateDeviceValuesAsync();   
+        return "OK";
     }
     
 }
