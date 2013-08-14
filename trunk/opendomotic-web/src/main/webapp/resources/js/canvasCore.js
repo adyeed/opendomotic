@@ -117,7 +117,24 @@ function checkTooltip(x, y) {
     image = getImage(x, y);
     if (image !== null) {
         if (imageTooltip === null) {
-            context.fillText(image.name, x, y);
+            context.save();
+            context.beginPath();
+            textDimensions = context.measureText(image.name);  
+            context.rect(x, y, textDimensions.width+10, 30);
+            context.globalAlpha = 0.5;           
+            context.fillStyle = '99CCFF';
+            context.fill();
+            context.lineWidth = 1;
+            context.strokeStyle = 'black';
+            context.stroke();
+            context.closePath();
+            
+            context.globalAlpha = 1;
+            context.textBaseline="top";
+            context.fillStyle = 'black';
+            context.fillText(image.name, x+5, y);
+            
+            context.restore();
         }
         imageTooltip = image;
         
@@ -147,6 +164,12 @@ function mouseDown(e) {
         imagePressed = image;
         xMouseDown = x - image.x;
         yMouseDown = y - image.y;
+        
+        if (imageTooltip !== null) {
+            imageTooltip = null;
+            draw();
+        }
+        
         context.fillText("aguarde...", image.x, image.y);
     }
 }
@@ -156,7 +179,7 @@ function mouseMove(e) {
         imagePressed.x = e.layerX - xMouseDown;
         imagePressed.y = e.layerY - yMouseDown;
         draw();
-    } else {
+    } else if (imagePressed === null) {
         setTimeout(
             function() {
                 checkTooltip(e.layerX, e.layerY);
