@@ -7,10 +7,11 @@ package com.opendomotic.device;
 /**
  *
  * @author jaques
+ * @param <T>
  */
-public interface Device {
+public interface Device<T> {
 
-    Object getValue();
-    void setValue(Object value);
+    T getValue();
+    void setValue(T value);
     
 }

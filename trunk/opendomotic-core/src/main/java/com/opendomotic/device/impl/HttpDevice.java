@@ -21,14 +21,14 @@ import org.apache.http.params.HttpParams;
  *
  * @author Jaques
  */
-public class HttpDevice implements Device {
+public class HttpDevice implements Device<Integer> {
 
     private static final Logger LOG = Logger.getLogger(HttpDevice.class.getName());
     private String ip;
     private String path;
 
     @Override
-    public Object getValue() {
+    public Integer getValue() {
         try {
             HttpGet request = new HttpGet(getURL());
             HttpResponse response = new DefaultHttpClient().execute(request);
@@ -43,7 +43,7 @@ public class HttpDevice implements Device {
     }
 
     @Override
-    public void setValue(Object value) {
+    public void setValue(Integer value) {
         try {
             long tempo = System.currentTimeMillis();
             HttpClient httpClient = new DefaultHttpClient();
