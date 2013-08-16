@@ -10,18 +10,18 @@ import com.opendomotic.device.Device;
  *
  * @author jaques
  */
-public class SerialDevice implements Device {
+public class SerialDevice implements Device<Integer> {
 
     private int address;
     private int device;
 
     @Override
-    public void setValue(Object value) {
-        SerialBus.getInstance().writeDevice(address, device, (int) value);
+    public void setValue(Integer value) {
+        SerialBus.getInstance().writeDevice(address, device, value);
     }
 
     @Override
-    public Object getValue() {
+    public Integer getValue() {
         int value = SerialBus.getInstance().readDevice(address, device);
         return value != -1 ? value : null;
     }
