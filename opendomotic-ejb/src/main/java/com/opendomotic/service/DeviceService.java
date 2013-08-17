@@ -78,18 +78,24 @@ public class DeviceService {
     }
     
     private void updateDeviceValues(String origin) {
+        long millisTotal = System.currentTimeMillis();
+        
         boolean changed = false;
         for (Entry<String, DeviceProxy> entry : mapDevice.entrySet()) {
             DeviceProxy device = entry.getValue();
+            long millisDevice = System.currentTimeMillis();
             if (device.updateValue()) {              
                 changed = true;
             }
+            logTime(device.toString(), millisDevice, 1000);
         }
         
         if (changed) {
             //TO-DO: se alterou estado, notificar apenas os devices correspondentes:
             webSocketService.sendUpdateDeviceValues(origin);
         }
+        
+        logTime("Total", millisTotal, 2000);
     }
     
     public void setDeviceValue(String deviceName, Object value) {
@@ -117,6 +123,13 @@ public class DeviceService {
             return value;
         } else {
             return null;
+        }
+    }
+    
+    private void logTime(String item, long startMillis, int limit) {
+        long elapsedMillis = System.currentTimeMillis() - startMillis;
+        if (elapsedMillis > limit) {
+            LOG.log(Level.WARNING, "Slow reading device: {0} ms | {1}", new Object[] {elapsedMillis, item});
         }
     }
     
