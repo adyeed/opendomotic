@@ -49,7 +49,7 @@ public class DomoticWebsocket extends WebSocketServlet implements BroadcastWebso
         for (DomoticInBound client : connections) {
             try {
                 client.getWsOutbound().writeTextMessage(CharBuffer.wrap(message));
-                LOG.log(Level.INFO, "Enviando mensagem: {0}", message);
+                //LOG.log(Level.INFO, "Enviando mensagem: {0}", message);
             } catch (IOException ex) {
                 LOG.severe(ex.toString());
             }
