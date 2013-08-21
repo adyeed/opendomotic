@@ -42,7 +42,7 @@ public class DeviceRestService {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path(value = "/value")
-    public List<DeviceValueRest> getListValue() {
+    public List<DeviceValueRest> list() {
         List<DeviceValueRest> list = new ArrayList<>();
         for (DeviceConfig config : configDAO.findAll()) {
             String name = config.getName();
@@ -79,7 +79,7 @@ public class DeviceRestService {
         LOG.log(Level.INFO, "name={0}", name);
 
         Object value = deviceService.toggleDeviceValue(name);
-        deviceService.updateDeviceValuesAsync();   
+        deviceService.updateDeviceValuesAsync(true);   
         return value.toString();
     }
     
@@ -96,7 +96,7 @@ public class DeviceRestService {
             deviceService.setDeviceValue(config.getName(), value);
         }
        
-        deviceService.updateDeviceValuesAsync();   
+        deviceService.updateDeviceValuesAsync(true);   
         return "OK";
     }
     

@@ -8,7 +8,7 @@ package com.opendomotic.service.websocket;
  *
  * @author jaques
  */
-public interface BroadcastWebsocket {
+public interface BroadcastMessenger {
     
     void sendBroadcast(String message);
     

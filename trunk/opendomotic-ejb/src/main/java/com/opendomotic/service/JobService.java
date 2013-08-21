@@ -37,7 +37,7 @@ public class JobService {
     public void timerJobs() {       
         //LOG.info("Timer trigger");
         if (checkExecuteJobs()) {
-            deviceService.updateDeviceValuesAsync();
+            deviceService.updateDeviceValuesAsync(true);
         }
         webSocketService.send(new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(new Date()));
     }
