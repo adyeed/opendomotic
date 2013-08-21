@@ -69,15 +69,15 @@ public class DeviceService {
 
     @Schedule(second = "*/30", minute = "*", hour = "*")
     public void updateDeviceValuesTimer() {
-        updateDeviceValues("timer");
+        updateDeviceValues("timer", false);
     }
     
     @Asynchronous
-    public void updateDeviceValuesAsync() {
-        updateDeviceValues("async");
+    public void updateDeviceValuesAsync(boolean alwaysSendWebsocket) {
+        updateDeviceValues("async", alwaysSendWebsocket);
     }
     
-    private void updateDeviceValues(String origin) {
+    private void updateDeviceValues(String origin, boolean alwaysSendWebsocket) {
         long millisTotal = System.currentTimeMillis();
         
         boolean changed = false;
@@ -90,7 +90,7 @@ public class DeviceService {
             logTime(device.toString(), millisDevice, 1000);
         }
         
-        if (changed) {
+        if (changed || alwaysSendWebsocket) {
             //TO-DO: se alterou estado, notificar apenas os devices correspondentes:
             webSocketService.sendUpdateDeviceValues(origin);
         }

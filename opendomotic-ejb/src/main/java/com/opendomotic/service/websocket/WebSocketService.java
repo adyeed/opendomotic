@@ -15,11 +15,11 @@ public class WebSocketService {
         
     private static final String UPDATE_DEVICE_VALUES = "updateDeviceValues";
     
-    private BroadcastWebsocket broadcastWebsocket;
+    private BroadcastMessenger broadcastMessenger;
     
     public void send(String msg) {
-        if (broadcastWebsocket != null) {
-            broadcastWebsocket.sendBroadcast(msg);
+        if (broadcastMessenger != null) {
+            broadcastMessenger.sendBroadcast(msg);
         }
     }
     
@@ -27,8 +27,8 @@ public class WebSocketService {
         send(UPDATE_DEVICE_VALUES + ": " + origin);
     }
     
-    public void setBroadcastWebsocket(BroadcastWebsocket broadcastWebsocket) {
-        this.broadcastWebsocket = broadcastWebsocket;
+    public void setBroadcastMessenger(BroadcastMessenger broadcastMessenger) {
+        this.broadcastMessenger = broadcastMessenger;
     }
     
 }
