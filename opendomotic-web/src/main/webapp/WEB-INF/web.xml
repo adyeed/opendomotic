@@ -75,8 +75,6 @@
         <web-resource-collection>
             <web-resource-name>public device values</web-resource-name>
             <url-pattern>/device/value</url-pattern>
-            <!-- device/set is temporary. Must be authenticated !-->
-            <url-pattern>/device/set</url-pattern>
         </web-resource-collection>
     </security-constraint>
    
@@ -90,7 +88,6 @@
         </session-timeout>
     </session-config>
     <welcome-file-list>
-        <!--<welcome-file>user/index.jsf</welcome-file>!-->
         <welcome-file>index.jsp</welcome-file>
     </welcome-file-list>
 </web-app>

@@ -4,13 +4,12 @@
  */
 package com.opendomotic.servlet;
 
-import com.opendomotic.service.websocket.BroadcastWebsocket;
+import com.opendomotic.service.websocket.BroadcastMessenger;
 import com.opendomotic.service.websocket.WebSocketService;
 import java.io.IOException;
 import java.nio.CharBuffer;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
@@ -24,7 +23,7 @@ import org.apache.catalina.websocket.WebSocketServlet;
  * @author jaques
  */
 @WebServlet(urlPatterns = "/websocket")
-public class DomoticWebsocket extends WebSocketServlet implements BroadcastWebsocket {
+public class DomoticWebsocket extends WebSocketServlet implements BroadcastMessenger {
     
     private static final Logger LOG = Logger.getLogger(DomoticWebsocket.class.getName());    
     private List<DomoticInBound> connections;
@@ -35,7 +34,7 @@ public class DomoticWebsocket extends WebSocketServlet implements BroadcastWebso
     @PostConstruct
     public void initialize() {
         connections = new ArrayList<>();
-        webSocketService.setBroadcastWebsocket(this);
+        webSocketService.setBroadcastMessenger(this);
     }
     
     @Override
