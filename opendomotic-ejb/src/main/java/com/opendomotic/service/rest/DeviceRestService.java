@@ -44,23 +44,18 @@ public class DeviceRestService {
     @Path(value = "/value")
     public List<DeviceValueRest> list() {
         List<DeviceValueRest> list = new ArrayList<>();
-        for (DeviceConfig config : configDAO.findAll()) {
+        for (DeviceConfig config : configDAO.findAllEnabled()) {
             String name = config.getName();
             Object value = deviceService.getDeviceValue(name);
-            String valueStr;
+            String valueStr = "";
             try {
-                if (name.startsWith("Temperatura")) {
-                    valueStr = String.format("%d°C", (Integer) value);
-                } else if (name.startsWith("Umidade")) {
-                    valueStr = String.format("%d%%", value);
-                } else if (name.startsWith("Corrente")) {
-                    valueStr = String.format("%d mA", value);
+                if (config.getFormat() != null && !config.getFormat().isEmpty()) {
+                    valueStr = String.format(config.getFormat(), value);
                 } else {
                     valueStr = String.valueOf(value);
                 }    
-            } catch (Exception e) {
-                System.out.println("REST list:"+e.toString());
-                valueStr = String.valueOf(value);
+            } catch (Exception ex) {
+                LOG.severe(ex.toString());
             }
             list.add(new DeviceValueRest(name, valueStr));
         }
@@ -89,11 +84,11 @@ public class DeviceRestService {
     
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @Path(value = "/toggle")
-    public String toggle(@QueryParam("name") String name) {
+    @Path(value = "/switch")
+    public String switchDevice(@QueryParam("name") String name) {
         LOG.log(Level.INFO, "name={0}", name);
 
-        Object value = deviceService.toggleDeviceValue(name);
+        Object value = deviceService.switchDeviceValue(name);
         deviceService.updateDeviceValuesAsync(true);   
         return value.toString();
     }

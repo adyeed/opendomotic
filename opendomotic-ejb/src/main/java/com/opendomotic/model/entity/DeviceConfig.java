@@ -28,12 +28,15 @@ public class DeviceConfig extends AbstractEntityName {
     private DeviceImage deviceImageDefault;
     
     @ManyToOne
-    private DeviceImage deviceImageToggle;
+    private DeviceImage deviceImageSwitch;
 
     @OneToMany(mappedBy = "deviceConfig", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<DeviceProperty> listDeviceProperty;
     
     private String deviceClassName;
+    private boolean enabled;
+    private boolean switchable;
+    private String format;
 
     public Device createDevice() throws ClassNotFoundException, InstantiationException, IllegalAccessException, DevicePropertyNotFoundException, IllegalArgumentException, InvocationTargetException {
         return DeviceFactory.createDevice(deviceClassName, createDeviceProperties());
@@ -54,15 +57,7 @@ public class DeviceConfig extends AbstractEntityName {
     public void setDeviceImageDefault(DeviceImage deviceImageDefault) {
         this.deviceImageDefault = deviceImageDefault;
     }
-
-    public DeviceImage getDeviceImageToggle() {
-        return deviceImageToggle;
-    }
-
-    public void setDeviceImageToggle(DeviceImage deviceImageToggle) {
-        this.deviceImageToggle = deviceImageToggle;
-    }
-
+    
     public List<DeviceProperty> getListDeviceProperty() {
         return listDeviceProperty;
     }
@@ -77,6 +72,38 @@ public class DeviceConfig extends AbstractEntityName {
 
     public void setDeviceClassName(String deviceClassName) {
         this.deviceClassName = deviceClassName;
+    }
+
+    public DeviceImage getDeviceImageSwitch() {
+        return deviceImageSwitch;
+    }
+
+    public void setDeviceImageSwitch(DeviceImage deviceImageSwitch) {
+        this.deviceImageSwitch = deviceImageSwitch;
+    }
+
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
+
+    public boolean isSwitchable() {
+        return switchable;
+    }
+
+    public void setSwitchable(boolean switchable) {
+        this.switchable = switchable;
+    }
+
+    public String getFormat() {
+        return format;
+    }
+
+    public void setFormat(String format) {
+        this.format = format;
     }
     
 }

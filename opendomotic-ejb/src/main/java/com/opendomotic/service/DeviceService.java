@@ -42,7 +42,7 @@ import javax.inject.Inject;
 public class DeviceService {
 
     private static final Logger LOG = Logger.getLogger(DeviceService.class.getName());
-    private static final int MILLIS_WAIT_INIT_SCHEDULE = 4*60*1000; //to wait application server to start.
+    private static final int MILLIS_WAIT_INIT_SCHEDULE = 3*60*1000; //to wait application server to start.
     
     private Map<String, DeviceProxy> mapDevice;
     private boolean scheduleInitialized = false;
@@ -148,7 +148,7 @@ public class DeviceService {
         return scheduleInitialized;
     }
     
-    public Object toggleDeviceValue(String deviceName) {
+    public Object switchDeviceValue(String deviceName) {
         Device device = mapDevice.get(deviceName);
         if (device != null) {
             Object value = device.getValue() == 1 ? 0 : 1;
