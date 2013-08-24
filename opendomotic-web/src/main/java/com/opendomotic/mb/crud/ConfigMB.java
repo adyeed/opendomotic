@@ -51,6 +51,12 @@ public class ConfigMB extends AbstractCRUD<DeviceConfig> {
     public AbstractDAO<DeviceConfig> getDAO() {
         return deviceConfigDAO;
     }
+
+    @Override
+    public void create() {
+        super.create(); 
+        entity.setEnabled(true);
+    }
     
     @Override
     public void save() {     

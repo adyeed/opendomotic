@@ -1,11 +1,13 @@
 var canvas, context;
 var xMouseDown, yMouseDown;
 
-var imagePlanta = new Image();
-var imagePressed = null;
-var imageTooltip = null;
-var arrayImage = new Array();
-var countImage = 0;
+var environmentImage = new Image();
+
+var deviceArray = new Array();
+var deviceCount = 0;
+var devicePressed = null;
+var deviceTooltip = null;
+
 var canDrag = false;
 var onMouseUpDevice = null;
 var loading = true;
@@ -30,10 +32,10 @@ function initCanvas(canDrag, onMouseUpDevice, idEnvironment) {
     
     $.getJSON(getUrl('environment?id='+idEnvironment), function(data) {
         for (var environment in data) {
-            imagePlanta.src = data[environment].fileName;
-            imagePlanta.onload = function() {
-                canvas.width = imagePlanta.width;
-                canvas.height = imagePlanta.height;
+            environmentImage.src = data[environment].fileName;
+            environmentImage.onload = function() {
+                canvas.width = environmentImage.width;
+                canvas.height = environmentImage.height;
                 context.font = "bold 26px verdana";
                 context.shadowColor = 'white';
                 context.shadowBlur = 5;
@@ -41,24 +43,24 @@ function initCanvas(canDrag, onMouseUpDevice, idEnvironment) {
             };
 
             //para limpar em caso de ajax update:
-            arrayImage = new Array(); 
-            countImage = 0;
+            deviceArray = new Array(); 
+            deviceCount = 0;
             
             list = data[environment].listDevicePositionRest; //returns array only when > 1
             if (list instanceof Array) {
                 for (var index in list) {
-                    addDevicePosition(list[index]);                    
+                    addDevice(list[index]);                    
                 }
             } else if (list !== undefined) {
-                addDevicePosition(list);
+                addDevice(list);
             }                
         }
         updateDeviceValues();
     });
 }
 
-function addDevicePosition(p) {
-    arrayImage[countImage++] = new ImageShape(p.id, p.x, p.y, p.name, p.src0, p.src1);
+function addDevice(p) {
+    deviceArray[deviceCount++] = new Device(p.id, p.x, p.y, p.name, p.switchable, p.imageDefault, p.imageSwitch);
 }
 
 function draw() {
@@ -66,23 +68,24 @@ function draw() {
     context.clearRect(0, 0, canvas.width, canvas.height); 
 
     //fundo
-    context.drawImage(imagePlanta, 0, 0);
+    context.drawImage(environmentImage, 0, 0);
 
     if (loading) {
         drawLoading();
     }
 
-    //desenha devices
-    for (var i in arrayImage) {
-        arrayImage[i].draw(context);
-        if (arrayImage[i].value !== null) {
-            context.fillText(arrayImage[i].value, arrayImage[i].x, arrayImage[i].getBottom());
+    //draw devices
+    for (var i in deviceArray) {
+        device = deviceArray[i];
+        device.draw(context);
+        if (device.value !== '') {
+            context.fillText(device.value, device.x, device.getBottom());
         }
     }
 
-    //para desenhar por cima
-    if (imagePressed !== null) {
-        imagePressed.draw(context);
+    //draw pressed device over all
+    if (devicePressed !== null) {
+        devicePressed.draw(context);
     }
 }
 
@@ -105,9 +108,9 @@ function updateDeviceValues() {
 }
 
 function updateDeviceValue(name, value) {
-    for (var i in arrayImage) {
-        if (arrayImage[i].name === name) {
-            arrayImage[i].value = value;
+    for (var i in deviceArray) {
+        if (deviceArray[i].name === name) {
+            deviceArray[i].value = value;
             //break; não posso dar break pq talvez tenha outras imagens para o mesmo device
         }
     }
@@ -116,7 +119,7 @@ function updateDeviceValue(name, value) {
 function checkTooltip(x, y) {
     image = getImage(x, y);
     if (image !== null) {
-        if (imageTooltip === null) {
+        if (deviceTooltip === null) {
             context.save();
             context.beginPath();
             textDimensions = context.measureText(image.name);  
@@ -136,18 +139,18 @@ function checkTooltip(x, y) {
             
             context.restore();
         }
-        imageTooltip = image;
+        deviceTooltip = image;
         
-    } else if (imageTooltip !== null) {
-        imageTooltip = null;
+    } else if (deviceTooltip !== null) {
+        deviceTooltip = null;
         draw();
     }
 }
 
 function getImage(x, y) {
-    for (var i in arrayImage) {
-        if (arrayImage[i].isIn(x, y)) {
-            return arrayImage[i];
+    for (var i in deviceArray) {
+        if (deviceArray[i].isIn(x, y)) {
+            return deviceArray[i];
         }
     }
     return null;
@@ -161,12 +164,12 @@ function mouseDown(e) {
 
     image = getImage(x, y);
     if (image !== null) {
-        imagePressed = image;
+        devicePressed = image;
         xMouseDown = x - image.x;
         yMouseDown = y - image.y;
         
-        if (imageTooltip !== null) {
-            imageTooltip = null;
+        if (deviceTooltip !== null) {
+            deviceTooltip = null;
             draw();
         }
         
@@ -175,11 +178,11 @@ function mouseDown(e) {
 }
 
 function mouseMove(e) {
-    if (canDrag && imagePressed !== null) {
-        imagePressed.x = e.layerX - xMouseDown;
-        imagePressed.y = e.layerY - yMouseDown;
+    if (canDrag && devicePressed !== null) {
+        devicePressed.x = e.layerX - xMouseDown;
+        devicePressed.y = e.layerY - yMouseDown;
         draw();
-    } else if (imagePressed === null) {
+    } else if (devicePressed === null) {
         setTimeout(
             function() {
                 checkTooltip(e.layerX, e.layerY);
@@ -189,8 +192,8 @@ function mouseMove(e) {
 }
 
 function mouseUp(e) {   
-    if (imagePressed !== null && onMouseUpDevice !== null) {
+    if (devicePressed !== null && onMouseUpDevice !== null) {
         onMouseUpDevice();
     }
-    imagePressed = null;
+    devicePressed = null;
 }

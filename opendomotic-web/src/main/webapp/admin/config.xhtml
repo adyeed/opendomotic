@@ -17,16 +17,25 @@
                 <p:inputText value="#{configMB.entity.name}"/>
 
                 #{msg.ClassName}
-                <p:inputText value="#{configMB.entity.deviceClassName}"/>
-
+                <p:inputText value="#{configMB.entity.deviceClassName}"/>      
+                
+                #{msg.Format}
+                <p:inputText value="#{configMB.entity.format}"/>
+                
+                #{msg.Enabled}
+                <p:selectBooleanCheckbox value="#{configMB.entity.enabled}"/>  
+                
+                #{msg.Switchable}
+                <p:selectBooleanCheckbox value="#{configMB.entity.switchable}"/>    
+                
                 <h:outputText value="#{msg.DefaultImage}"/>
                 <p:selectOneMenu value="#{configMB.entity.deviceImageDefault}" converter="#{entityConverter}">
                     <f:selectItem itemLabel="#{msg.Select}"/>
                     <f:selectItems value="#{imageMB.listAll}" var="i" itemLabel="#{i.name}" itemValue="#{i}"/>                         
                 </p:selectOneMenu>
 
-                <h:outputText value="#{msg.ToggleImage}"/>
-                <p:selectOneMenu value="#{configMB.entity.deviceImageToggle}" converter="#{entityConverter}">
+                <h:outputText value="#{msg.SwitchImage}"/>
+                <p:selectOneMenu value="#{configMB.entity.deviceImageSwitch}" converter="#{entityConverter}">
                     <f:selectItem itemLabel="#{msg.None}"/>
                     <f:selectItems value="#{imageMB.listAll}" var="i" itemLabel="#{i.name}"/>                         
                 </p:selectOneMenu>
@@ -70,6 +79,24 @@
             </p:column>
             <p:column>
                 <f:facet name="header">
+                    #{msg.Enabled}
+                </f:facet>
+                #{config.enabled ? msg.Yes : msg.No}
+            </p:column>
+            <p:column>
+                <f:facet name="header">
+                    #{msg.Switchable}
+                </f:facet>
+                #{config.switchable ? msg.Yes : msg.No}
+            </p:column>
+            <p:column>
+                <f:facet name="header">
+                    #{msg.Format}
+                </f:facet>
+                #{config.format}
+            </p:column>
+            <p:column>
+                <f:facet name="header">
                     #{msg.Properties}
                 </f:facet>
                 #{config.listDeviceProperty}
@@ -82,8 +109,8 @@
                     value="../resources/images/#{config.deviceImageDefault.fileName}" 
                     rendered="#{!empty config.deviceImageDefault}"/>
                 <p:graphicImage 
-                    value="../resources/images/#{config.deviceImageToggle.fileName}" 
-                    rendered="#{!empty config.deviceImageToggle}"/>
+                    value="../resources/images/#{config.deviceImageSwitch.fileName}" 
+                    rendered="#{!empty config.deviceImageSwitch}"/>
             </p:column>
             <p:column>
                 <p:commandButton value="#{msg.Delete}" action="#{configMB.delete(config)}" update="table" onclick="return confirm('#{msg.ConfirmsTheExclusion}');"/>
