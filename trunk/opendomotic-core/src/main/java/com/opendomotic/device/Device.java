@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.opendomotic.device;
 
 /**
@@ -11,7 +7,7 @@ package com.opendomotic.device;
  */
 public interface Device<T> {
 
-    T getValue();
-    void setValue(T value);
+    T getValue() throws Exception;
+    void setValue(T value) throws Exception;
     
 }

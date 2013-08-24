@@ -31,22 +31,13 @@ public class HttpDevice implements Device<Integer> {
     private String path;
 
     @Override
-    public Integer getValue() {
-        try {
-            return Integer.parseInt(makeRequest(getURL()));
-        } catch (IOException ex) {
-            LOG.severe(ex.toString());
-            return null;
-        }
+    public Integer getValue() throws Exception {
+        return Integer.parseInt(makeRequest(getURL()));
     }
 
     @Override
-    public void setValue(Integer value) {
-        try {
-            makeRequest(getURL() + "=" + value);
-        } catch (IOException ex) {
-            LOG.severe(ex.toString());
-        }
+    public void setValue(Integer value) throws Exception {
+        makeRequest(getURL() + "=" + value);
     }
     
     private HttpClient createHttpClient() {
