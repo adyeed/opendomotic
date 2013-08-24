@@ -78,7 +78,7 @@ function draw() {
     for (var i in deviceArray) {
         device = deviceArray[i];
         device.draw(context);
-        if (device.value !== '') {
+        if (device.value !== null) {
             context.fillText(device.value, device.x, device.getBottom());
         }
     }
