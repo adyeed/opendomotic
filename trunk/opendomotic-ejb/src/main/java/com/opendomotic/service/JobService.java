@@ -12,14 +12,16 @@ import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.Schedule;
-import javax.ejb.Stateless;
+import javax.ejb.Singleton;
+import javax.ejb.Startup;
 import javax.inject.Inject;
 
 /**
  *
  * @author jaques
  */
-@Stateless
+@Singleton
+@Startup
 public class JobService {
     
     private static final Logger LOG = Logger.getLogger(JobService.class.getName());
@@ -32,14 +34,15 @@ public class JobService {
     
     @Inject
     private JobDAO jobDAO;
-    
+        
     @Schedule(minute = "*/1", hour = "*")
-    public void timerJobs() {       
-        //LOG.info("Timer trigger");
-        if (checkExecuteJobs()) {
-            deviceService.updateDeviceValuesAsync(true);
+    public void timerJobs() {
+        if (deviceService.isScheduleInitialized()) {
+            if (checkExecuteJobs()) {
+                deviceService.updateDeviceValuesAsync(true);
+            }
+            webSocketService.send(new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(new Date()));
         }
-        webSocketService.send(new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(new Date()));
     }
     
     private boolean checkExecuteJobs() {
