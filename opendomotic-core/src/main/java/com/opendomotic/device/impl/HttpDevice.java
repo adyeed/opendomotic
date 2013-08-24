@@ -23,22 +23,17 @@ import org.apache.http.params.HttpParams;
  */
 public class HttpDevice implements Device<Integer> {
 
-    private static final Logger LOG = Logger.getLogger(HttpDevice.class.getName());
+    private static final Logger LOG = Logger.getLogger(HttpDevice.class.getName());    
     private static final boolean SHOW_LOG = false;
+    private static final int DEFAULT_TIMEOUT = 2000;
+    
     private String ip;
     private String path;
 
     @Override
     public Integer getValue() {
         try {
-            HttpGet request = new HttpGet(getURL());
-            HttpResponse response = new DefaultHttpClient().execute(request);
-            BufferedReader rd = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
-            String value = rd.readLine();
-            if (SHOW_LOG) {
-                LOG.log(Level.INFO, "Response={0} | {1}", new Object[] {value, getURL()});
-            }
-            return Integer.parseInt(value);
+            return Integer.parseInt(makeRequest(getURL()));
         } catch (IOException ex) {
             LOG.severe(ex.toString());
             return null;
@@ -48,22 +43,38 @@ public class HttpDevice implements Device<Integer> {
     @Override
     public void setValue(Integer value) {
         try {
-            long tempo = System.currentTimeMillis();
-            HttpClient httpClient = new DefaultHttpClient();
-            HttpParams httpParameters = httpClient.getParams();
-            HttpConnectionParams.setTcpNoDelay(httpParameters, true);
-
-            HttpGet request = new HttpGet(getURL() + "=" + value);
-            HttpResponse response = httpClient.execute(request);
-
-            BufferedReader rd = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
-            String responseStr = rd.readLine();
-            if (SHOW_LOG) {
-                LOG.log(Level.INFO, "Response={0} | {1} ms", new Object[] {responseStr, System.currentTimeMillis() - tempo});
-            }
+            makeRequest(getURL() + "=" + value);
         } catch (IOException ex) {
             LOG.severe(ex.toString());
         }
+    }
+    
+    private HttpClient createHttpClient() {
+        HttpClient httpClient = new DefaultHttpClient();
+        HttpParams httpParameters = httpClient.getParams();
+        HttpConnectionParams.setTcpNoDelay(httpParameters, true);
+        HttpConnectionParams.setConnectionTimeout(httpParameters, DEFAULT_TIMEOUT);
+        HttpConnectionParams.setSoTimeout(httpParameters, DEFAULT_TIMEOUT);        
+        return httpClient;
+    }
+    
+    private String readResponseLine(HttpResponse response) throws IOException {
+        BufferedReader rd = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
+        return rd.readLine();
+    }
+    
+    private String makeRequest(String url) throws IOException {
+        long time = System.currentTimeMillis();
+        
+        HttpGet request = new HttpGet(url);
+        HttpResponse response = createHttpClient().execute(request);    
+        String responseStr = readResponseLine(response);
+        
+        if (SHOW_LOG) {
+            LOG.log(Level.INFO, "Response={0} | {1} ms | {2}", new Object[] {responseStr, System.currentTimeMillis() - time, url});
+        }
+        
+        return responseStr;
     }
     
     public String getURL() {
