@@ -5,7 +5,6 @@
 package com.opendomotic.model;
 
 import com.opendomotic.device.Device;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -26,7 +25,11 @@ public class DeviceProxy implements Device {
     @Override
     public void setValue(Object value) {
         this.value = value;
-        device.setValue(value);
+        try {
+            device.setValue(value);
+        } catch (Exception ex) {
+            LOG.severe(ex.toString());
+        }
     }
 
     @Override
@@ -35,13 +38,15 @@ public class DeviceProxy implements Device {
     }
     
     public boolean updateValue() {
-        Object newValue = device.getValue();
-        if (newValue == null) {
-            LOG.log(Level.SEVERE, "Error on reading {0}", device.toString());
-            return false;
+        boolean changed = false;
+        try {
+            Object newValue = device.getValue();
+            changed = !newValue.equals(value);
+            value = newValue;
+            
+        } catch (Exception ex) {
+            LOG.severe(ex.toString());
         }
-        boolean changed = !newValue.equals(value);
-        value = newValue;
         return changed;
     }
 
