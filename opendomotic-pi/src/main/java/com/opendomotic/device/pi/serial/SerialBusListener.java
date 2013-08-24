@@ -15,6 +15,7 @@ import java.util.logging.Logger;
 public class SerialBusListener implements SerialDataListener {
 
     private static final Logger LOG = Logger.getLogger(SerialBusListener.class.getName());
+    private static final boolean SHOW_LOG = false;
 
     @Override
     public void dataReceived(SerialDataEvent event) {
@@ -26,7 +27,9 @@ public class SerialBusListener implements SerialDataListener {
             log.append(rx);            
             log.append("|");
         }
-        LOG.info(log.toString());
+        if (SHOW_LOG) {
+            LOG.info(log.toString());
+        }
     }
     
 }

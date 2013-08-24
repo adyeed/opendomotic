@@ -33,6 +33,7 @@ public class SerialBus {
     
     private static SerialBus instance;
     private static final Logger LOG = Logger.getLogger(SerialBus.class.getName());
+    private static final boolean SHOW_LOG = false;
     
     //GPIO:
     private GpioController gpio;
@@ -40,9 +41,7 @@ public class SerialBus {
     private Serial serial = SerialFactory.createInstance();
     private SerialDataListener serialListener = new SerialBusListener();
     
-    private SerialBus() {
-        LOG.info("contructor");
-        
+    private SerialBus() {        
         gpio = GpioFactory.getInstance();
         pin1 = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_01, "PIN_RE_485", PinState.LOW);
         serial.open(Serial.DEFAULT_COM_PORT, 115200);
@@ -93,7 +92,9 @@ public class SerialBus {
             if (bufferRx != null) {
                 return getBufferInt(bufferRx, 0); //conseguiu ler
             } else if (attempts > 0) {
-                LOG.warning("Error on reading device. Trying again...");
+                if (SHOW_LOG) {
+                    LOG.warning("Error on reading device. Trying again...");
+                }
                 return serialRead(bufferTx, attempts-1);
             } else {
                 LOG.severe("Failed on read device.");
@@ -121,7 +122,7 @@ public class SerialBus {
         }
         
         long tempo = System.currentTimeMillis()-millisStart;
-        if (tempo > 30) {
+        if (SHOW_LOG && tempo > 30) {
             log.append(tempo);
             log.append(" ms");
             LOG.info(log.toString());
@@ -142,7 +143,7 @@ public class SerialBus {
 
         boolean isOK = (bufferRx[i] == checksum / 256) && (bufferRx[i+1] == checksum % 256);
 
-        if (!isOK) {
+        if (SHOW_LOG && !isOK) {
             StringBuilder log = new StringBuilder("CHECKSUM ERROR: ");
             log.append(checksum);
             log.append(" rx=");
