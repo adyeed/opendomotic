@@ -24,6 +24,7 @@ import org.apache.http.params.HttpParams;
 public class HttpDevice implements Device<Integer> {
 
     private static final Logger LOG = Logger.getLogger(HttpDevice.class.getName());
+    private static final boolean SHOW_LOG = false;
     private String ip;
     private String path;
 
@@ -34,7 +35,9 @@ public class HttpDevice implements Device<Integer> {
             HttpResponse response = new DefaultHttpClient().execute(request);
             BufferedReader rd = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
             String value = rd.readLine();
-            //LOG.log(Level.INFO, "Response={0} | {1}", new Object[] {value, url});
+            if (SHOW_LOG) {
+                LOG.log(Level.INFO, "Response={0} | {1}", new Object[] {value, getURL()});
+            }
             return Integer.parseInt(value);
         } catch (IOException ex) {
             LOG.severe(ex.toString());
@@ -55,7 +58,9 @@ public class HttpDevice implements Device<Integer> {
 
             BufferedReader rd = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
             String responseStr = rd.readLine();
-            LOG.log(Level.INFO, "Response={0} | {1} ms", new Object[] {responseStr, System.currentTimeMillis() - tempo});
+            if (SHOW_LOG) {
+                LOG.log(Level.INFO, "Response={0} | {1} ms", new Object[] {responseStr, System.currentTimeMillis() - tempo});
+            }
         } catch (IOException ex) {
             LOG.severe(ex.toString());
         }
