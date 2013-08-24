@@ -21,9 +21,12 @@ public class SerialDevice implements Device<Integer> {
     }
 
     @Override
-    public Integer getValue() {
+    public Integer getValue() throws Exception {
         int value = SerialBus.getInstance().readDevice(address, device);
-        return value != -1 ? value : null;
+        if (value == -1) {
+            throw new Exception(String.format("Error on getValue of address=%d, device=%d", address, device));
+        }
+        return value;
     }
 
     public void setAddress(int address) {
