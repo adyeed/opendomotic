@@ -47,7 +47,22 @@ public class DeviceRestService {
         for (DeviceConfig config : configDAO.findAll()) {
             String name = config.getName();
             Object value = deviceService.getDeviceValue(name);
-            list.add(new DeviceValueRest(name, String.valueOf(value)));
+            String valueStr;
+            try {
+                if (name.startsWith("Temperatura")) {
+                    valueStr = String.format("%d°C", (Integer) value);
+                } else if (name.startsWith("Umidade")) {
+                    valueStr = String.format("%d%%", value);
+                } else if (name.startsWith("Corrente")) {
+                    valueStr = String.format("%d mA", value);
+                } else {
+                    valueStr = String.valueOf(value);
+                }    
+            } catch (Exception e) {
+                System.out.println("REST list:"+e.toString());
+                valueStr = String.valueOf(value);
+            }
+            list.add(new DeviceValueRest(name, valueStr));
         }
         return list;
     }

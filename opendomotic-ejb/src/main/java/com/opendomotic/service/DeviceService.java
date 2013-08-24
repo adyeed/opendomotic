@@ -17,6 +17,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
+import javax.annotation.Resource;
 import javax.ejb.AccessTimeout;
 import javax.ejb.Asynchronous;
 import javax.ejb.Lock;
@@ -24,6 +25,10 @@ import javax.ejb.LockType;
 import javax.ejb.Schedule;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
+import javax.ejb.Timeout;
+import javax.ejb.Timer;
+import javax.ejb.TimerConfig;
+import javax.ejb.TimerService;
 import javax.inject.Inject;
 
 /**
@@ -37,7 +42,14 @@ import javax.inject.Inject;
 public class DeviceService {
 
     private static final Logger LOG = Logger.getLogger(DeviceService.class.getName());
+    private static final int MILLIS_WAIT_INIT_SCHEDULE = 4*60*1000; //to wait application server to start.
+    
     private Map<String, DeviceProxy> mapDevice;
+    private boolean scheduleInitialized = false;
+    private Timer timerInitSchedule;
+    
+    @Resource
+    private TimerService timerService;
     
     @Inject
     private DeviceConfigDAO deviceConfigService;
@@ -47,11 +59,13 @@ public class DeviceService {
        
     @PostConstruct
     public void init() {
+        LOG.info("DeviceService init...");
+        timerInitSchedule = timerService.createSingleActionTimer(MILLIS_WAIT_INIT_SCHEDULE, new TimerConfig());
         loadDevices();
     }
-    
+           
     public void loadDevices() {
-        LOG.info("loading devices...");
+        LOG.info("Loading devices...");
 
         mapDevice = Collections.synchronizedMap(new LinkedHashMap<String, DeviceProxy>());
         for (DeviceConfig config : deviceConfigService.findAll()) {
@@ -67,9 +81,23 @@ public class DeviceService {
         }
     }
 
+    @Timeout
+    public void initScheduleTimer(Timer timer) {
+        if (timer.equals(timerInitSchedule)) {
+            LOG.info("Schedule initialized.");
+            scheduleInitialized = true;
+        } else {
+            LOG.info(timer.toString());
+        }
+    }
+    
     @Schedule(second = "*/30", minute = "*", hour = "*")
     public void updateDeviceValuesTimer() {
-        updateDeviceValues("timer", false);
+        if (scheduleInitialized) {
+            updateDeviceValues("timer", false);
+        } else if (timerInitSchedule != null) {
+            LOG.log(Level.INFO, "Waiting init schedule: {0} ms", timerInitSchedule.getTimeRemaining());
+        }
     }
     
     @Asynchronous
@@ -113,6 +141,11 @@ public class DeviceService {
         } else {
             return null;
         }
+    }
+
+    @Lock(LockType.READ)
+    public boolean isScheduleInitialized() {
+        return scheduleInitialized;
     }
     
     public Object toggleDeviceValue(String deviceName) {
