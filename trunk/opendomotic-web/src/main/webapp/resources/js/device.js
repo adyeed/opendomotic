@@ -1,21 +1,21 @@
-function ImageShape(id, x, y, name, src0, src1) {
+function Device(id, x, y, name, switchable, imageDefault, imageSwitch) {
     this.id = id;
     this.x = x;
     this.y = y;
     this.name = name;
+    this.switchable = switchable;
     this.value = null;
 
-    //TO-DO: array de Image-Value
-    this.image0 = new Image();
-    this.image0.alt = name;
-    this.image0.src = src0;
+    this.imageDefault = new Image();
+    this.imageDefault.alt = name;
+    this.imageDefault.src = imageDefault;
 
-    if (src1 !== undefined && src1 !== '') {
-        this.image1 = new Image();
-        this.image1.alt = name;
-        this.image1.src = src1;
+    if (imageSwitch !== undefined && imageSwitch !== '') {
+        this.imageSwitch = new Image();
+        this.imageSwitch.alt = name;
+        this.imageSwitch.src = imageSwitch;
     } else {
-        this.image1 = null;
+        this.imageSwitch = null;
     }
 
     this.getRight = function() {
@@ -27,9 +27,9 @@ function ImageShape(id, x, y, name, src0, src1) {
     };
     
     this.getImage = function() {
-        if (this.image1 !== null && this.value === 1)
-            return this.image1;
-        return this.image0;
+        if (this.imageSwitch !== null && this.value === 1)
+            return this.imageSwitch;
+        return this.imageDefault;
     };
 
     this.isIn = function(x, y) {

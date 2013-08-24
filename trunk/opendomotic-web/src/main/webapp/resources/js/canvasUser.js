@@ -11,10 +11,14 @@ function drawCanvas(idEnvironment) {
 //------------------------------------------------------------------------------
 
 function mouseUpDevice() {
-    deviceName = imagePressed.name;
-    $.getJSON(getUrl('device/toggle?name='+deviceName), null, function(data) {
-        newValue = data;
-        updateDeviceValue(deviceName, newValue);
-        draw();
-    }); 
+    if (devicePressed.switchable) {
+        deviceName = devicePressed.name;
+        $.getJSON(getUrl('device/switch?name='+deviceName), null, function(data) {
+            newValue = data;
+            updateDeviceValue(deviceName, newValue);
+            draw();
+        }); 
+    } else {
+        alert(devicePressed.name + ' = ' + devicePressed.value);
+    }
 }
