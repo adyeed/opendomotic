@@ -127,7 +127,7 @@ public class DeviceService {
     }
     
     public void setDeviceValue(String deviceName, Object value) {
-        Device device = mapDevice.get(deviceName);
+        DeviceProxy device = mapDevice.get(deviceName);
         if (device != null) {
             device.setValue(value);
         }
@@ -135,7 +135,7 @@ public class DeviceService {
     
     @Lock(LockType.READ)
     public Object getDeviceValue(String deviceName) {
-        Device device = mapDevice.get(deviceName);
+        DeviceProxy device = mapDevice.get(deviceName);
         if (device != null) {
             return device.getValue();
         } else {
@@ -149,7 +149,7 @@ public class DeviceService {
     }
     
     public Object switchDeviceValue(String deviceName) {
-        Device device = mapDevice.get(deviceName);
+        DeviceProxy device = mapDevice.get(deviceName);
         if (device != null) {
             Object value = device.getValue() == 1 ? 0 : 1;
             device.setValue(value);
