@@ -4,6 +4,7 @@
  */
 package com.opendomotic.service.rest;
 
+import com.opendomotic.model.entity.DeviceConfig;
 import com.opendomotic.model.entity.DeviceImage;
 import com.opendomotic.model.entity.DevicePosition;
 import com.opendomotic.model.entity.Environment;
@@ -40,13 +41,17 @@ public class EnvironmentRestService {
             List<DevicePositionRest> list = new ArrayList<>();
             
             for (DevicePosition position : environment.getListDevicePosition()) {  
-               list.add(new DevicePositionRest(
-                   position.getId(), 
-                   position.getX(),
-                   position.getY(),
-                   position.getDeviceConfig().getName(), 
-                   getDeviceImageFileName(position.getDeviceConfig().getDeviceImageDefault()), //TO-DO: lista de image-value?
-                   getDeviceImageFileName(position.getDeviceConfig().getDeviceImageToggle())));            
+                DeviceConfig config = position.getDeviceConfig();
+                if (config.isEnabled()) {
+                    list.add(new DevicePositionRest(
+                       position.getId(), 
+                       position.getX(),
+                       position.getY(),
+                       position.getDeviceConfig().getName(), 
+                       position.getDeviceConfig().isSwitchable(),
+                       getDeviceImageFileName(position.getDeviceConfig().getDeviceImageDefault()),
+                       getDeviceImageFileName(position.getDeviceConfig().getDeviceImageSwitch())));
+                }
             }            
             
             e.setFileName(IMAGE_PATH + environment.getFileName()); 

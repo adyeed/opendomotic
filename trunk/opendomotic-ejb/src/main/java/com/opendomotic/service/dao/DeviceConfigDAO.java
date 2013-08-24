@@ -32,4 +32,10 @@ public class DeviceConfigDAO extends AbstractDAO<DeviceConfig> {
                 .getResultList();
     }
     
+    public List<DeviceConfig> findAllEnabled() {
+        return em
+                .createQuery("select c from DeviceConfig c where c.enabled = true")
+                .getResultList();
+    }
+    
 }
