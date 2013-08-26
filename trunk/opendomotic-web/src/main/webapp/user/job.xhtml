@@ -83,11 +83,12 @@
                 </f:facet>
                 #{job.outputDescription}
             </p:column>
-            <p:column>
+            <p:column style="text-align: center;">
                 <f:facet name="header">
                     <h:outputText value="#{msg.Delete}"/>
                 </f:facet>
-                #{job.deleteAfterExecute}
+                <p:graphicImage value="../resources/images/button/checked.png" rendered="#{job.deleteAfterExecute}"/>
+                <p:graphicImage value="../resources/images/button/unchecked.png" rendered="#{!job.deleteAfterExecute}"/>
             </p:column>
             <p:column>
                 <p:commandButton value="#{msg.Delete}" action="#{jobMB.delete(job)}" update="table" onclick="return confirm('#{msg.ConfirmsTheExclusion}');"/>

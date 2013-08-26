@@ -77,17 +77,19 @@
                 </f:facet>
                 #{config.deviceClassName}
             </p:column>
-            <p:column>
+            <p:column style="text-align: center;">
                 <f:facet name="header">
                     #{msg.Enabled}
                 </f:facet>
-                #{config.enabled ? msg.Yes : msg.No}
+                <p:graphicImage value="../resources/images/button/checked.png" rendered="#{config.enabled}"/>
+                <p:graphicImage value="../resources/images/button/unchecked.png" rendered="#{!config.enabled}"/>
             </p:column>
-            <p:column>
+            <p:column style="text-align: center;">
                 <f:facet name="header">
                     #{msg.Switchable}
                 </f:facet>
-                #{config.switchable ? msg.Yes : msg.No}
+                <p:graphicImage value="../resources/images/button/checked.png" rendered="#{config.switchable}"/>
+                <p:graphicImage value="../resources/images/button/unchecked.png" rendered="#{!config.switchable}"/>
             </p:column>
             <p:column>
                 <f:facet name="header">
