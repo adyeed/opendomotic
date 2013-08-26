@@ -29,7 +29,6 @@ public class DomoticInBound extends MessageInbound {
     @Override
     protected void onOpen(WsOutbound outbound) {
         servlet.getConnections().add(this);
-        servlet.sendBroadcast("new client connected");
     }
 
     @Override

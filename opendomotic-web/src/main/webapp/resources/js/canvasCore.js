@@ -4,7 +4,6 @@ var xMouseDown, yMouseDown;
 var environmentImage = new Image();
 
 var deviceArray = new Array();
-var deviceCount = 0;
 var devicePressed = null;
 var deviceTooltip = null;
 
@@ -44,7 +43,6 @@ function initCanvas(canDrag, onMouseUpDevice, idEnvironment) {
 
             //para limpar em caso de ajax update:
             deviceArray = new Array(); 
-            deviceCount = 0;
             
             list = data[environment].listDevicePositionRest; //returns array only when > 1
             if (list instanceof Array) {
@@ -54,13 +52,19 @@ function initCanvas(canDrag, onMouseUpDevice, idEnvironment) {
             } else if (list !== undefined) {
                 addDevice(list);
             }                
+            
+            if (deviceArray.length > 0) {
+                deviceArray[deviceArray.length-1].imageDefault.onload = function() {
+                    draw();
+                };
+            }
         }
         updateDeviceValues();
     });
 }
 
 function addDevice(p) {
-    deviceArray[deviceCount++] = new Device(p.id, p.x, p.y, p.name, p.switchable, p.imageDefault, p.imageSwitch);
+    deviceArray.push(new Device(p.id, p.x, p.y, p.name, p.switchable, p.imageDefault, p.imageSwitch));
 }
 
 function draw() {
@@ -117,29 +121,34 @@ function updateDeviceValue(name, value) {
 }
 
 function checkTooltip(x, y) {
-    image = getImage(x, y);
-    if (image !== null) {
+    device = getDeviceByXY(x, y);
+    if (device !== null) {
         if (deviceTooltip === null) {
+            //background:
             context.save();
             context.beginPath();
-            textDimensions = context.measureText(image.name);  
+            textDimensions = context.measureText(device.name);  
             context.rect(x, y, textDimensions.width+10, 30);
             context.globalAlpha = 0.5;           
-            context.fillStyle = '99CCFF';
+            context.fillStyle = '#99CCFF';
             context.fill();
+            
+            //border:
             context.lineWidth = 1;
             context.strokeStyle = 'black';
             context.stroke();
             context.closePath();
             
+            //text:
             context.globalAlpha = 1;
             context.textBaseline="top";
             context.fillStyle = 'black';
-            context.fillText(image.name, x+5, y);
+            context.textBaseline = 'bottom';
+            context.fillText(device.name, x+5, y+30);
             
             context.restore();
         }
-        deviceTooltip = image;
+        deviceTooltip = device;
         
     } else if (deviceTooltip !== null) {
         deviceTooltip = null;
@@ -147,7 +156,7 @@ function checkTooltip(x, y) {
     }
 }
 
-function getImage(x, y) {
+function getDeviceByXY(x, y) {
     for (var i in deviceArray) {
         if (deviceArray[i].isIn(x, y)) {
             return deviceArray[i];
@@ -162,18 +171,18 @@ function mouseDown(e) {
     var x = e.layerX;//e.pageX - canvas.offsetLeft;
     var y = e.layerY;//e.pageY - canvas.offsetTop;
 
-    image = getImage(x, y);
-    if (image !== null) {
-        devicePressed = image;
-        xMouseDown = x - image.x;
-        yMouseDown = y - image.y;
+    device = getDeviceByXY(x, y);
+    if (device !== null) {
+        devicePressed = device;
+        xMouseDown = x - device.x;
+        yMouseDown = y - device.y;
         
         if (deviceTooltip !== null) {
             deviceTooltip = null;
             draw();
         }
         
-        context.fillText("aguarde...", image.x, image.y);
+        context.fillText("aguarde...", device.x, device.y);
     }
 }
 

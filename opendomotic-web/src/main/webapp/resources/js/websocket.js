@@ -16,20 +16,23 @@ function connect() {
         log('WebSocket is not supported by this browser.');
         return;
     }
+    
     ws.onopen = function () {
-        log('Info: Conexao aberta.');
+        log('Conexao aberta.');
     };
+    
     ws.onmessage = function (event) {
         msg = event.data;
-        log('Recebido: ' + msg);
+        log(msg);
         
         //algum dispositivo mudou de estado, então servidor notificou:
         if (msg.indexOf('updateDeviceValues') !== -1) {
             updateDeviceValues();         
         }        
     };
+    
     ws.onclose = function () {
-        log('Info: Conexao fechada.');
+        log('Conexao fechada.');
     };
 }
 
@@ -39,10 +42,10 @@ function send() {
         log('Enviado: ' + message);
         ws.send(message);
     } else {
-        log('WebSocket connection not established, please connect.');
+        log('Connection not established, please connect.');
     }
 }
 
 function log(message) {
-    document.getElementById('log').innerHTML = message;
+    document.getElementById('log').innerHTML = 'WebSocket: ' + message;
 }
