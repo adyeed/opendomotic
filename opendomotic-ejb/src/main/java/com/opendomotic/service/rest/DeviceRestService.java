@@ -88,9 +88,9 @@ public class DeviceRestService {
     public String switchDevice(@QueryParam("name") String name) {
         LOG.log(Level.INFO, "name={0}", name);
 
-        Object value = deviceService.switchDeviceValue(name);
+        deviceService.switchDeviceValue(name);
         deviceService.updateDeviceValuesAsync(true);   
-        return value.toString();
+        return "OK";
     }
     
     @GET
