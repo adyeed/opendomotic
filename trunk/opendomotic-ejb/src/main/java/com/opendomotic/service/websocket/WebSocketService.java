@@ -13,6 +13,7 @@ import javax.ejb.Singleton;
 @Singleton
 public class WebSocketService {
         
+    private static final String UPDATE_DEVICE_VALUE  = "updateDeviceValue";
     private static final String UPDATE_DEVICE_VALUES = "updateDeviceValues";
     
     private BroadcastMessenger broadcastMessenger;
@@ -23,8 +24,12 @@ public class WebSocketService {
         }
     }
     
+    public void sendUpdateDeviceValue(String name, String value) {
+        send(UPDATE_DEVICE_VALUE + "|" + name + "|" + value);
+    }
+    
     public void sendUpdateDeviceValues(String origin) {
-        send(UPDATE_DEVICE_VALUES + ": " + origin);
+        send(UPDATE_DEVICE_VALUES + "|" + origin);
     }
     
     public void setBroadcastMessenger(BroadcastMessenger broadcastMessenger) {

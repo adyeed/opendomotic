@@ -37,7 +37,7 @@ public class Job extends AbstractEntityId {
     private boolean deleteAfterExecute;
 
     public String getInputDescription() {
-        if (input != null) {
+        if (input != null && operator != null && expectValue != null) {
             return input.getName() + " " + operator.toString() + " " + expectValue;
         }
         if (inputDate != null) {

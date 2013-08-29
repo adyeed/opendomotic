@@ -125,14 +125,7 @@ public class DeviceService {
         
         logTime("Total", millisTotal, 2000);
     }
-    
-    public void setDeviceValue(String deviceName, Object value) {
-        DeviceProxy device = mapDevice.get(deviceName);
-        if (device != null) {
-            device.setValue(value);
-        }
-    }
-    
+           
     @Lock(LockType.READ)
     public Object getDeviceValue(String deviceName) {
         DeviceProxy device = mapDevice.get(deviceName);
@@ -143,20 +136,21 @@ public class DeviceService {
         }
     }
 
+    public void setDeviceValue(String deviceName, Object value) {
+        DeviceProxy device = mapDevice.get(deviceName);
+        if (device != null) {
+            device.setValue(value);
+            webSocketService.sendUpdateDeviceValue(deviceName, value.toString()); //TO-DO: melhorar value.toString 
+        }
+    }
+    
+    public void switchDeviceValue(String deviceName) {
+        setDeviceValue(deviceName, getDeviceValue(deviceName) == 1 ? 0 : 1);
+    }
+    
     @Lock(LockType.READ)
     public boolean isScheduleInitialized() {
         return scheduleInitialized;
-    }
-    
-    public Object switchDeviceValue(String deviceName) {
-        DeviceProxy device = mapDevice.get(deviceName);
-        if (device != null) {
-            Object value = device.getValue() == 1 ? 0 : 1;
-            device.setValue(value);
-            return value;
-        } else {
-            return null;
-        }
     }
     
     private void logTime(String item, long startMillis, int limit) {
