@@ -103,7 +103,7 @@ function updateDeviceValues() {
         for (var device in data) {
             for (var index in data[device]) {
                 d = data[device][index]; //d.name; d.value;
-                updateDeviceValue(d.name, d.value);
+                updateDeviceValue(d.name, d.value, false);
             }
         }
         loading = false;
@@ -111,12 +111,15 @@ function updateDeviceValues() {
     });    
 }
 
-function updateDeviceValue(name, value) {
+function updateDeviceValue(name, value, canDraw) {
     for (var i in deviceArray) {
         if (deviceArray[i].name === name) {
             deviceArray[i].value = value;
             //break; não posso dar break pq talvez tenha outras imagens para o mesmo device
         }
+    }
+    if (canDraw) {
+        draw();
     }
 }
 

@@ -24,11 +24,13 @@ function connect() {
     ws.onmessage = function (event) {
         msg = event.data;
         log(msg);
-        
         //algum dispositivo mudou de estado, então servidor notificou:
         if (msg.indexOf('updateDeviceValues') !== -1) {
             updateDeviceValues();         
-        }        
+        } else if (msg.indexOf('updateDeviceValue') !== -1) { 
+            values = msg.split("|");
+            updateDeviceValue(values[1], values[2], true);   
+        }
     };
     
     ws.onclose = function () {
