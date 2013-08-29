@@ -14,9 +14,9 @@ function mouseUpDevice() {
     if (devicePressed.switchable) {
         deviceName = devicePressed.name;
         $.getJSON(getUrl('device/switch?name='+deviceName), null, function(data) {
-            newValue = data;
-            updateDeviceValue(deviceName, newValue);
-            draw();
+            if (data !== 'OK') {
+                alert(data);
+            }
         }); 
     } else {
         alert(devicePressed.name + ' = ' + devicePressed.value);

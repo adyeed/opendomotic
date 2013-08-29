@@ -27,8 +27,9 @@ function Device(id, x, y, name, switchable, imageDefault, imageSwitch) {
     };
     
     this.getImage = function() {
-        if (this.imageSwitch !== null && this.value === 1)
+        if (this.imageSwitch !== null && (this.value === 1 || this.value === '1')) {
             return this.imageSwitch;
+        }
         return this.imageDefault;
     };
 
