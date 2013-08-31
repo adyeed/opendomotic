@@ -68,26 +68,16 @@ function addDevice(p) {
 }
 
 function draw() {
-    //clear canvas
     context.clearRect(0, 0, canvas.width, canvas.height); 
-
-    //fundo
     context.drawImage(environmentImage, 0, 0);
 
     if (loading) {
         drawLoading();
     }
 
-    //draw devices
-    for (var i in deviceArray) {
-        device = deviceArray[i];
-        device.draw(context);
-        if (device.value !== null) {
-            context.fillText(device.value, device.x, device.getBottom());
-        }
-    }
+    drawDevices();
 
-    //draw pressed device over all
+    //draw pressed device over all:
     if (devicePressed !== null) {
         devicePressed.draw(context);
     }
@@ -95,6 +85,21 @@ function draw() {
 
 function drawLoading() {
     context.fillText("carregando...", 10, 30);
+}
+
+function drawDevices() {
+    context.save();
+    context.lineWidth = 1; 
+    context.strokeStyle = 'white';
+    for (var i in deviceArray) {
+        device = deviceArray[i];
+        device.draw(context);
+        if (device.value !== null) {
+            context.strokeText(device.value, device.x, device.getBottom());
+            context.fillText(device.value, device.x, device.getBottom());              
+        }
+    }
+    context.restore();
 }
 
 function updateDeviceValues() {
