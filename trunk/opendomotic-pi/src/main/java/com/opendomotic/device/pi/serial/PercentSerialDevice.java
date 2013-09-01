@@ -16,14 +16,32 @@ public class PercentSerialDevice extends SerialDevice {
     public static final int DEFAULT_MIN = 0;
     public static final int DEFAULT_MAX = 1024;
     public static final boolean DEFAULT_CHECK_RANGE = true;
+    public static final boolean DEFAULT_AUTO = false;
     
-    private int min = DEFAULT_MIN;
-    private int max = DEFAULT_MAX;
+    private Integer min = null;
+    private Integer max = null;
     private boolean checkRange = DEFAULT_CHECK_RANGE;
-
+    private boolean auto = DEFAULT_AUTO;
+    
     @Override
     public Integer getValue() throws Exception {
-        return Percent.getPercent(super.getValue(), min, max, checkRange);
+        int value = super.getValue();        
+        checkMinMax(value); 
+        return Percent.getPercent(value, min, max, checkRange);
+    }
+    
+    private void checkMinMax(int value) {
+        if (auto) {
+            if (min == null || value < min) {
+                min = value;
+            }
+            if (max == null || value > max) {
+                max = value;
+            }
+        } else if (min == null || max == null) {
+            min = DEFAULT_MIN;
+            max = DEFAULT_MAX;
+        }
     }
     
     public int getMin() {
@@ -48,6 +66,14 @@ public class PercentSerialDevice extends SerialDevice {
 
     public void setCheckRange(boolean checkRange) {
         this.checkRange = checkRange;
+    }
+
+    public boolean isAuto() {
+        return auto;
+    }
+
+    public void setAuto(boolean auto) {
+        this.auto = auto;
     }
     
 }
