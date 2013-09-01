@@ -30,7 +30,9 @@ public class DeviceFactory {
                 throw new DevicePropertyNotFoundException();
             }
             
-            if (isStringToInteger(property.getValue(), method)) {
+            if (isStringToBoolean(property.getValue(), method)) {
+                method.invoke(device, Boolean.parseBoolean((String) property.getValue()));
+            } else if (isStringToInteger(property.getValue(), method)) {
                 method.invoke(device, Integer.parseInt((String) property.getValue()));
             } else {
                 method.invoke(device, property.getValue());
@@ -47,6 +49,11 @@ public class DeviceFactory {
         }
         return null;
     }    
+    
+    private static boolean isStringToBoolean(Object value, Method method) {
+        String p = method.getParameterTypes()[0].getName();
+        return value instanceof String && (p.equals(boolean.class.getName()) || p.equals(Boolean.class.getName()));
+    }
     
     private static boolean isStringToInteger(Object value, Method method) {
         String p = method.getParameterTypes()[0].getName();
