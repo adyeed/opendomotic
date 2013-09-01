@@ -6,12 +6,16 @@
 package com.opendomotic.device.pi.serial;
 
 import com.opendomotic.device.util.Percent;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
  * @author Jaques Claudino
  */
 public class PercentSerialDevice extends SerialDevice {
+    
+    private static final Logger LOG = Logger.getLogger(PercentSerialDevice.class.getName());
     
     public static final int DEFAULT_MIN = 0;
     public static final int DEFAULT_MAX = 1024;
@@ -34,14 +38,20 @@ public class PercentSerialDevice extends SerialDevice {
         if (auto) {
             if (min == null || value < min) {
                 min = value;
+                logMinMax();
             }
             if (max == null || value > max) {
                 max = value;
+                logMinMax();
             }
         } else if (min == null || max == null) {
             min = DEFAULT_MIN;
             max = DEFAULT_MAX;
         }
+    }
+    
+    private void logMinMax() {
+        LOG.log(Level.INFO, "***** address={0} | min={1} | max={2}", new Object[] {getAddress(), min, max});
     }
     
     public int getMin() {

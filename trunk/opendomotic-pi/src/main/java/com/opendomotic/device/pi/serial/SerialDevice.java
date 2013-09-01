@@ -29,8 +29,16 @@ public class SerialDevice implements Device<Integer> {
         return value;
     }
 
+    public int getAddress() {
+        return address;
+    }
+
     public void setAddress(int address) {
         this.address = address;
+    }
+
+    public int getDevice() {
+        return device;
     }
 
     public void setDevice(int device) {
