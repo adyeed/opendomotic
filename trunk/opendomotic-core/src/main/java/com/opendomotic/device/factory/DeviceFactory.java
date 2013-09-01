@@ -21,8 +21,7 @@ public class DeviceFactory {
     private static final Logger LOG = Logger.getLogger(DeviceFactory.class.getName());
     
     public static Device createDevice(String className, Map<String, Object> properties) throws ClassNotFoundException, InstantiationException, IllegalAccessException, DevicePropertyNotFoundException, IllegalArgumentException, InvocationTargetException {
-        Class clazz = Class.forName(className);
-        Device device = (Device) clazz.newInstance();
+        Device device = (Device) Class.forName(className).newInstance();
         for (Map.Entry<String, Object> property : properties.entrySet()) {
             Method method = getMethod(device, property.getKey());   
             if (method == null || method.getParameterTypes().length != 1) {
@@ -68,7 +67,7 @@ public class DeviceFactory {
                 return true;
             }
         }
-        //no one classTypes found:
+        //no one classType found:
         return false;
     }
     
