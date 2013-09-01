@@ -51,13 +51,25 @@ public class DeviceFactory {
     }    
     
     private static boolean isStringToBoolean(Object value, Method method) {
-        String p = method.getParameterTypes()[0].getName();
-        return value instanceof String && (p.equals(boolean.class.getName()) || p.equals(Boolean.class.getName()));
+        return isStringToType(value, method, boolean.class, Boolean.class);
     }
     
     private static boolean isStringToInteger(Object value, Method method) {
-        String p = method.getParameterTypes()[0].getName();
-        return value instanceof String && (p.equals(int.class.getName()) || p.equals(Integer.class.getName()));
+        return isStringToType(value, method, int.class, Integer.class);
+    }
+    
+    private static boolean isStringToType(Object value, Method method, Class... classTypes) {
+        if (!(value instanceof String))
+            return false;
+        
+        String paramType = method.getParameterTypes()[0].getName();
+        for (Class c : classTypes) {
+            if (paramType.equals(c.getName())) { //TO-DO: comparacao direta com classType nao funcionou. Verificar forma de evitar comparacao de string.
+                return true;
+            }
+        }
+        //no one classTypes found:
+        return false;
     }
     
 }
