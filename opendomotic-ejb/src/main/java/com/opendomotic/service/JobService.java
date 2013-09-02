@@ -1,13 +1,7 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.opendomotic.service;
 
-import com.opendomotic.service.websocket.WebSocketService;
 import com.opendomotic.model.entity.Job;
 import com.opendomotic.service.dao.JobDAO;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -30,18 +24,16 @@ public class JobService {
     private DeviceService deviceService;
     
     @Inject
-    private WebSocketService webSocketService;
-    
-    @Inject
     private JobDAO jobDAO;
         
+    private boolean canExecuteJobs = false; //setted by deviceService, after read device, to avoid ConcurrentAccessTimeoutException.
+    
     @Schedule(minute = "*/1", hour = "*")
     public void timerJobs() {
-        if (deviceService.isScheduleInitialized()) {
+        if (canExecuteJobs) {
             if (checkExecuteJobs()) {
-                deviceService.updateDeviceValuesAsync(true);
+                deviceService.updateDeviceValuesAsync();
             }
-            webSocketService.send(new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(new Date()));
         }
     }
     
@@ -56,7 +48,7 @@ public class JobService {
             if (job.getInput() != null) {
                 Object inputValue = deviceService.getDeviceValue(job.getInput().getName());  
                 if (inputValue != null) {
-                    switch (job.getOperator()) {
+                    switch (job.getOperator()) { //TO-DO: Actually run only with integers. Add another types.
                         case EQUAL:             canExecute = inputValue.equals(job.getExpectValueAsInt()); break;
                         case DIFERENT:          canExecute = !inputValue.equals(job.getExpectValueAsInt()); break;
                         case GREATHER:          canExecute = (Integer) inputValue >  job.getExpectValueAsInt(); break;
@@ -78,6 +70,7 @@ public class JobService {
                             job.getOutput().getName(), 
                             job.getActionValueAsInt());
 
+                    //TO-DO: Check if really setted the value in device. Can occurs communication error.
                     if (job.isDeleteAfterExecute()) {
                         jobDAO.delete(job);
                     }
@@ -86,6 +79,10 @@ public class JobService {
             }
         }
         return executed;
+    }
+    
+    public void setCanExecuteJobs(boolean canExecuteJobs) {
+        this.canExecuteJobs = canExecuteJobs;
     }
     
 }

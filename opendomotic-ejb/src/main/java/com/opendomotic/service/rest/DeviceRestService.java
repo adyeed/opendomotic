@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.opendomotic.service.rest;
 
 import com.opendomotic.model.entity.DeviceConfig;
@@ -45,9 +41,9 @@ public class DeviceRestService {
     public List<DeviceValueRest> list() {
         List<DeviceValueRest> list = new ArrayList<>();
         for (DeviceConfig config : configDAO.findAllEnabled()) {
-            String name = config.getName();
-            String valueStr = deviceService.getDeviceValueAsString(config);
-            list.add(new DeviceValueRest(name, valueStr));
+            list.add(new DeviceValueRest(
+                    config.getName(), 
+                    deviceService.getDeviceValueAsString(config)));
         }
         return list;
     }
@@ -69,7 +65,7 @@ public class DeviceRestService {
             positionDAO.save(position);
             return "OK";
         }
-        return "Device não encontrado";
+        return "Device not found";
     }
     
     @GET
@@ -79,7 +75,7 @@ public class DeviceRestService {
         LOG.log(Level.INFO, "name={0}", name);
 
         deviceService.switchDeviceValue(name);
-        deviceService.updateDeviceValuesAsync(true);   
+        deviceService.updateDeviceValuesAsync();   
         return "OK";
     }
     
@@ -96,7 +92,7 @@ public class DeviceRestService {
             deviceService.setDeviceValue(config.getName(), value);
         }
        
-        deviceService.updateDeviceValuesAsync(true);   
+        deviceService.updateDeviceValuesAsync();   
         return "OK";
     }
     

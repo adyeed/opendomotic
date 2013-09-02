@@ -36,12 +36,12 @@ public class DeviceService {
     
     private Map<String, DeviceProxy> mapDevice;
     private boolean scheduleInitialized = false;
-        
-    @Inject
-    private DeviceConfigDAO deviceConfigService;
 
     @Inject
     private WebSocketService webSocketService;
+    
+    @Inject
+    private JobService jobService;
     
     @Inject
     private DeviceConfigDAO configDAO;
@@ -56,7 +56,7 @@ public class DeviceService {
         LOG.info("Loading devices...");
 
         mapDevice = Collections.synchronizedMap(new LinkedHashMap<String, DeviceProxy>());
-        for (DeviceConfig config : deviceConfigService.findAll()) {
+        for (DeviceConfig config : configDAO.findAllEnabled()) {
             try {
                 LOG.log(Level.INFO, "creating {0}", config.getName());
                 Device device = config.createDevice();
@@ -64,43 +64,44 @@ public class DeviceService {
                     mapDevice.put(config.getName(), new DeviceProxy(device));
                 }
             } catch (Exception ex) {
-                LOG.log(Level.SEVERE, "Error on create device: {0}", ex.toString());
+                LOG.log(Level.SEVERE, "Error creating device: {0}", ex.toString());
             }
         }
     }
     
     @Schedule(second = "*/30", minute = "*", hour = "*")
     public void updateDeviceValuesTimer() {
-        updateDeviceValues("timer", false);
+        updateDeviceValues();
         
         if (!scheduleInitialized) { //to avoid ConcurrentAccessTimeoutException from JobService 
             scheduleInitialized = true;
+            jobService.setCanExecuteJobs(true);
             LOG.info("Schedule initialized.");
         }
     }
     
     @Asynchronous
-    public void updateDeviceValuesAsync(boolean alwaysSendWebsocket) {
-        updateDeviceValues("async", alwaysSendWebsocket);
+    public void updateDeviceValuesAsync() {
+        updateDeviceValues();
     }
     
-    private void updateDeviceValues(String origin, boolean alwaysSendWebsocket) {
+    private void updateDeviceValues() {
         long millisTotal = System.currentTimeMillis();
         
         for (Entry<String, DeviceProxy> entry : mapDevice.entrySet()) {
             String deviceName = entry.getKey();
             DeviceProxy device = entry.getValue();
             long millisDevice = System.currentTimeMillis();
-            if (device.updateValue()) {   
-                webSocketService.sendUpdateDeviceValue(deviceName, getDeviceValueAsString(deviceName));
+            try {
+                if (device.updateValue()) {   
+                    //TO-DO: apenas enviar para os clientes que estao observando o ambiente
+                    webSocketService.sendUpdateDeviceValue(deviceName, getDeviceValueAsString(deviceName));
+                }
+            } catch (Exception ex) {
+                LOG.log(Level.SEVERE, "Error updating device: {0} | {1}", new Object[] {deviceName, ex.toString()});
             }
             logTime(device.toString(), millisDevice, 1000);
         }
-        
-        /*if (changed || alwaysSendWebsocket) {
-            //TO-DO: se alterou estado, notificar apenas os devices correspondentes:
-            webSocketService.sendUpdateDeviceValues(origin);
-        }*/
         
         logTime("Total", millisTotal, 2000);
     }
