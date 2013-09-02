@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.opendomotic.device.pi.serial;
 
 import com.opendomotic.device.util.Percent;
@@ -21,6 +16,7 @@ public class PercentSerialDevice extends SerialDevice {
     public static final int DEFAULT_MAX = 1024;
     public static final boolean DEFAULT_CHECK_RANGE = true;
     public static final boolean DEFAULT_AUTO = false;
+    public static final boolean CAN_LOG = false;
     
     private Integer min = null;
     private Integer max = null;
@@ -51,7 +47,9 @@ public class PercentSerialDevice extends SerialDevice {
     }
     
     private void logMinMax() {
-        LOG.log(Level.INFO, "***** address={0} | min={1} | max={2}", new Object[] {getAddress(), min, max});
+        if (CAN_LOG) {
+            LOG.log(Level.INFO, "***** address={0} | min={1} | max={2}", new Object[] {getAddress(), min, max});
+        }
     }
     
     public int getMin() {
