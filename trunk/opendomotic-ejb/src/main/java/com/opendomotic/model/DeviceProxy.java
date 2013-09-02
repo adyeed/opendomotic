@@ -37,16 +37,10 @@ public class DeviceProxy implements Device {
         return value;
     }
     
-    public boolean updateValue() {
-        boolean changed = false;
-        try {
-            Object newValue = device.getValue();
-            changed = !newValue.equals(value);
-            value = newValue;
-            
-        } catch (Exception ex) {
-            LOG.severe(ex.toString());
-        }
+    public boolean updateValue() throws Exception {
+        Object newValue = device.getValue();
+        boolean changed = !newValue.equals(value);
+        value = newValue;            
         return changed;
     }
 
