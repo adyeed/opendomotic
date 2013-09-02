@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.opendomotic.servlet;
 
 import com.opendomotic.service.websocket.BroadcastMessenger;
@@ -48,7 +44,7 @@ public class DomoticWebsocket extends WebSocketServlet implements BroadcastMesse
         for (DomoticInBound client : connections) {
             try {
                 client.getWsOutbound().writeTextMessage(CharBuffer.wrap(message));
-                //LOG.log(Level.INFO, "Enviando mensagem: {0}", message);
+                //LOG.info(message);
             } catch (IOException ex) {
                 LOG.severe(ex.toString());
             }
