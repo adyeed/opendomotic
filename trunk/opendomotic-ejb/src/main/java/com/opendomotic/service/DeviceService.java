@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.opendomotic.service;
 
 import com.opendomotic.service.websocket.WebSocketService;
@@ -17,7 +13,6 @@ import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
-import javax.annotation.Resource;
 import javax.ejb.AccessTimeout;
 import javax.ejb.Asynchronous;
 import javax.ejb.Lock;
@@ -25,10 +20,6 @@ import javax.ejb.LockType;
 import javax.ejb.Schedule;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
-import javax.ejb.Timeout;
-import javax.ejb.Timer;
-import javax.ejb.TimerConfig;
-import javax.ejb.TimerService;
 import javax.inject.Inject;
 
 /**
@@ -42,25 +33,22 @@ import javax.inject.Inject;
 public class DeviceService {
 
     private static final Logger LOG = Logger.getLogger(DeviceService.class.getName());
-    private static final int MILLIS_WAIT_INIT_SCHEDULE = 3*60*1000; //to wait application server to start.
     
     private Map<String, DeviceProxy> mapDevice;
     private boolean scheduleInitialized = false;
-    private Timer timerInitSchedule;
-    
-    @Resource
-    private TimerService timerService;
-    
+        
     @Inject
     private DeviceConfigDAO deviceConfigService;
 
     @Inject
     private WebSocketService webSocketService;
+    
+    @Inject
+    private DeviceConfigDAO configDAO;
        
     @PostConstruct
     public void init() {
         LOG.info("DeviceService init...");
-        timerInitSchedule = timerService.createSingleActionTimer(MILLIS_WAIT_INIT_SCHEDULE, new TimerConfig());
         loadDevices();
     }
            
@@ -80,23 +68,14 @@ public class DeviceService {
             }
         }
     }
-
-    @Timeout
-    public void initScheduleTimer(Timer timer) {
-        if (timer.equals(timerInitSchedule)) {
-            LOG.info("Schedule initialized.");
-            scheduleInitialized = true;
-        } else {
-            LOG.info(timer.toString());
-        }
-    }
     
     @Schedule(second = "*/30", minute = "*", hour = "*")
     public void updateDeviceValuesTimer() {
-        if (scheduleInitialized) {
-            updateDeviceValues("timer", false);
-        } else if (timerInitSchedule != null) {
-            LOG.log(Level.INFO, "Waiting init schedule: {0} ms", timerInitSchedule.getTimeRemaining());
+        updateDeviceValues("timer", false);
+        
+        if (!scheduleInitialized) { //to avoid ConcurrentAccessTimeoutException from JobService 
+            scheduleInitialized = true;
+            LOG.info("Schedule initialized.");
         }
     }
     
@@ -108,20 +87,20 @@ public class DeviceService {
     private void updateDeviceValues(String origin, boolean alwaysSendWebsocket) {
         long millisTotal = System.currentTimeMillis();
         
-        boolean changed = false;
         for (Entry<String, DeviceProxy> entry : mapDevice.entrySet()) {
+            String deviceName = entry.getKey();
             DeviceProxy device = entry.getValue();
             long millisDevice = System.currentTimeMillis();
-            if (device.updateValue()) {              
-                changed = true;
+            if (device.updateValue()) {   
+                webSocketService.sendUpdateDeviceValue(deviceName, getDeviceValueAsString(deviceName));
             }
             logTime(device.toString(), millisDevice, 1000);
         }
         
-        if (changed || alwaysSendWebsocket) {
+        /*if (changed || alwaysSendWebsocket) {
             //TO-DO: se alterou estado, notificar apenas os devices correspondentes:
             webSocketService.sendUpdateDeviceValues(origin);
-        }
+        }*/
         
         logTime("Total", millisTotal, 2000);
     }
@@ -135,12 +114,34 @@ public class DeviceService {
             return null;
         }
     }
+    
+    @Lock(LockType.READ)
+    public String getDeviceValueAsString(DeviceConfig config) {
+        Object value = getDeviceValue(config.getName());
+        String valueStr = "";
+        try {
+            if (config.getFormat() != null && !config.getFormat().isEmpty()) {
+                valueStr = String.format(config.getFormat(), value);
+            } else {
+                valueStr = String.valueOf(value);
+            }    
+        } catch (Exception ex) {
+            LOG.severe(ex.toString());
+        }
+        return valueStr;
+    }
+    
+    @Lock(LockType.READ)
+    public String getDeviceValueAsString(String deviceName) {
+        DeviceConfig config = configDAO.findByName(deviceName);
+        return getDeviceValueAsString(config);
+    }
 
     public void setDeviceValue(String deviceName, Object value) {
         DeviceProxy device = mapDevice.get(deviceName);
         if (device != null) {
             device.setValue(value);
-            webSocketService.sendUpdateDeviceValue(deviceName, value.toString()); //TO-DO: melhorar value.toString 
+            webSocketService.sendUpdateDeviceValue(deviceName, getDeviceValueAsString(deviceName)); 
         }
     }
     

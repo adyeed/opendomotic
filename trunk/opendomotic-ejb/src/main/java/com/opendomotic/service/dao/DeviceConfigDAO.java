@@ -25,7 +25,14 @@ public class DeviceConfigDAO extends AbstractDAO<DeviceConfig> {
         return DeviceConfig.class;
     }
     
-    public List<DeviceConfig> findByName(String name) {
+    public DeviceConfig findByName(String name) {
+        return em
+                .createQuery("select c from DeviceConfig c where c.name = ?1", DeviceConfig.class)
+                .setParameter(1, name)
+                .getSingleResult();
+    }
+    
+    public List<DeviceConfig> findAllByNameLike(String name) {
         return em
                 .createQuery("select c from DeviceConfig c where c.name like ?1")
                 .setParameter(1, "%"+name+"%")

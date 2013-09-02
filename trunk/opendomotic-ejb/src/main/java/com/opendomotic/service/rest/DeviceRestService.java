@@ -46,17 +46,7 @@ public class DeviceRestService {
         List<DeviceValueRest> list = new ArrayList<>();
         for (DeviceConfig config : configDAO.findAllEnabled()) {
             String name = config.getName();
-            Object value = deviceService.getDeviceValue(name);
-            String valueStr = "";
-            try {
-                if (config.getFormat() != null && !config.getFormat().isEmpty()) {
-                    valueStr = String.format(config.getFormat(), value);
-                } else {
-                    valueStr = String.valueOf(value);
-                }    
-            } catch (Exception ex) {
-                LOG.severe(ex.toString());
-            }
+            String valueStr = deviceService.getDeviceValueAsString(config);
             list.add(new DeviceValueRest(name, valueStr));
         }
         return list;
@@ -101,7 +91,7 @@ public class DeviceRestService {
             @QueryParam("value") int value) {
         LOG.log(Level.INFO, "name={0} enabled={1}", new Object[] {name, value});
         
-        for (DeviceConfig config : configDAO.findByName(name)) {
+        for (DeviceConfig config : configDAO.findAllByNameLike(name)) {
             LOG.info(config.getName());
             deviceService.setDeviceValue(config.getName(), value);
         }
