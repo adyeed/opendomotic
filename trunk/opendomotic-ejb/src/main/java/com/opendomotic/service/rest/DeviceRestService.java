@@ -47,6 +47,34 @@ public class DeviceRestService {
         }
         return list;
     }
+    
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path(value = "/switch")
+    public String switchDevice(@QueryParam("name") String name) {       
+        long time = System.currentTimeMillis();
+        deviceService.switchDeviceValue(name);
+        deviceService.updateDeviceValuesAsync();
+        LOG.log(Level.INFO, "name={0} | {1} ms", new Object[] {name, System.currentTimeMillis()-time});
+        return "OK";
+    }
+    
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path(value = "/set")
+    public String set(
+            @QueryParam("name") String name, 
+            @QueryParam("value") int value) {
+
+        for (DeviceConfig config : configDAO.findAllByNameLike(name)) {
+            long time = System.currentTimeMillis();
+            deviceService.setDeviceValue(config.getName(), value);
+            LOG.log(Level.INFO, "name={0} | value={1} | {2} ms", new Object[] {name, value, System.currentTimeMillis()-time});
+        }
+       
+        deviceService.updateDeviceValuesAsync();   
+        return "OK";
+    }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -66,34 +94,6 @@ public class DeviceRestService {
             return "OK";
         }
         return "Device not found";
-    }
-    
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    @Path(value = "/switch")
-    public String switchDevice(@QueryParam("name") String name) {
-        LOG.log(Level.INFO, "name={0}", name);
-
-        deviceService.switchDeviceValue(name);
-        deviceService.updateDeviceValuesAsync();   
-        return "OK";
-    }
-    
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    @Path(value = "/set")
-    public String set(
-            @QueryParam("name") String name, 
-            @QueryParam("value") int value) {
-        LOG.log(Level.INFO, "name={0} enabled={1}", new Object[] {name, value});
-        
-        for (DeviceConfig config : configDAO.findAllByNameLike(name)) {
-            LOG.info(config.getName());
-            deviceService.setDeviceValue(config.getName(), value);
-        }
-       
-        deviceService.updateDeviceValuesAsync();   
-        return "OK";
     }
     
 }
