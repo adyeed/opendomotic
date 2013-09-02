@@ -24,11 +24,9 @@ function connect() {
     ws.onmessage = function (event) {
         msg = event.data;
         log(msg);
-        //algum dispositivo mudou de estado, então servidor notificou:
-        if (msg.indexOf('updateDeviceValues') !== -1) {
-            updateDeviceValues();         
-        } else if (msg.indexOf('updateDeviceValue') !== -1) { 
-            values = msg.split("|");
+        //se servidor notificou a alteracao de estado do dispositivo:
+        if (msg.indexOf('updateDeviceValue') !== -1) { 
+            values = msg.split("|"); //ex: updateDeviceValue|Luz|1
             updateDeviceValue(values[1], values[2], true);   
         }
     };
@@ -49,5 +47,22 @@ function send() {
 }
 
 function log(message) {
-    document.getElementById('log').innerHTML = 'WebSocket: ' + message;
+    now = new Date(); 
+    fmtDate = 
+        formatField(now.getHours(), 2) + ':' + 
+        formatField(now.getMinutes(), 2) + ':' + 
+        formatField(now.getSeconds(), 2) + ':' + 
+        formatField(now.getMilliseconds(), 3); 
+        
+    line = fmtDate + ' WebSocket: ' +  message;               
+    console.log(line);
+    document.getElementById('log').innerHTML = line;
+}
+
+function formatField(value, len) {
+    s = String(value);
+    while (s.length < len) {
+        s = '0' + s;
+    }
+    return s;
 }
