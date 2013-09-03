@@ -27,7 +27,7 @@ import javax.ws.rs.core.MediaType;
 @Path("/environment")
 public class EnvironmentRestService {
     
-    private static final String IMAGE_PATH = "../resources/images/"; //TO-DO: como resolver caminho?
+    private static final String IMAGE_PATH = "../resources/images/"; //TO-DO: Usar configuracao de path
     
     @Inject
     private EnvironmentDAO environmentDAO;
