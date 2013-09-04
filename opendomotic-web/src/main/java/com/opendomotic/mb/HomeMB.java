@@ -28,7 +28,7 @@ public class HomeMB implements Serializable {
     @Inject
     private EnvironmentDAO environmentDAO;
     
-    private int idEnvironment;
+    private Integer idEnvironment;
     private Boolean adminLogged;
     
     @PostConstruct
@@ -40,11 +40,11 @@ public class HomeMB implements Serializable {
         LOG.log(Level.INFO, "HomeMB init id={0}", idEnvironment);
     }
     
-    public int getIdEnvironment() {
+    public Integer getIdEnvironment() {
         return idEnvironment;
     }
 
-    public void setIdEnvironment(int idEnvironment) {
+    public void setIdEnvironment(Integer idEnvironment) {
         this.idEnvironment = idEnvironment;
     }
 

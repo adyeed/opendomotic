@@ -12,7 +12,7 @@ function drawCanvas(idEnvironment) {
 
 function mouseUpDevice() {  
     $.getJSON(getUrl(
-            'device/move?id='+devicePressed.id+
+            'rest/device/move?id='+devicePressed.id+
             '&x='+devicePressed.x+
             '&y='+devicePressed.y), null, null); 
 }

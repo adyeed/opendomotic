@@ -13,7 +13,7 @@ function drawCanvas(idEnvironment) {
 function mouseUpDevice() {
     if (devicePressed.switchable) {
         deviceName = devicePressed.name;
-        $.getJSON(getUrl('device/switch?name='+deviceName), null, function(data) {
+        $.getJSON(getUrl('rest/device/switch?name='+deviceName), null, function(data) {
             if (data !== 'OK') {
                 alert(data);
             }

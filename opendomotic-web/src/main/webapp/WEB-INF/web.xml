@@ -33,6 +33,10 @@
     </filter-mapping>
       
     <login-config>
+        <!--
+        TomEE: Use tomcat-user.xml. Add roles admin/user and the usernames; 
+        Glassfish: Create a fileRealm with the name UserDatabase. Roles and Groups are associated in glassfish-web.xml
+        !-->
         <auth-method>BASIC</auth-method>
         <realm-name>UserDatabase</realm-name>
     </login-config>
@@ -71,12 +75,12 @@
         </user-data-constraint>!-->
     </security-constraint>
     
-    <security-constraint>
+    <!--<security-constraint>
         <web-resource-collection>
             <web-resource-name>public device values</web-resource-name>
-            <url-pattern>/device/value</url-pattern>
+            <url-pattern>/rest/device/value</url-pattern>
         </web-resource-collection>
-    </security-constraint>
+    </security-constraint>!-->
    
     <servlet-mapping>
         <servlet-name>Faces Servlet</servlet-name>
