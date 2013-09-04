@@ -26,11 +26,9 @@ public class JobService {
     @Inject
     private JobDAO jobDAO;
         
-    private boolean canExecuteJobs = false; //setted by deviceService, after read device, to avoid ConcurrentAccessTimeoutException.
-    
     @Schedule(minute = "*/1", hour = "*")
     public void timerJobs() {
-        if (canExecuteJobs) {
+        if (deviceService.isScheduleInitialized()) { //to avoid ConcurrentAccessTimeoutException:
             if (checkExecuteJobs()) {
                 deviceService.updateDeviceValuesAsync();
             }
@@ -79,10 +77,6 @@ public class JobService {
             }
         }
         return executed;
-    }
-    
-    public void setCanExecuteJobs(boolean canExecuteJobs) {
-        this.canExecuteJobs = canExecuteJobs;
     }
     
 }

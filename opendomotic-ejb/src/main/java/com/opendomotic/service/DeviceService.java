@@ -41,9 +41,6 @@ public class DeviceService {
     private WebSocketService webSocketService;
     
     @Inject
-    private JobService jobService;
-    
-    @Inject
     private DeviceConfigDAO configDAO;
        
     @PostConstruct
@@ -75,7 +72,6 @@ public class DeviceService {
         
         if (!scheduleInitialized) { //to avoid ConcurrentAccessTimeoutException from JobService 
             scheduleInitialized = true;
-            jobService.setCanExecuteJobs(true);
             LOG.info("Schedule initialized.");
         }
     }
