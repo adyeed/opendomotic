@@ -69,7 +69,7 @@ public class DeviceRestService {
         for (DeviceConfig config : configDAO.findAllByNameLike(name)) {
             long time = System.currentTimeMillis();
             deviceService.setDeviceValue(config.getName(), value);
-            LOG.log(Level.INFO, "name={0} | value={1} | {2} ms", new Object[] {name, value, System.currentTimeMillis()-time});
+            LOG.log(Level.INFO, "name={0} | value={1} | {2} ms", new Object[] {config.getName(), value, System.currentTimeMillis()-time});
         }
        
         deviceService.updateDeviceValuesAsync();   
