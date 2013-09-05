@@ -58,7 +58,7 @@
 
         <br/>
 
-        <p:dataTable id="table" value="#{configMB.listAll}" var="config">
+        <p:dataTable id="table" value="#{configMB.listAll}" var="config" emptyMessage="#{msg.WithoutDevice}">
             <p:column>
                 <f:facet name="header">
                     #{msg.Name}

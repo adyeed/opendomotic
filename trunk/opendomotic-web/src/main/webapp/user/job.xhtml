@@ -11,7 +11,7 @@
 
         <p:commandButton value="#{msg.New}" action="#{jobMB.create()}" update="dialog"/>
 
-        <p:dialog id="dialog" header="#{msg.Job}" visible="#{jobMB.visible}">
+        <p:panel id="dialog" header="#{msg.Job}" visible="#{jobMB.visible}">
             <h:inputHidden value="#{jobMB.entity.id}"/>
 
             <p:panel header="#{msg.Input}">
@@ -66,11 +66,11 @@
 
             <p:commandButton value="#{msg.Save}" action="#{jobMB.save}" update="dialog,table"/>
             <p:commandButton value="#{msg.Cancel}" action="#{jobMB.cancel}" update="dialog"/>
-        </p:dialog>
+        </p:panel>
 
         <br/>
 
-        <p:dataTable id="table" value="#{jobMB.listAll}" var="job" emptyMessage="#{msg.WithoutJobs}">
+        <p:dataTable id="table" value="#{jobMB.listAll}" var="job" emptyMessage="#{msg.WithoutJob}">
             <p:column>
                 <f:facet name="header">
                     <h:outputText value="#{msg.Input}"/>

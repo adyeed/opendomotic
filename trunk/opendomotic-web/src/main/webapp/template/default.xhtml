@@ -21,15 +21,15 @@
             <div id="top">            
                 <p:toolbar>
                     <p:toolbarGroup>
-                        <h:panelGrid columns="6">
-                            <h:outputText value="#{msg.Environment}"/> 
-                            <p:selectOneMenu value="#{homeMB.idEnvironment}">
+                        <h:panelGrid columns="#{homeMB.adminLogged ? 6 : 4}">
+                            <h:outputText value="#{msg.Environment}" rendered="#{!empty environmentMB.listAll}"/> 
+                            <p:selectOneMenu value="#{homeMB.idEnvironment}" rendered="#{!empty environmentMB.listAll}">
                                 <f:selectItems value="#{environmentMB.listAll}" var="e" itemValue="#{e.id}" itemLabel="#{e.name}"/>
                                 <p:ajax process="@form" update="@form"/>
-                            </p:selectOneMenu>                      
+                            </p:selectOneMenu>   
                             
                             <p:commandButton ajax="false" action="/user/index" value="#{msg.Home}" />
-                            <p:commandButton ajax="false" action="/user/job" value="#{msg.Job}" />                      
+                            <p:commandButton ajax="false" action="/user/job" value="#{msg.Job}" />    
                             <p:commandButton ajax="false" action="/admin/config" value="#{msg.Device}" rendered="#{homeMB.adminLogged}"/>
                             <p:commandButton ajax="false" action="/admin/environment" value="#{msg.Environment}" rendered="#{homeMB.adminLogged}"/>
                         </h:panelGrid>

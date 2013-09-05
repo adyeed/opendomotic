@@ -38,25 +38,25 @@
 
         <br/>
 
-        <p:dataTable id="table" value="#{imageMB.listAll}" var="e">
+        <p:dataTable id="table" value="#{imageMB.listAll}" var="item" emptyMessage="#{msg.WithoutImage}">
             <p:column>
                 <f:facet name="header">
                     #{msg.Name}
                 </f:facet>
-                #{e.name}
+                #{item.name}
             </p:column>
             <p:column>
                 <f:facet name="header">
                     #{msg.Image}
                 </f:facet>
                 <p:graphicImage 
-                    value="../resources/images/#{e.fileName}" 
-                    rendered="#{!empty e.fileName}"/>
-                #{e.fileName}
+                    value="../resources/images/#{item.fileName}" 
+                    rendered="#{!empty item.fileName}"/>
+                #{item.fileName}
             </p:column>
             <p:column>
-                <p:commandButton value="#{msg.Delete}" action="#{imageMB.delete(e)}" update="table" onclick="return confirm('#{msg.ConfirmsTheExclusion}');"/>
-                <p:commandButton value="#{msg.Edit}" action="#{imageMB.edit(e)}" update="@form"/>
+                <p:commandButton value="#{msg.Delete}" action="#{imageMB.delete(item)}" update="table" onclick="return confirm('#{msg.ConfirmsTheExclusion}');"/>
+                <p:commandButton value="#{msg.Edit}" action="#{imageMB.edit(item)}" update="@form"/>
             </p:column>
         </p:dataTable>
     </ui:define>
