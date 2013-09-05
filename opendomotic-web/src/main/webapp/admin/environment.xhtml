@@ -39,7 +39,7 @@
 
         <br/>
 
-        <p:dataTable id="table" value="#{environmentMB.listAll}" var="item">
+        <p:dataTable id="table" value="#{environmentMB.listAll}" var="item" emptyMessage="#{msg.WithoutEnvironment}">
             <p:column>
                 <f:facet name="header">
                     #{msg.Name}
