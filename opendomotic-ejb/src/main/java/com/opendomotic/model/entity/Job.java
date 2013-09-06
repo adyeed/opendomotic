@@ -28,14 +28,33 @@ public class Job extends AbstractEntityId {
     private Date inputDate;
     
     private JobOperator operator;
-    private Serializable expectValue;
-    private Serializable actionValue;
+    private String expectValue;
+    private String actionValue;
     
     @ManyToOne
     private DeviceConfig output;
     
     private boolean deleteAfterExecute;
 
+    public Object getExpectValueAsType(Class clazz) {
+        return castValue(clazz, expectValue);
+    }
+    
+    public Object getActionValueAsType(Class clazz) {
+        return castValue(clazz, actionValue);
+    }
+    
+    private Object castValue(Class clazz, String value) {
+        if (Boolean.class == clazz) return Boolean.parseBoolean(value);
+        if (Byte.class == clazz)    return Byte.parseByte(value);
+        if (Short.class == clazz)   return Short.parseShort(value);
+        if (Integer.class == clazz) return Integer.parseInt(value);
+        if (Long.class == clazz)    return Long.parseLong(value);
+        if (Float.class == clazz)   return Float.parseFloat(value);
+        if (Double.class == clazz)  return Double.parseDouble(value);
+        return value;
+    }
+    
     public String getInputDescription() {
         if (input != null && operator != null && expectValue != null) {
             return input.getName() + " " + operator.toString() + " " + expectValue;
@@ -77,31 +96,19 @@ public class Job extends AbstractEntityId {
         this.operator = operator;
     }
 
-    public Serializable getExpectValue() {
+    public String getExpectValue() {
         return expectValue;
     }
-    
-    public Integer getExpectValueAsInt() {
-        if (expectValue instanceof String)
-            return Integer.parseInt((String) expectValue);
-        return (Integer) expectValue;
-    }
 
-    public void setExpectValue(Serializable expectValue) {
+    public void setExpectValue(String expectValue) {
         this.expectValue = expectValue;
     }
 
-    public Serializable getActionValue() {
+    public String getActionValue() {
         return actionValue;
     }
-    
-    public Integer getActionValueAsInt() {
-        if (actionValue instanceof String)
-            return Integer.parseInt((String) actionValue);
-        return (Integer) actionValue;
-    }
 
-    public void setActionValue(Serializable actionValue) {
+    public void setActionValue(String actionValue) {
         this.actionValue = actionValue;
     }
 
@@ -123,7 +130,7 @@ public class Job extends AbstractEntityId {
 
     @Override
     public String toString() {
-        return getInputDescription() + " | " + getOutputDescription();
+        return "Input: " + getInputDescription() + " | Output: " + getOutputDescription();
     }
 
 }
