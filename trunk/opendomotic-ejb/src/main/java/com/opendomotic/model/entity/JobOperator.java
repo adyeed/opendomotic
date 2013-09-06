@@ -9,48 +9,61 @@ package com.opendomotic.model.entity;
  *
  * @author jaques
  */
-public enum JobOperator {
-    
-    EQUAL {
+public enum JobOperator {   
+
+    EQUAL("=") {
         @Override
-        public String toString() {
-            return "=";
+        public boolean compare(Comparable input, Object expect) {
+            return input.compareTo(expect) == 0;
         }
     },
     
-    DIFERENT {
+    DIFERENT("<>") {
         @Override
-        public String toString() {
-            return "<>";
+        public boolean compare(Comparable input, Object expect) {
+            return input.compareTo(expect) != 0;
         }
     },
     
-    GREATHER {
+    GREATHER(">") {       
         @Override
-        public String toString() {
-            return ">";
+        public boolean compare(Comparable input, Object expect) {
+            return input.compareTo(expect) > 0;
         }
     },
     
-    GREATHER_EQUAL {
+    GREATHER_EQUAL(">=") {        
         @Override
-        public String toString() {
-            return ">=";
+        public boolean compare(Comparable input, Object expect) {
+            return input.compareTo(expect) >= 0;
         }
     },
     
-    LESS {
+    LESS("<") {
         @Override
-        public String toString() {
-            return "<";
+        public boolean compare(Comparable input, Object expect) {
+            return input.compareTo(expect) < 0;
         }
     },
     
-    LESS_EQUAL {
+    LESS_EQUAL("<=") {
         @Override
-        public String toString() {
-            return "<=";
+        public boolean compare(Comparable input, Object expect) {
+            return input.compareTo(expect) <= 0;
         }
+    };
+    
+    private final String symbol;
+    
+    JobOperator(String symbol) {
+        this.symbol = symbol;
     }
     
+    @Override
+    public String toString() {
+        return symbol;
+    }
+    
+    public abstract boolean compare(Comparable input, Object expect);
+
 }
