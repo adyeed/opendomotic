@@ -40,8 +40,23 @@ function Device(id, x, y, name, switchable, imageDefault, imageSwitch) {
                 && this.getBottom() >= y;
     };
 
-    this.draw = function(context) {
+    this.draw = function(context, isPressed) {       
+        context.save();
+        
+        if (isPressed) {
+            context.shadowColor = 'yellow';
+            context.shadowBlur = 20;
+        }
+        
         context.drawImage(this.getImage(), this.x, this.y);
+        context.lineWidth = 1; 
+        context.strokeStyle = 'white';
+        
+        if (this.value !== null) {
+            context.strokeText(this.value, this.x, this.getBottom());
+            context.fillText(this.value, this.x, this.getBottom());              
+        }
+        context.restore();
     };
 
 }
