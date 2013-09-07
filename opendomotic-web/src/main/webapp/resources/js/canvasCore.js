@@ -1,7 +1,7 @@
 var canvas, context;
 var xMouseDown, yMouseDown;
 
-var environmentImage = new Image();
+var environmentImage = null;
 
 var deviceArray = new Array();
 var devicePressed = null;
@@ -23,14 +23,17 @@ function initCanvas(canDrag, onMouseUpDevice, idEnvironment) {
     canvas.onmousedown = mouseDown;
     canvas.onmousemove = mouseMove;
     canvas.onmouseup = mouseUp;
-    canvas.width = 1000;
-    canvas.height = 500;
+    if (environmentImage === null) {
+        canvas.width = 1000;
+        canvas.height = 500;
+    }
     context = canvas.getContext("2d"); 
     context.font = "bold 26px verdana";
     drawLoading();
     
     $.getJSON(getUrl('rest/environment/get?id='+idEnvironment), function(data) {
         for (var environment in data) {
+            environmentImage = new Image();
             environmentImage.src = data[environment].fileName;
             environmentImage.onload = function() {
                 canvas.width = environmentImage.width;
@@ -69,37 +72,27 @@ function addDevice(p) {
 
 function draw() {
     context.clearRect(0, 0, canvas.width, canvas.height); 
-    context.drawImage(environmentImage, 0, 0);
-
+    
+    if (environmentImage !== null) {
+        context.drawImage(environmentImage, 0, 0);
+    }
+    
     if (loading) {
         drawLoading();
     }
 
-    drawDevices();
+    for (var i in deviceArray) {
+        deviceArray[i].draw(context, false);
+    }
 
     //draw pressed device over all:
     if (devicePressed !== null) {
-        devicePressed.draw(context);
+        devicePressed.draw(context, true);
     }
 }
 
 function drawLoading() {
     context.fillText("carregando...", 10, 30);
-}
-
-function drawDevices() {
-    context.save();
-    context.lineWidth = 1; 
-    context.strokeStyle = 'white';
-    for (var i in deviceArray) {
-        device = deviceArray[i];
-        device.draw(context);
-        if (device.value !== null) {
-            context.strokeText(device.value, device.x, device.getBottom());
-            context.fillText(device.value, device.x, device.getBottom());              
-        }
-    }
-    context.restore();
 }
 
 function updateDeviceValues() {
@@ -182,6 +175,8 @@ function mouseDown(e) {
     device = getDeviceByXY(x, y);
     if (device !== null) {
         devicePressed = device;
+        devicePressed.draw(context, true);
+        
         xMouseDown = x - device.x;
         yMouseDown = y - device.y;
         
@@ -189,8 +184,6 @@ function mouseDown(e) {
             deviceTooltip = null;
             draw();
         }
-        
-        context.fillText("aguarde...", device.x, device.y);
     }
 }
 
@@ -213,4 +206,10 @@ function mouseUp(e) {
         onMouseUpDevice();
     }
     devicePressed = null;
+    
+    setTimeout(
+        function() {
+            draw(); //to clean yellow shadow on devicePressed
+        },  
+        100);
 }
