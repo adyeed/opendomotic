@@ -70,11 +70,15 @@
             <version>2.4</version>
         </dependency>                
        
-        <!-- objectdb-jee.jar must be manually added into apache tomee lib folder.!-->
+        <!-- 
+        For Apache-TomEE you must use 'provided' and add manually objectdb-jee.jar into TomEE lib folder. 
+        For GlassFish, don't use 'provided' and don't copy any jars to lib folder.
+        !-->
         <dependency>
             <groupId>com.objectdb</groupId>
             <artifactId>objectdb</artifactId>
-            <version>2.5.0</version>
+            <version>2.5.3</version>
+            <scope>provided</scope>
         </dependency>
         
     </dependencies>

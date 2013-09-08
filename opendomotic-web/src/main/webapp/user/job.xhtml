@@ -35,11 +35,12 @@
                     </p:tab>  
 
                     <p:tab id="tab2" title="#{msg.Date}">  
-                        <h:panelGrid columns="2">
-                            <h:outputText value="#{msg.Date}"/>
-                            <p:calendar value="#{jobMB.entity.inputDate}" pattern="dd/MM/yyyy HH:mm:ss" 
-                                        stepHour="1" stepMinute="1" stepSecond="1" showOn="button"/>                    
-                        </h:panelGrid>  
+                        <p:calendar value="#{jobMB.entity.inputDate}" mode="inline"/>
+                        <br/>
+                        #{msg.Hour}
+                        <p:spinner value="#{jobMB.hour}" min="0" max="23" size="2"/>
+                        :
+                        <p:spinner value="#{jobMB.minute}" min="0" max="59" size="2"/>
                     </p:tab>   
                 </p:tabView>
 
