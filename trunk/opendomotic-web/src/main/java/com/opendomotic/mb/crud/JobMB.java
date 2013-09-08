@@ -11,6 +11,8 @@ import com.opendomotic.service.dao.AbstractDAO;
 import com.opendomotic.service.dao.DeviceConfigDAO;
 import com.opendomotic.service.dao.JobDAO;
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
@@ -34,6 +36,8 @@ public class JobMB extends AbstractCRUD<Job> {
     private Integer idOutput;
     private List<JobOperator> listOperator;
     private int tabActiveIndex;
+    private int hour;
+    private int minute;
 
     @Override
     public AbstractDAO<Job> getDAO() {
@@ -41,18 +45,39 @@ public class JobMB extends AbstractCRUD<Job> {
     }
 
     @Override
+    public void create() {
+        super.create();
+        hour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
+        minute = Calendar.getInstance().get(Calendar.MINUTE);
+    }
+
+    @Override
     public void save() {
         if (tabActiveIndex == 0) {
             entity.setInputDate(null);
+            
+            if (idInput != null) {
+                entity.setInput(deviceConfigDAO.findById(idInput));
+            }
         } else { //inputDate:
             entity.setInput(null);
             entity.setOperator(null);
             entity.setExpectValue(null);
+            
+            Date inputDate = entity.getInputDate();
+            if (inputDate == null) {
+                inputDate = new Date();
+            }
+            
+            Calendar c = Calendar.getInstance();
+            c.setTime(inputDate);
+            c.set(Calendar.HOUR_OF_DAY, hour);
+            c.set(Calendar.MINUTE, minute);
+            c.set(Calendar.SECOND, 0);
+            c.set(Calendar.MILLISECOND, 0);
+            entity.setInputDate(c.getTime());
         }
         
-        if (idInput != null) {
-            entity.setInput(deviceConfigDAO.findById(idInput));
-        }        
         if (idOutput != null) {
             entity.setOutput(deviceConfigDAO.findById(idOutput));
         }
@@ -100,6 +125,22 @@ public class JobMB extends AbstractCRUD<Job> {
 
     public void setTabActiveIndex(int tabActiveIndex) {
         this.tabActiveIndex = tabActiveIndex;
+    }
+
+    public int getHour() {
+        return hour;
+    }
+
+    public void setHour(int hour) {
+        this.hour = hour;
+    }
+
+    public int getMinute() {
+        return minute;
+    }
+
+    public void setMinute(int minute) {
+        this.minute = minute;
     }
     
 }
