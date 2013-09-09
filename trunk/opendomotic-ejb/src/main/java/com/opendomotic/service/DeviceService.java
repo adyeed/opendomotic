@@ -87,16 +87,24 @@ public class DeviceService {
         for (Entry<String, DeviceProxy> entry : mapDevice.entrySet()) {
             String deviceName = entry.getKey();
             DeviceProxy device = entry.getValue();
-            long millisDevice = System.currentTimeMillis();
+            boolean sendWebSocket = false;
+            
+            long millis = System.currentTimeMillis();            
             try {
-                if (device.updateValue()) {   
-                    //TO-DO: apenas enviar para os clientes que estao observando o ambiente
-                    webSocketService.sendUpdateDeviceValue(deviceName, getDeviceValueAsString(deviceName));
+                if (device.updateValue()) {
+                    sendWebSocket = true;
                 }
             } catch (Exception ex) {
                 LOG.log(Level.SEVERE, "Error updating device: {0} | {1}", new Object[] {deviceName, ex.toString()});
+                device.setValue(null);
+                sendWebSocket = true;
             }
-            logTime(device.toString(), millisDevice, 1000);
+            logTime(device.toString(), millis, 1000);
+            
+            if (sendWebSocket) {
+                //TO-DO: apenas enviar para os clientes que estao observando o ambiente
+                webSocketService.sendUpdateDeviceValue(deviceName, getDeviceValueAsString(deviceName));
+            }
         }
         
         logTime("Total", millisTotal, 2000);
@@ -117,7 +125,7 @@ public class DeviceService {
         Object value = getDeviceValue(config.getName());
         String valueStr = "";
         try {
-            if (config.getFormat() != null && !config.getFormat().isEmpty()) {
+            if (value != null && config.getFormat() != null && !config.getFormat().isEmpty()) {
                 valueStr = String.format(config.getFormat(), value);
             } else {
                 valueStr = String.valueOf(value);
