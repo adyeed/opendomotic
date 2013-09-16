@@ -11,8 +11,11 @@ import java.io.InputStreamReader;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.http.HttpResponse;
+import org.apache.http.auth.AuthScope;
+import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.AbstractHttpClient;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
@@ -29,6 +32,8 @@ public class HttpDevice implements Device<Integer> {
     
     private String ip;
     private String path;
+    private String user;
+    private String password;
 
     @Override
     public Integer getValue() throws Exception {
@@ -42,6 +47,12 @@ public class HttpDevice implements Device<Integer> {
     
     private HttpClient createHttpClient() {
         HttpClient httpClient = new DefaultHttpClient();
+        
+        if (user != null && !user.isEmpty()) {
+            UsernamePasswordCredentials creds = new UsernamePasswordCredentials(user, password);
+            ((AbstractHttpClient) httpClient).getCredentialsProvider().setCredentials(AuthScope.ANY, creds);
+        }
+        
         HttpParams httpParameters = httpClient.getParams();
         HttpConnectionParams.setTcpNoDelay(httpParameters, true);
         HttpConnectionParams.setConnectionTimeout(httpParameters, DEFAULT_TIMEOUT);
@@ -78,6 +89,14 @@ public class HttpDevice implements Device<Integer> {
 
     public void setPath(String path) {
         this.path = path;
+    }
+
+    public void setUser(String user) {
+        this.user = user;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     @Override
