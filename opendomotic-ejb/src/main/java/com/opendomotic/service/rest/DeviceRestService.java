@@ -61,6 +61,13 @@ public class DeviceRestService {
     
     @GET
     @Produces(MediaType.APPLICATION_JSON)
+    @Path(value = "/get")
+    public String get(@QueryParam("name") String name) {
+        return deviceService.getDeviceValueAsString(name);
+    }
+    
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
     @Path(value = "/set")
     public String set(
             @QueryParam("name") String name, 
