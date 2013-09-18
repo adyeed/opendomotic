@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.opendomotic.device.impl;
 
 import com.opendomotic.device.Device;
@@ -22,10 +17,10 @@ import java.util.logging.Logger;
 public class SimpleHttpDevice implements Device<Integer> {
 
     private static final Logger LOG = Logger.getLogger(SimpleHttpDevice.class.getName());
-    private static final boolean SHOW_LOG = true;
+    private static final boolean SHOW_LOG = false;
     private static final int DEFAULT_TIMEOUT = 2000;
     
-    private String ip;
+    private String host;
     private String path;
     
     @Override
@@ -42,7 +37,7 @@ public class SimpleHttpDevice implements Device<Integer> {
         long time = System.currentTimeMillis();
 
         Socket socket = new Socket();
-        socket.connect(new InetSocketAddress(ip, 80), DEFAULT_TIMEOUT);
+        socket.connect(new InetSocketAddress(host, 80), DEFAULT_TIMEOUT);
         socket.setSoTimeout(DEFAULT_TIMEOUT);
 
         BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream())); 
@@ -61,18 +56,23 @@ public class SimpleHttpDevice implements Device<Integer> {
         }
                 
         if (SHOW_LOG) {
-            LOG.log(Level.INFO, "Response={0} | {1} ms | {2}", new Object[] {responseBuffer, System.currentTimeMillis() - time, request});
+            LOG.log(Level.INFO, "Response={0} | {1} | {2} ms", new Object[] {responseBuffer, request, System.currentTimeMillis() - time});
         }
         
         return responseLast;
     }
         
-    public void setIp(String ip) {
-        this.ip = ip;
+    public void setHost(String host) {
+        this.host = host;
     }
 
     public void setPath(String path) {
         this.path = path;
+    }
+    
+    @Override
+    public String toString() {
+        return "SimpleHttpDevice{" + "host=" + host + ", path=" + path + '}';
     }
     
 }
