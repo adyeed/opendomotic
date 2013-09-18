@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.opendomotic.device.impl;
 
 import com.opendomotic.device.Device;
@@ -22,7 +18,7 @@ import org.apache.http.params.HttpParams;
 
 /**
  *
- * @author Jaques
+ * @author Jaques Claudino
  */
 public class HttpDevice implements Device<Integer> {
 
@@ -30,7 +26,7 @@ public class HttpDevice implements Device<Integer> {
     private static final boolean SHOW_LOG = false;
     private static final int DEFAULT_TIMEOUT = 2000;
     
-    private String ip;
+    private String host;
     private String path;
     private String user;
     private String password;
@@ -80,13 +76,17 @@ public class HttpDevice implements Device<Integer> {
     }
     
     public String getURL() {
-        return "http://" + ip + "/" + path;
+        return "http://" + host + "/" + path;
     }
 
     public void setIp(String ip) {
-        this.ip = ip;
+        this.host = ip;
     }
 
+    public void setHost(String host) {
+        this.host = host;
+    }
+    
     public void setPath(String path) {
         this.path = path;
     }
@@ -101,7 +101,7 @@ public class HttpDevice implements Device<Integer> {
 
     @Override
     public String toString() {
-        return "HttpDevice{" + "ip=" + ip + ", path=" + path + '}';
+        return "HttpDevice{" + "host=" + host + ", path=" + path + '}';
     }
     
 }
