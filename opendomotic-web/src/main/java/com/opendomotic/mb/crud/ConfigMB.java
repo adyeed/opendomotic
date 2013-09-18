@@ -63,6 +63,7 @@ public class ConfigMB extends AbstractCRUD<DeviceConfig> {
         super.save();
         updateDeviceProperty();
         deviceService.loadDevices();
+        deviceService.updateDeviceValuesAsync();
     }
         
     private void updateDeviceProperty() {
