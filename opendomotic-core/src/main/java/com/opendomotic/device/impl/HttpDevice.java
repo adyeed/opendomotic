@@ -52,7 +52,10 @@ public class HttpDevice implements Device<Integer> {
         HttpParams httpParameters = httpClient.getParams();
         HttpConnectionParams.setTcpNoDelay(httpParameters, true);
         HttpConnectionParams.setConnectionTimeout(httpParameters, DEFAULT_TIMEOUT);
-        HttpConnectionParams.setSoTimeout(httpParameters, DEFAULT_TIMEOUT);        
+        HttpConnectionParams.setSoTimeout(httpParameters, DEFAULT_TIMEOUT); 
+        HttpConnectionParams.setSoKeepalive(httpParameters, false);
+        HttpConnectionParams.setStaleCheckingEnabled(httpParameters, false);
+        
         return httpClient;
     }
     
@@ -64,9 +67,15 @@ public class HttpDevice implements Device<Integer> {
     private String makeRequest(String url) throws IOException {
         long time = System.currentTimeMillis();
         
+        String responseStr = null;
+        HttpClient httpClient = createHttpClient();
         HttpGet request = new HttpGet(url);
-        HttpResponse response = createHttpClient().execute(request);    
-        String responseStr = readResponseLine(response);
+        try {
+            HttpResponse response = httpClient.execute(request);    
+            responseStr = readResponseLine(response);
+        } finally {
+            request.releaseConnection();
+        }
         
         if (SHOW_LOG) {
             LOG.log(Level.INFO, "Response={0} | {1} ms | {2}", new Object[] {responseStr, System.currentTimeMillis() - time, url});
