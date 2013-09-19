@@ -23,7 +23,7 @@ import org.apache.http.params.HttpParams;
 public class HttpDevice implements Device<Integer> {
 
     private static final Logger LOG = Logger.getLogger(HttpDevice.class.getName());    
-    private static final boolean SHOW_LOG = false;
+    private static final boolean SHOW_LOG = true;
     private static final int DEFAULT_TIMEOUT = 2000;
     
     private String host;
@@ -80,7 +80,7 @@ public class HttpDevice implements Device<Integer> {
         }
         
         if (SHOW_LOG) {
-            LOG.log(Level.INFO, "Response={0} | {1} ms | {2}", new Object[] {responseStr, System.currentTimeMillis() - time, url});
+            LOG.log(Level.INFO, "Response={0} | {1} | {2} ms", new Object[] {responseStr, url, System.currentTimeMillis() - time});
         }
         
         return responseStr;
