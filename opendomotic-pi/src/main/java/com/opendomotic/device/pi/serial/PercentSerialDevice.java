@@ -16,7 +16,7 @@ public class PercentSerialDevice extends SerialDevice {
     public static final int DEFAULT_MAX = 1024;
     public static final boolean DEFAULT_CHECK_RANGE = true;
     public static final boolean DEFAULT_AUTO = false;
-    public static final boolean CAN_LOG = false;
+    public static final boolean SHOW_LOG = false;
     
     private Integer min = null;
     private Integer max = null;
@@ -47,7 +47,7 @@ public class PercentSerialDevice extends SerialDevice {
     }
     
     private void logMinMax() {
-        if (CAN_LOG) {
+        if (SHOW_LOG) {
             LOG.log(Level.INFO, "***** address={0} | min={1} | max={2}", new Object[] {getAddress(), min, max});
         }
     }
