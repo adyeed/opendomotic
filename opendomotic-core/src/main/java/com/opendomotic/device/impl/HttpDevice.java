@@ -31,6 +31,8 @@ public class HttpDevice implements Device<Integer> {
     private String user;
     private String password;
 
+    private HttpClient httpClient;
+    
     @Override
     public Integer getValue() throws Exception {
         return Integer.parseInt(makeRequest(getURL()));
@@ -41,21 +43,22 @@ public class HttpDevice implements Device<Integer> {
         makeRequest(getURL() + "=" + value);
     }
     
-    private HttpClient createHttpClient() {
-        HttpClient httpClient = new DefaultHttpClient();
-        
-        if (user != null && !user.isEmpty()) {
-            UsernamePasswordCredentials creds = new UsernamePasswordCredentials(user, password);
-            ((AbstractHttpClient) httpClient).getCredentialsProvider().setCredentials(AuthScope.ANY, creds);
-        }
-        
-        HttpParams httpParameters = httpClient.getParams();
-        HttpConnectionParams.setTcpNoDelay(httpParameters, true);
-        HttpConnectionParams.setConnectionTimeout(httpParameters, DEFAULT_TIMEOUT);
-        HttpConnectionParams.setSoTimeout(httpParameters, DEFAULT_TIMEOUT); 
-        HttpConnectionParams.setSoKeepalive(httpParameters, false);
-        HttpConnectionParams.setStaleCheckingEnabled(httpParameters, false);
-        
+    private HttpClient getHttpClient() {
+        if (httpClient == null) {
+            httpClient = new DefaultHttpClient();
+
+            if (user != null && !user.isEmpty()) {
+                UsernamePasswordCredentials creds = new UsernamePasswordCredentials(user, password);
+                ((AbstractHttpClient) httpClient).getCredentialsProvider().setCredentials(AuthScope.ANY, creds);
+            }
+
+            HttpParams httpParameters = httpClient.getParams();
+            HttpConnectionParams.setTcpNoDelay(httpParameters, true);
+            HttpConnectionParams.setConnectionTimeout(httpParameters, DEFAULT_TIMEOUT);
+            HttpConnectionParams.setSoTimeout(httpParameters, DEFAULT_TIMEOUT); 
+            HttpConnectionParams.setSoKeepalive(httpParameters, false);
+            HttpConnectionParams.setStaleCheckingEnabled(httpParameters, false);
+        }        
         return httpClient;
     }
     
@@ -68,10 +71,9 @@ public class HttpDevice implements Device<Integer> {
         long time = System.currentTimeMillis();
         
         String responseStr = null;
-        HttpClient httpClient = createHttpClient();
         HttpGet request = new HttpGet(url);
         try {
-            HttpResponse response = httpClient.execute(request);    
+            HttpResponse response = getHttpClient().execute(request);    
             responseStr = readResponseLine(response);
         } finally {
             request.releaseConnection();
