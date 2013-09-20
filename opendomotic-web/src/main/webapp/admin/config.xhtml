@@ -103,7 +103,7 @@
                 </f:facet>
                 #{config.listDeviceProperty}
             </p:column>
-            <p:column>
+            <p:column width="130">
                 <f:facet name="header">
                     #{msg.Image}
                 </f:facet>
@@ -114,7 +114,7 @@
                     value="../resources/images/#{config.deviceImageSwitch.fileName}" 
                     rendered="#{!empty config.deviceImageSwitch}"/>
             </p:column>
-            <p:column>
+            <p:column width="300">
                 <p:commandButton value="#{msg.Delete}" action="#{configMB.delete(config)}" update="table" onclick="return confirm('#{msg.ConfirmsTheExclusion}');"/>
                 <p:commandButton value="#{msg.Edit}" action="#{configMB.edit(config)}" update="@form"/>
                 <p:commandButton value="#{msg.Test}" action="#{configMB.test(config)}" update="@form"/>
