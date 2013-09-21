@@ -88,10 +88,10 @@
         </user-data-constraint>!-->
     </security-constraint>
     
-    <!--<security-constraint>
+    <security-constraint>
         <web-resource-collection>
-            <web-resource-name>public device values</web-resource-name>
-            <url-pattern>/rest/device/value</url-pattern>
+            <web-resource-name>public update request device values</web-resource-name>
+            <url-pattern>/rest/device/update</url-pattern>
         </web-resource-collection>
-    </security-constraint>!-->
+    </security-constraint>
 </web-app>
