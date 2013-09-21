@@ -104,13 +104,8 @@ public class ConfigMB extends AbstractCRUD<DeviceConfig> {
         listDeviceProperty.add(new DeviceProperty());
     }
     
-    public Object getDeviceValue(DeviceConfig config) {
-        try {
-            return deviceService.getDeviceValue(config.getName());
-        } catch (Exception ex) {
-            LOG.severe(ex.toString());
-            return null;
-        }        
+    public String getDeviceValueAsString(DeviceConfig config) {
+        return deviceService.getDeviceValueAsString(config);
     }
     
     public void test(DeviceConfig config) {
