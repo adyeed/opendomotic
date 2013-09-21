@@ -8,6 +8,7 @@ import com.opendomotic.model.entity.DeviceConfig;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 
 /**
@@ -26,10 +27,14 @@ public class DeviceConfigDAO extends AbstractDAO<DeviceConfig> {
     }
     
     public DeviceConfig findByName(String name) {
-        return em
+        try {
+            return em
                 .createQuery("select c from DeviceConfig c where c.name = ?1", DeviceConfig.class)
                 .setParameter(1, name)
                 .getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
     }
     
     public List<DeviceConfig> findAllByNameLike(String name) {
