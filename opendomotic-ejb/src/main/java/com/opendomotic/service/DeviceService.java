@@ -151,7 +151,14 @@ public class DeviceService {
     }
     
     public void switchDeviceValue(String deviceName) {
-        setDeviceValue(deviceName, getDeviceValue(deviceName) == 1 ? 0 : 1);
+        Object value = getDeviceValue(deviceName);        
+        Object newValue;
+        if (value instanceof String) {
+            newValue = value.equals("1") ? "0" : "1";
+        } else {
+            newValue = value == 1 ? 0 : 1;
+        }            
+        setDeviceValue(deviceName, newValue);
     }
     
     @Lock(LockType.READ)
