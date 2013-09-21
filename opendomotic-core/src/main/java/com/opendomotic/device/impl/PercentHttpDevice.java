@@ -6,43 +6,35 @@ import com.opendomotic.device.util.Percent;
  *
  * @author Jaques Claudino
  */
-public class PercentHttpDevice extends HttpDevice {
+public class PercentHttpDevice extends DoubleHttpDevice {
     
-    public static final int DEFAULT_MIN = 0;
-    public static final int DEFAULT_MAX = 1024;
+    public static final double DEFAULT_MIN = 0;
+    public static final double DEFAULT_MAX = 1023;
     public static final boolean DEFAULT_CHECK_RANGE = true;
     
-    private int min = DEFAULT_MIN;
-    private int max = DEFAULT_MAX;
-    private boolean checkRange = DEFAULT_CHECK_RANGE;
+    private Double min = DEFAULT_MIN;
+    private Double max = DEFAULT_MAX;
 
     @Override
-    public Integer getValue() throws Exception {
-        return Percent.getPercent(super.getValue(), min, max, checkRange);
+    public Double getValue() throws Exception {
+        Double value = super.getValue();
+        return Percent.getPercent(value, min, max, DEFAULT_CHECK_RANGE);
     }
     
-    public int getMin() {
+    public Double getMin() {
         return min;
     }
 
-    public void setMin(int min) {
+    public void setMin(Double min) {
         this.min = min;
     }
 
-    public int getMax() {
+    public Double getMax() {
         return max;
     }
 
-    public void setMax(int max) {
+    public void setMax(Double max) {
         this.max = max;
-    }
-
-    public boolean isCheckRange() {
-        return checkRange;
-    }
-
-    public void setCheckRange(boolean checkRange) {
-        this.checkRange = checkRange;
     }
     
 }

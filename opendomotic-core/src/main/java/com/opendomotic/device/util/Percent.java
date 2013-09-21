@@ -11,12 +11,12 @@ package com.opendomotic.device.util;
  */
 public class Percent {
  
-    public static int getPercent(int value, int min, int max, boolean checkRange) {
-        int range = max - min;
+    public static double getPercent(double value, double min, double max, boolean checkRange) {
+        double range = max - min;
         if (range == 0)
             return 0;
         
-        int percent = (value - min) * 100 / range;
+        double percent = (value - min) * 100 / range;
         if (checkRange) {
             return Math.max(0, Math.min(100, percent));
         } else {

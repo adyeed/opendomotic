@@ -19,8 +19,9 @@ import org.apache.http.params.HttpParams;
 /**
  *
  * @author Jaques Claudino
+ * @param <T>
  */
-public class HttpDevice implements Device<Integer> {
+public class HttpDevice<T> implements Device<T> {
 
     private static final Logger LOG = Logger.getLogger(HttpDevice.class.getName());    
     private static final boolean SHOW_LOG = false;
@@ -30,17 +31,16 @@ public class HttpDevice implements Device<Integer> {
     private String path;
     private String user;
     private String password;
-
     private HttpClient httpClient;
     
     @Override
-    public Integer getValue() throws Exception {
-        return Integer.parseInt(makeRequest(getURL()));
+    public T getValue() throws Exception {
+        return (T) makeRequest(getURI());
     }
 
     @Override
-    public void setValue(Integer value) throws Exception {
-        makeRequest(getURL() + "=" + value);
+    public void setValue(T value) throws Exception {
+        makeRequest(getURI() + "=" + value);
     }
     
     private HttpClient getHttpClient() {
@@ -67,11 +67,11 @@ public class HttpDevice implements Device<Integer> {
         return rd.readLine();
     }
     
-    private String makeRequest(String url) throws IOException {
+    protected String makeRequest(String uri) throws IOException {
         long time = System.currentTimeMillis();
         
         String responseStr = null;
-        HttpGet request = new HttpGet(url);
+        HttpGet request = new HttpGet(uri);
         try {
             HttpResponse response = getHttpClient().execute(request);    
             responseStr = readResponseLine(response);
@@ -80,13 +80,13 @@ public class HttpDevice implements Device<Integer> {
         }
         
         if (SHOW_LOG) {
-            LOG.log(Level.INFO, "Response={0} | {1} | {2} ms", new Object[] {responseStr, url, System.currentTimeMillis() - time});
+            LOG.log(Level.INFO, "Response={0} | {1} | {2} ms", new Object[] {responseStr, uri, System.currentTimeMillis() - time});
         }
         
         return responseStr;
     }
     
-    public String getURL() {
+    protected String getURI() {
         return "http://" + host + "/" + path;
     }
 

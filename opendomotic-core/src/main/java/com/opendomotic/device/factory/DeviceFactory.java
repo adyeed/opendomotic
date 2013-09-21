@@ -31,6 +31,8 @@ public class DeviceFactory {
             
             if (isStringToBoolean(property.getValue(), method)) {
                 method.invoke(device, Boolean.parseBoolean((String) property.getValue()));
+            } else if (isStringToDouble(property.getValue(), method)) {
+                method.invoke(device, Double.parseDouble((String) property.getValue()));
             } else if (isStringToInteger(property.getValue(), method)) {
                 method.invoke(device, Integer.parseInt((String) property.getValue()));
             } else {
@@ -51,6 +53,10 @@ public class DeviceFactory {
     
     private static boolean isStringToBoolean(Object value, Method method) {
         return isStringToType(value, method, boolean.class, Boolean.class);
+    }
+    
+    private static boolean isStringToDouble(Object value, Method method) {
+        return isStringToType(value, method, double.class, Double.class);
     }
     
     private static boolean isStringToInteger(Object value, Method method) {
