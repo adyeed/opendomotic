@@ -27,7 +27,7 @@ public class PercentSerialDevice extends SerialDevice {
     public Integer getValue() throws Exception {
         int value = super.getValue();        
         checkMinMax(value); 
-        return Percent.getPercent(value, min, max, checkRange);
+        return (int) Percent.getPercent(value, min, max, checkRange);
     }
     
     private void checkMinMax(int value) {
