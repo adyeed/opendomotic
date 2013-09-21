@@ -103,4 +103,14 @@ public class DeviceRestService {
         return "Device not found";
     }
     
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path(value = "/update")
+    public String update() {
+        
+        LOG.info("update all device values");
+        deviceService.updateDeviceValuesAsync();   
+        return "OK";
+    }
+    
 }
