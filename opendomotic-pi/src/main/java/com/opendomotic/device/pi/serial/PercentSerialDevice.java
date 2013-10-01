@@ -25,7 +25,7 @@ public class PercentSerialDevice extends SerialDevice {
     
     @Override
     public Integer getValue() throws Exception {
-        int value = super.getValue();        
+        int value = (Integer) super.getValue();        
         checkMinMax(value); 
         return (int) Percent.getPercent(value, min, max, checkRange);
     }

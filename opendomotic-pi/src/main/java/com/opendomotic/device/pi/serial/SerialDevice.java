@@ -10,25 +10,29 @@ import com.opendomotic.device.Device;
  *
  * @author jaques
  */
-public class SerialDevice implements Device<Integer> {
+public class SerialDevice<T> implements Device<T> {
 
     private int address;
     private int device;
 
     @Override
-    public void setValue(Integer value) {
-        SerialBus.getInstance().writeDevice(address, device, value);
+    public void setValue(T value) {
+        SerialBus.getInstance().writeDevice(address, device, (Integer) value);
     }
 
     @Override
-    public Integer getValue() throws Exception {
-        int value = SerialBus.getInstance().readDevice(address, device);
+    public T getValue() throws Exception {
+        return (T) getValueInt();
+    }
+
+    protected Integer getValueInt() throws Exception {
+        Integer value = SerialBus.getInstance().readDevice(address, device);
         if (value == -1) {
             throw new Exception(String.format("Error on getValue of address=%d, device=%d", address, device));
         }
         return value;
     }
-
+    
     public int getAddress() {
         return address;
     }
