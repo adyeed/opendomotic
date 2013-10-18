@@ -6,7 +6,8 @@ function connect() {
     } else {
         wsProtocol = "ws://";
     }
-    url = wsProtocol + window.location.host + '/opendomotic-web-0.0.1/websocket';
+    contextPath = location.pathname.split('/')[1];
+    url = wsProtocol + window.location.host + '/' + contextPath + '/websocket';
 
     if ('WebSocket' in window) {
         ws = new WebSocket(url);
