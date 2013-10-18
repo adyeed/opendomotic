@@ -12,7 +12,8 @@ var onMouseUpDevice = null;
 var loading = true;
 
 function getUrl(path) {
-    return '/opendomotic-web-0.0.1/' + path;
+    contextPath = location.pathname.split('/')[1];
+    return '/' + contextPath + '/' + path;
 }
 
 function initCanvas(canDrag, onMouseUpDevice, idEnvironment) {   
