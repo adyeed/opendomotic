@@ -156,7 +156,7 @@ public class DeviceService {
         if (value instanceof String) {
             newValue = value.equals("1") ? "0" : "1";
         } else {
-            newValue = value == 1 ? 0 : 1;
+            newValue = value.equals(1) ? 0 : 1;
         }            
         setDeviceValue(deviceName, newValue);
     }
