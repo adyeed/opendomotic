@@ -17,6 +17,7 @@ public class DeviceProxy implements Device {
 
     private final Device device;
     private Object value;
+    private int millisResponse = -1;
 
     public DeviceProxy(Device device) {
         this.device = device;
@@ -36,11 +37,17 @@ public class DeviceProxy implements Device {
     public Object getValue() {
         return value;
     }
+
+    public int getMillisResponse() {
+        return millisResponse;
+    }
     
     public boolean updateValue() throws Exception {
+        long millis = System.currentTimeMillis();
         Object newValue = device.getValue();
         boolean changed = !newValue.equals(value);
         value = newValue;            
+        millisResponse = (int) (System.currentTimeMillis() - millis);
         return changed;
     }
 

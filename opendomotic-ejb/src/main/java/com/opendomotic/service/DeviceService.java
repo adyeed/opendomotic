@@ -88,8 +88,7 @@ public class DeviceService {
             String deviceName = entry.getKey();
             DeviceProxy device = entry.getValue();
             boolean sendWebSocket = false;
-            
-            long millis = System.currentTimeMillis();            
+                   
             try {
                 if (device.updateValue()) {
                     sendWebSocket = true;
@@ -99,7 +98,7 @@ public class DeviceService {
                 device.setValue(null);
                 sendWebSocket = true;
             }
-            logTime(device.toString(), millis, 1000);
+            logTime(device.toString(), device.getMillisResponse(), 1000);
             
             if (sendWebSocket) {
                 //TO-DO: apenas enviar para os clientes que estao observando o ambiente
@@ -140,6 +139,16 @@ public class DeviceService {
     public String getDeviceValueAsString(String deviceName) {
         DeviceConfig config = configDAO.findByName(deviceName);
         return getDeviceValueAsString(config);
+    }
+    
+    @Lock(LockType.READ)
+    public int getDeviceMillisResponse(DeviceConfig config) {
+        DeviceProxy device = mapDevice.get(config.getName());
+        if (device != null) {
+            return device.getMillisResponse();
+        } else {
+            return -1;
+        }
     }
 
     public void setDeviceValue(String deviceName, Object value) {
