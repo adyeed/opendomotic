@@ -73,6 +73,12 @@
             </p:column>
             <p:column>
                 <f:facet name="header">
+                    #{msg.Ms}
+                </f:facet>
+                #{configMB.getDeviceMillisResponse(config)}
+            </p:column>
+            <p:column>
+                <f:facet name="header">
                     #{msg.ClassName}
                 </f:facet>
                 #{config.deviceClassName}
