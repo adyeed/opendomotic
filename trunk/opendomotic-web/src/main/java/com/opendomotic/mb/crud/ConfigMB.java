@@ -108,6 +108,10 @@ public class ConfigMB extends AbstractCRUD<DeviceConfig> {
         return deviceService.getDeviceValueAsString(config);
     }
     
+    public int getDeviceMillisResponse(DeviceConfig config) {
+        return deviceService.getDeviceMillisResponse(config);
+    }
+    
     public void test(DeviceConfig config) {
         FacesMessage msg;
         try {
