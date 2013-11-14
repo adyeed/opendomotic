@@ -1,0 +1,41 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                template="../template/default.xhtml"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core">
+
+    <ui:define name="content">
+        <p:growl id="growl" showDetail="true" />  
+        
+        <h:panelGrid columns="4">
+            <h:outputText value="#{msg.Max}:"/>
+            <h:outputText value="#{historyMB.max.value}" style="font-weight: bold; color: blue;"/>
+            |
+            <h:outputText value="#{historyMB.max.date}">
+                <f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss" />  
+            </h:outputText>
+            
+            <h:outputText value="#{msg.Min}:"/>
+            <h:outputText value="#{historyMB.min.value}" style="font-weight: bold; color: red;"/>
+            |
+            <h:outputText value="#{historyMB.min.date}">
+                <f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss" />  
+            </h:outputText>            
+        </h:panelGrid>
+        
+        <p:lineChart id="grafico" 
+                     value="#{historyMB.linearModel}" 
+                     minY="#{historyMB.min.value}" 
+                     maxY="#{historyMB.max.value}"
+                     legendPosition="e" 
+                     title="Gráfico"  
+                     style="height:500px" 
+                     xaxisAngle="-90">
+            <p:ajax event="itemSelect" listener="#{historyMB.itemSelect}" update="growl" />  
+        </p:lineChart>
+    </ui:define>
+
+</ui:composition>
