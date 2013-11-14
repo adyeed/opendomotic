@@ -55,6 +55,8 @@ public class DeviceHistory {
         public Integer getValueAsInt() {
             if (value instanceof Integer) {
                 return (Integer) value;
+            } else if (value instanceof Double) { 
+                return ((Double) value).intValue();
             } else if (value instanceof String) {
                 return Integer.parseInt((String) value);
             } else {
