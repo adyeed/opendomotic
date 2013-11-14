@@ -123,7 +123,7 @@
                     value="../resources/images/#{config.deviceImageSwitch.fileName}" 
                     rendered="#{!empty config.deviceImageSwitch}"/>
             </p:column>
-            <p:column width="300">
+            <p:column width="430">
                 <p:commandButton value="#{msg.Delete}" action="#{configMB.delete(config)}" update="table" onclick="return confirm('#{msg.ConfirmsTheExclusion}');"/>
                 <p:commandButton value="#{msg.Edit}" action="#{configMB.edit(config)}" update="@form"/>
                 <p:commandButton value="#{msg.Test}" action="#{configMB.test(config)}" update="@form"/>

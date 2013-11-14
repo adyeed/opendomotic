@@ -122,7 +122,7 @@ public class ConfigMB extends AbstractCRUD<DeviceConfig> {
             msg = new FacesMessage("Error", ex.toString());  
         }
         FacesContext.getCurrentInstance().addMessage(null, msg);
-    }
+    }    
 
     public List<DeviceProperty> getListDeviceProperty() {
         return listDeviceProperty;
