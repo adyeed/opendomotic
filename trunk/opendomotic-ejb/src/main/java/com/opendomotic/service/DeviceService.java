@@ -3,6 +3,7 @@ package com.opendomotic.service;
 import com.opendomotic.service.websocket.WebSocketService;
 import com.opendomotic.service.dao.DeviceConfigDAO;
 import com.opendomotic.device.Device;
+import com.opendomotic.model.DeviceHistory;
 import com.opendomotic.model.DeviceProxy;
 import com.opendomotic.model.entity.DeviceConfig;
 import java.util.Collections;
@@ -58,7 +59,7 @@ public class DeviceService {
                 LOG.log(Level.INFO, "creating {0}", config.getName());
                 Device device = config.createDevice();
                 if (device != null) {
-                    mapDevice.put(config.getName(), new DeviceProxy(device));
+                    mapDevice.put(config.getName(), new DeviceProxy(device, config.isHistory()));
                 }
             } catch (Exception ex) {
                 LOG.log(Level.SEVERE, "Error creating device: {0}", ex.toString());
@@ -106,7 +107,7 @@ public class DeviceService {
             }
         }
         
-        logTime("Total", millisTotal, 2000);
+        logTime("Total", System.currentTimeMillis()-millisTotal, 2000);
     }
            
     @Lock(LockType.READ)
@@ -114,6 +115,16 @@ public class DeviceService {
         DeviceProxy device = mapDevice.get(deviceName);
         if (device != null) {
             return device.getValue();
+        } else {
+            return null;
+        }
+    }
+    
+    @Lock(LockType.READ)
+    public DeviceHistory getDeviceHistory(DeviceConfig config) {
+        DeviceProxy device = mapDevice.get(config.getName());
+        if (device != null) {
+            return device.getHistory();
         } else {
             return null;
         }
@@ -175,8 +186,7 @@ public class DeviceService {
         return scheduleInitialized;
     }
     
-    private void logTime(String item, long startMillis, int limit) {
-        long elapsedMillis = System.currentTimeMillis() - startMillis;
+    private void logTime(String item, long elapsedMillis, int limit) {
         if (elapsedMillis > limit) {
             LOG.log(Level.WARNING, "Slow reading device: {0} ms | {1}", new Object[] {elapsedMillis, item});
         }
