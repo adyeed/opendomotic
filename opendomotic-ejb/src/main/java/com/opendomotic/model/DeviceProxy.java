@@ -5,6 +5,7 @@
 package com.opendomotic.model;
 
 import com.opendomotic.device.Device;
+import java.util.Date;
 import java.util.logging.Logger;
 
 /**
@@ -18,9 +19,13 @@ public class DeviceProxy implements Device {
     private final Device device;
     private Object value;
     private int millisResponse = -1;
+    private DeviceHistory history; 
 
-    public DeviceProxy(Device device) {
+    public DeviceProxy(Device device, boolean saveHistory) {
         this.device = device;
+        if (saveHistory) {
+            history = new DeviceHistory();
+        }
     }
 
     @Override
@@ -48,7 +53,16 @@ public class DeviceProxy implements Device {
         boolean changed = !newValue.equals(value);
         value = newValue;            
         millisResponse = (int) (System.currentTimeMillis() - millis);
+        
+        if (history != null) {
+            history.add(new Date(), value);
+        }
+        
         return changed;
+    }
+
+    public DeviceHistory getHistory() {
+        return history;
     }
 
     @Override

@@ -36,6 +36,7 @@ public class DeviceConfig extends AbstractEntityName {
     private String deviceClassName;
     private boolean enabled;
     private boolean switchable;
+    private boolean history;
     private String format;
 
     public Device createDevice() throws ClassNotFoundException, InstantiationException, IllegalAccessException, DevicePropertyNotFoundException, IllegalArgumentException, InvocationTargetException {
@@ -104,6 +105,14 @@ public class DeviceConfig extends AbstractEntityName {
 
     public void setFormat(String format) {
         this.format = format;
+    }
+
+    public boolean isHistory() {
+        return history;
+    }
+
+    public void setHistory(boolean history) {
+        this.history = history;
     }
     
 }
