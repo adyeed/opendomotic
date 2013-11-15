@@ -27,3 +27,28 @@ a:link:hover, a:visited:hover  {
   font-weight : bold;
   text-decoration : underline;
 }
+
+.icon-home { 
+    background-image: url('../images/button/home.png') !important; 
+    border-radius: 0;
+}
+
+.icon-history { 
+    background-image: url('../images/button/history.png') !important; 
+    border-radius: 0;
+}
+
+.icon-job { 
+    background-image: url('../images/button/job.png') !important; 
+    border-radius: 0;
+}
+
+.icon-config { 
+    background-image: url('../images/button/config.png') !important; 
+    border-radius: 0;
+}
+
+.icon-environment { 
+    background-image: url('../images/button/environment.png') !important; 
+    border-radius: 0;
+}

@@ -21,17 +21,18 @@
             <div id="top">            
                 <p:toolbar>
                     <p:toolbarGroup>
-                        <h:panelGrid columns="#{homeMB.adminLogged ? 6 : 4}">
-                            <h:outputText value="#{msg.Environment}" rendered="#{!empty environmentMB.listAll}"/> 
-                            <p:selectOneMenu value="#{homeMB.idEnvironment}" rendered="#{!empty environmentMB.listAll}">
+                        <h:panelGrid columns="#{homeMB.adminLogged ? 7 : 5}">
+                            <h:outputText value="#{msg.Environment}" rendered="#{environmentMB.listAll.size() > 1}"/> 
+                            <p:selectOneMenu value="#{homeMB.idEnvironment}" rendered="#{environmentMB.listAll.size() > 1}">
                                 <f:selectItems value="#{environmentMB.listAll}" var="e" itemValue="#{e.id}" itemLabel="#{e.name}"/>
                                 <p:ajax process="@form" update="@form"/>
                             </p:selectOneMenu>   
                             
-                            <p:commandButton ajax="false" action="/user/index" value="#{msg.Home}" />
-                            <p:commandButton ajax="false" action="/user/job" value="#{msg.Job}" />    
-                            <p:commandButton ajax="false" action="/admin/config" value="#{msg.Device}" rendered="#{homeMB.adminLogged}"/>
-                            <p:commandButton ajax="false" action="/admin/environment" value="#{msg.Environment}" rendered="#{homeMB.adminLogged}"/>
+                            <p:commandButton ajax="false" action="/user/index" icon="icon-home" value="#{msg.Home}" />
+                            <p:commandButton ajax="false" action="/user/history" icon="icon-history" value="#{msg.History}" />   
+                            <p:commandButton ajax="false" action="/user/job" icon="icon-job" value="#{msg.Job}" />    
+                            <p:commandButton ajax="false" action="/admin/config" icon="icon-config" value="#{msg.Device}" rendered="#{homeMB.adminLogged}"/>
+                            <p:commandButton ajax="false" action="/admin/environment" icon="icon-environment" value="#{msg.Environment}" rendered="#{homeMB.adminLogged}"/>
                         </h:panelGrid>
                     </p:toolbarGroup> 
                 </p:toolbar>
