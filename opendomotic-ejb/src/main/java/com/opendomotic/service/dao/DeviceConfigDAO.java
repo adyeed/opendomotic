@@ -52,7 +52,7 @@ public class DeviceConfigDAO extends AbstractDAO<DeviceConfig> {
     
     public List<DeviceConfig> findAllWithHistory() {
         return em
-                .createQuery("select c from DeviceConfig c where c.history = true")
+                .createQuery("select c from DeviceConfig c where c.history = true order by c.name")
                 .getResultList();
     }
     
