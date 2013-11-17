@@ -25,7 +25,7 @@ public class HttpDevice<T> implements Device<T> {
 
     private static final Logger LOG = Logger.getLogger(HttpDevice.class.getName());    
     private static final boolean SHOW_LOG = false;
-    private static final int DEFAULT_TIMEOUT = 2000;
+    private static final int DEFAULT_TIMEOUT = 100;
     
     private String host;
     private String path;
