@@ -35,7 +35,7 @@ import org.primefaces.model.chart.LineChartSeries;
 public class HistoryMB implements Serializable {
     
     private static final Logger LOG = Logger.getLogger(HistoryMB.class.getName());
-    private static final int DEFAULT_INTERVAL = 5;
+    private static final int DEFAULT_INTERVAL = 10;
     
     @Inject 
     private DeviceService deviceService;

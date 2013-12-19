@@ -4,7 +4,7 @@ function Device(id, x, y, name, switchable, imageDefault, imageSwitch) {
     this.y = y;
     this.name = name;
     this.switchable = switchable;
-    this.value = null;
+    this.value = null;   
 
     this.imageDefault = new Image();
     this.imageDefault.alt = name;
@@ -47,16 +47,29 @@ function Device(id, x, y, name, switchable, imageDefault, imageSwitch) {
             context.shadowColor = 'yellow';
             context.shadowBlur = 20;
         }
-        
+               
         context.drawImage(this.getImage(), this.x, this.y);
         context.lineWidth = 1; 
         context.strokeStyle = 'white';
         
-        if (this.value !== null) {
-            context.strokeText(this.value, this.x, this.getBottom());
-            context.fillText(this.value, this.x, this.getBottom());              
+        text = this.value;        
+        if ((text !== 'null') && this.switchable) {   
+            text = (this.value === 1 || this.value === '1') ? 'on' : 'off';
         }
+        context.strokeText(text, this.x, this.getBottom());
+        context.fillText(text, this.x, this.getBottom());              
+
         context.restore();
+        
+        //force repaint out from cache. TO-DO: Add a device parameter?
+        /*if (this.imageDefault.src.indexOf('webcam') !== -1) {
+            webcamImage = new Image();
+            webcamImage.src = this.imageDefault.src;
+            webcamImage.onload = function() {
+                context.drawImage(webcamImage, x, y);
+                imageDefault = webcamImage;
+            };
+        }*/
     };
 
 }
