@@ -60,16 +60,6 @@ function Device(id, x, y, name, switchable, imageDefault, imageSwitch) {
         context.fillText(text, this.x, this.getBottom());              
 
         context.restore();
-        
-        //force repaint out from cache. TO-DO: Add a device parameter?
-        /*if (this.imageDefault.src.indexOf('webcam') !== -1) {
-            webcamImage = new Image();
-            webcamImage.src = this.imageDefault.src;
-            webcamImage.onload = function() {
-                context.drawImage(webcamImage, x, y);
-                imageDefault = webcamImage;
-            };
-        }*/
     };
 
 }
