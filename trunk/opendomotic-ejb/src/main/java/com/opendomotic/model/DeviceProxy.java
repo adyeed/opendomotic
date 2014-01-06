@@ -31,10 +31,12 @@ public class DeviceProxy implements Device {
     @Override
     public void setValue(Object value) {
         this.value = value;
-        try {
-            device.setValue(value);
-        } catch (Exception ex) {
-            LOG.severe(ex.toString());
+        if (value != null) {
+            try {
+                device.setValue(value);
+            } catch (Exception ex) {
+                LOG.severe(ex.toString());
+            }
         }
     }
 
