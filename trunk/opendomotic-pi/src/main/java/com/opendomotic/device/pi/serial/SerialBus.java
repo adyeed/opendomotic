@@ -43,7 +43,7 @@ public class SerialBus {
     
     private SerialBus() {        
         gpio = GpioFactory.getInstance();
-        pin1 = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_01, "PIN_RE_485", PinState.LOW);
+        pin1 = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_00, "PIN_RE_485", PinState.LOW);
         serial.open(Serial.DEFAULT_COM_PORT, 115200);
         serial.addListener(serialListener);
     }
