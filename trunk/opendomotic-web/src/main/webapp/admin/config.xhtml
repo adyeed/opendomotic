@@ -82,6 +82,12 @@
             </p:column>
             <p:column>
                 <f:facet name="header">
+                    #{msg.Error}
+                </f:facet>
+                #{configMB.getDeviceErrors(config)}
+            </p:column>
+            <p:column>
+                <f:facet name="header">
                     #{msg.ClassName}
                 </f:facet>
                 #{config.deviceClassName}
