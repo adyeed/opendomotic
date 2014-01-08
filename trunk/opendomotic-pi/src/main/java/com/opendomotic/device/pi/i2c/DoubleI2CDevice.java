@@ -3,14 +3,15 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.opendomotic.device.pi.serial;
+
+package com.opendomotic.device.pi.i2c;
 
 /**
  *
  * @author Jaques Claudino
  */
-public class DoubleSerialDevice extends SerialDevice<Double> {
-
+public class DoubleI2CDevice extends I2CDevice<Double> {
+ 
     private double factor = 1;
     
     @Override

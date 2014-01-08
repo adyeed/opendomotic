@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package com.opendomotic.device.pi;
+package com.opendomotic.device.pi.i2c;
 
 import com.opendomotic.device.Device;
 import com.pi4j.io.i2c.I2CBus;
@@ -13,8 +13,9 @@ import com.pi4j.io.i2c.I2CFactory;
 /**
  *
  * @author Jaques Claudino
+ * @param <T>
  */
-public class I2CDevice implements Device<Integer> {
+public class I2CDevice<T> implements Device<T> {
     
     private int address;
     private int device;
@@ -22,7 +23,16 @@ public class I2CDevice implements Device<Integer> {
     private com.pi4j.io.i2c.I2CDevice i2c;
 
     @Override
-    public Integer getValue() throws Exception {
+    public T getValue() throws Exception {
+        return (T) getValueInt();
+    }
+
+    @Override
+    public void setValue(T value) throws Exception {
+        //TO-DO: Not implemented
+    }
+    
+    protected Integer getValueInt() throws Exception {
         if (i2c == null) {
             i2c = I2CFactory.getInstance(I2CBus.BUS_1).getDevice(address);
         }
@@ -38,10 +48,6 @@ public class I2CDevice implements Device<Integer> {
         int value = msb * 256 + lsb;
         
         return value;
-    }
-
-    @Override
-    public void setValue(Integer value) throws Exception {
     }
     
     public void setAddress(int address) {
