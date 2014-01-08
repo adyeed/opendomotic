@@ -96,6 +96,7 @@ public class DeviceService {
                 }
             } catch (Exception ex) {
                 LOG.log(Level.SEVERE, "Error updating device: {0} | {1}", new Object[] {deviceName, ex.toString()});
+                device.incErrors();
                 device.setValue(null);
                 sendWebSocket = true;
             }
@@ -108,26 +109,6 @@ public class DeviceService {
         }
         
         logTime("Total", System.currentTimeMillis()-millisTotal, 2000);
-    }
-           
-    @Lock(LockType.READ)
-    public Object getDeviceValue(String deviceName) {
-        DeviceProxy device = mapDevice.get(deviceName);
-        if (device != null) {
-            return device.getValue();
-        } else {
-            return null;
-        }
-    }
-    
-    @Lock(LockType.READ)
-    public DeviceHistory getDeviceHistory(DeviceConfig config) {
-        DeviceProxy device = mapDevice.get(config.getName());
-        if (device != null) {
-            return device.getHistory();
-        } else {
-            return null;
-        }
     }
     
     @Lock(LockType.READ)
@@ -151,12 +132,42 @@ public class DeviceService {
         DeviceConfig config = configDAO.findByName(deviceName);
         return getDeviceValueAsString(config);
     }
+           
+    @Lock(LockType.READ)
+    public Object getDeviceValue(String deviceName) {
+        DeviceProxy device = mapDevice.get(deviceName);
+        if (device != null) {
+            return device.getValue();
+        } else {
+            return null;
+        }
+    }
+    
+    @Lock(LockType.READ)
+    public DeviceHistory getDeviceHistory(DeviceConfig config) {
+        DeviceProxy device = mapDevice.get(config.getName());
+        if (device != null) {
+            return device.getHistory();
+        } else {
+            return null;
+        }
+    }
     
     @Lock(LockType.READ)
     public int getDeviceMillisResponse(DeviceConfig config) {
         DeviceProxy device = mapDevice.get(config.getName());
         if (device != null) {
             return device.getMillisResponse();
+        } else {
+            return -1;
+        }
+    }
+    
+    @Lock(LockType.READ)
+    public int getDeviceErrors(DeviceConfig config) {
+        DeviceProxy device = mapDevice.get(config.getName());
+        if (device != null) {
+            return device.getErrors();
         } else {
             return -1;
         }
