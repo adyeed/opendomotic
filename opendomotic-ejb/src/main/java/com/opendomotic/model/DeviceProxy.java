@@ -19,6 +19,7 @@ public class DeviceProxy implements Device {
     private final Device device;
     private Object value;
     private int millisResponse = -1;
+    private int errors = 0;
     private DeviceHistory history; 
 
     public DeviceProxy(Device device, boolean saveHistory) {
@@ -47,6 +48,14 @@ public class DeviceProxy implements Device {
 
     public int getMillisResponse() {
         return millisResponse;
+    }
+
+    public int getErrors() {
+        return errors;
+    }
+    
+    public void incErrors() {
+        errors++;
     }
     
     public boolean updateValue() throws Exception {
