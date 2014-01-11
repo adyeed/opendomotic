@@ -65,6 +65,12 @@
 
             <br/>
 
+            #{msg.Enabled}
+            <p:selectBooleanCheckbox value="#{jobMB.entity.enabled}"/>  
+            
+            <br/>
+            <br/>
+            
             <p:commandButton value="#{msg.Save}" action="#{jobMB.save}" update="dialog,table"/>
             <p:commandButton value="#{msg.Cancel}" action="#{jobMB.cancel}" update="dialog"/>
         </p:panel>
@@ -83,7 +89,7 @@
                     <h:outputText value="#{msg.Output}"/>
                 </f:facet>
                 #{job.outputDescription}
-            </p:column>
+            </p:column>            
             <p:column style="text-align: center;">
                 <f:facet name="header">
                     <h:outputText value="#{msg.Delete}"/>
@@ -91,9 +97,17 @@
                 <p:graphicImage value="../resources/images/button/checked.png" rendered="#{job.deleteAfterExecute}"/>
                 <p:graphicImage value="../resources/images/button/unchecked.png" rendered="#{!job.deleteAfterExecute}"/>
             </p:column>
+            <p:column style="text-align: center;">
+                <f:facet name="header">
+                    <h:outputText value="#{msg.Enabled}"/>
+                </f:facet>
+                <p:graphicImage value="../resources/images/button/checked.png" rendered="#{job.enabled}"/>
+                <p:graphicImage value="../resources/images/button/unchecked.png" rendered="#{!job.enabled}"/>
+            </p:column>
             <p:column>
                 <p:commandButton value="#{msg.Delete}" action="#{jobMB.delete(job)}" update="table" onclick="return confirm('#{msg.ConfirmsTheExclusion}');"/>
                 <p:commandButton value="#{msg.Edit}" action="#{jobMB.edit(job)}" update="@form"/>
+                <p:commandButton value="#{job.enabled ? msg.Disable : msg.Enable}" action="#{jobMB.toggleEnable(job)}" update="table"/>
             </p:column>
         </p:dataTable> 
 
