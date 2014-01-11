@@ -6,6 +6,7 @@
 package com.opendomotic.service.dao;
 
 import com.opendomotic.model.entity.Job;
+import java.util.List;
 import javax.ejb.Stateless;
 
 /**
@@ -18,6 +19,12 @@ public class JobDAO extends AbstractDAO<Job> {
     @Override
     public Class<Job> getEntityClass() {
         return Job.class;
+    }
+    
+    public List<Job> findAllEnabled() {
+        return getEntityManager()
+                .createQuery("select j from Job j where j.enabled = true")
+                .getResultList();
     }
     
 }
