@@ -31,6 +31,8 @@ public class Job extends AbstractEntityId {
     private String expectValue;
     private String actionValue;
     
+    private boolean enabled;
+    
     @ManyToOne
     private DeviceConfig output;
     
@@ -126,6 +128,14 @@ public class Job extends AbstractEntityId {
 
     public void setDeleteAfterExecute(boolean deleteAfterExecute) {
         this.deleteAfterExecute = deleteAfterExecute;
+    }
+
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
     }
 
     @Override
