@@ -49,6 +49,7 @@ public class JobMB extends AbstractCRUD<Job> {
         super.create();
         hour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
         minute = Calendar.getInstance().get(Calendar.MINUTE);
+        entity.setEnabled(true);
     }
 
     @Override
@@ -90,6 +91,11 @@ public class JobMB extends AbstractCRUD<Job> {
         idOutput = getIdDeviceConfig(entity.getOutput());
         tabActiveIndex = idInput != null || entity.getId() == null ? 0 : 1;
         super.edit(entity); 
+    }
+    
+    public void toggleEnable(Job job) {
+        job.setEnabled(!job.isEnabled());
+        jobDAO.save(job);
     }
     
     private Integer getIdDeviceConfig(DeviceConfig deviceConfig) {
