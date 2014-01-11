@@ -53,11 +53,13 @@ function Device(id, x, y, name, switchable, imageDefault, imageSwitch) {
         context.strokeStyle = 'white';
         
         text = this.value;        
-        if ((text !== 'null') && this.switchable) {   
-            text = (this.value === 1 || this.value === '1') ? 'on' : 'off';
+        if (text !== null) { //is null when loading
+            if ((text !== 'null') && this.switchable) { //is 'null' string when has comunication error   
+                text = (this.value === 1 || this.value === '1') ? 'on' : 'off';
+            }
+            context.strokeText(text, this.x, this.getBottom());
+            context.fillText(text, this.x, this.getBottom());              
         }
-        context.strokeText(text, this.x, this.getBottom());
-        context.fillText(text, this.x, this.getBottom());              
 
         context.restore();
     };
