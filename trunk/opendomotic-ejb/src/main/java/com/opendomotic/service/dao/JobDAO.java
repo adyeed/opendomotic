@@ -15,11 +15,6 @@ import javax.ejb.Stateless;
  */
 @Stateless
 public class JobDAO extends AbstractDAO<Job> {
-
-    @Override
-    public Class<Job> getEntityClass() {
-        return Job.class;
-    }
     
     public List<Job> findAllEnabled() {
         return getEntityManager()
