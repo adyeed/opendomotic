@@ -21,11 +21,6 @@ public class DeviceConfigDAO extends AbstractDAO<DeviceConfig> {
     @PersistenceContext
     private EntityManager em;
     
-    @Override
-    public Class getEntityClass() {
-        return DeviceConfig.class;
-    }
-    
     public DeviceConfig findByName(String name) {
         try {
             return em

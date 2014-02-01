@@ -21,11 +21,6 @@ public class DevicePropertyDAO extends AbstractDAO<DeviceProperty> {
     @PersistenceContext
     private EntityManager em;
     
-    @Override
-    public Class<DeviceProperty> getEntityClass() {
-        return DeviceProperty.class;
-    }
-    
     public void deleteByConfig(DeviceConfig config) {
         em.createQuery("delete from DeviceProperty d where d.deviceConfig=?1")
                 .setParameter(1, config)

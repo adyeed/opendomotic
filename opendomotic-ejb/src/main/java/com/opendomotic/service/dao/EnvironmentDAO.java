@@ -13,10 +13,5 @@ import javax.ejb.Stateless;
  */
 @Stateless
 public class EnvironmentDAO extends AbstractDAO<Environment> {
-
-    @Override
-    public Class getEntityClass() {
-        return Environment.class;
-    }
     
 }

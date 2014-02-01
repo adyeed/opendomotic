@@ -13,10 +13,5 @@ import javax.ejb.Stateless;
  */
 @Stateless
 public class DeviceImageDAO extends AbstractDAO<DeviceImage> {
-
-    @Override
-    public Class getEntityClass() {
-        return DeviceImage.class;
-    }
     
 }
