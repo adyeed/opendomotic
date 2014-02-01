@@ -32,6 +32,7 @@ public class HttpDevice<T> implements Device<T> {
     private String user;
     private String password;
     private HttpClient httpClient;
+    private int timeout = DEFAULT_TIMEOUT;
     
     @Override
     public T getValue() throws Exception {
@@ -54,8 +55,8 @@ public class HttpDevice<T> implements Device<T> {
 
             HttpParams httpParameters = httpClient.getParams();
             HttpConnectionParams.setTcpNoDelay(httpParameters, true);
-            HttpConnectionParams.setConnectionTimeout(httpParameters, DEFAULT_TIMEOUT);
-            HttpConnectionParams.setSoTimeout(httpParameters, DEFAULT_TIMEOUT); 
+            HttpConnectionParams.setConnectionTimeout(httpParameters, timeout);
+            HttpConnectionParams.setSoTimeout(httpParameters, timeout); 
             HttpConnectionParams.setSoKeepalive(httpParameters, false);
             HttpConnectionParams.setStaleCheckingEnabled(httpParameters, false);
         }        
@@ -108,6 +109,10 @@ public class HttpDevice<T> implements Device<T> {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public void setTimeout(int timeout) {
+        this.timeout = timeout;
     }
 
     @Override
