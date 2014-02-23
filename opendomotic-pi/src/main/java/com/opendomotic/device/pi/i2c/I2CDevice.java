@@ -19,6 +19,7 @@ public class I2CDevice<T> implements Device<T> {
     
     private int address;
     private int device;
+    private int readBytes = 2;
     
     private com.pi4j.io.i2c.I2CDevice i2c;
 
@@ -39,13 +40,21 @@ public class I2CDevice<T> implements Device<T> {
         
         i2c.write((byte) device);
         Thread.sleep(5); //precisa de um intervalo
-
-        byte[] buffer = new byte[2]; 
-        i2c.read(buffer, 0, 2);
-
-        int msb = buffer[0] & 0xff;
-        int lsb = buffer[1] & 0xff;            
-        int value = msb * 256 + lsb;
+        
+        byte[] buffer = new byte[readBytes]; 
+        i2c.read(buffer, 0, readBytes);
+        int value;
+        
+        if (readBytes == 4) {
+            value = (buffer[0] << 24) + //o primeiro byte contém o sinal
+                ((buffer[1] & 0xff) << 16) + //& 0xff pra ser unsigned. Outros bytes nao contém sinal
+                ((buffer[2] & 0xff) << 8) +
+                (buffer[3] & 0xff);
+        } else { //2 bytes:
+            int msb = buffer[0] & 0xff;
+            int lsb = buffer[1] & 0xff;            
+            value = msb * 256 + lsb;
+        }
         
         return value;
     }
@@ -56,6 +65,10 @@ public class I2CDevice<T> implements Device<T> {
 
     public void setDevice(int device) {
         this.device = device;
+    }
+
+    public void setReadBytes(int readBytes) {
+        this.readBytes = readBytes;
     }
     
 }
