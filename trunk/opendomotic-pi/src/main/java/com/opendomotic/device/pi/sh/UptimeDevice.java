@@ -16,7 +16,7 @@ public class UptimeDevice extends ShellDevice {
     
     @Override
     public String getReadCommand() {
-        return full ? "uptime" : "uptime | grep -ohe 'up .*' | sed 's/,//g' | awk '{ print $2 }'";
+        return full ? "uptime" : "uptime | grep -ohe 'up .*' | sed 's/,//g' | awk '{ print $2 \" \" $3 \" \" $4 }'";
         
         //for hour and users: "uptime | grep -ohe 'up .*' | sed 's/,//g' | awk '{ print $2\" \"$3 }'"
     }
