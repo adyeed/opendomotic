@@ -79,12 +79,18 @@
                     #{msg.Ms}
                 </f:facet>
                 #{configMB.getDeviceMillisResponse(config)}
+                <f:facet name="footer">  
+                     #{configMB.getDeviceMillisResponseSum()}
+                </f:facet>
             </p:column>
             <p:column>
                 <f:facet name="header">
                     #{msg.Error}
                 </f:facet>
                 #{configMB.getDeviceErrors(config)}
+                <f:facet name="footer">  
+                     #{configMB.getDeviceErrorsSum()}
+                </f:facet>
             </p:column>
             <p:column>
                 <f:facet name="header">

@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.opendomotic.mb.crud;
 
 import com.opendomotic.device.Device;
@@ -112,8 +108,16 @@ public class ConfigMB extends AbstractCRUD<DeviceConfig> {
         return deviceService.getDeviceMillisResponse(config);
     }
     
+    public int getDeviceMillisResponseSum() {
+        return deviceService.getDeviceMillisResponseSum();
+    }
+    
     public int getDeviceErrors(DeviceConfig config) {
         return deviceService.getDeviceErrors(config);
+    }
+    
+    public int getDeviceErrorsSum() {
+        return deviceService.getDeviceErrorsSum();
     }
     
     public void test(DeviceConfig config) {
