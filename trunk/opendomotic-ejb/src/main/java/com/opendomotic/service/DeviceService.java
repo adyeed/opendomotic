@@ -164,6 +164,17 @@ public class DeviceService {
     }
     
     @Lock(LockType.READ)
+    public int getDeviceMillisResponseSum() {
+        int sum = 0;
+        for (DeviceProxy device : mapDevice.values()) {
+            if (device.getMillisResponse() > 0) {
+                sum += device.getMillisResponse();
+            }
+        }        
+        return sum;
+    }
+    
+    @Lock(LockType.READ)
     public int getDeviceErrors(DeviceConfig config) {
         DeviceProxy device = mapDevice.get(config.getName());
         if (device != null) {
@@ -171,6 +182,17 @@ public class DeviceService {
         } else {
             return -1;
         }
+    }
+    
+    @Lock(LockType.READ)
+    public int getDeviceErrorsSum() {
+        int sum = 0;
+        for (DeviceProxy device : mapDevice.values()) {
+            if (device.getErrors() > 0) {
+                sum += device.getErrors();
+            }
+        }        
+        return sum;
     }
 
     public void setDeviceValue(String deviceName, Object value) {
