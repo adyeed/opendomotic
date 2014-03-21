@@ -10,19 +10,19 @@ package com.opendomotic.device.pi.sh;
  *
  * @author Jaques Claudino
  */
-public class SwitchShellDevice extends ShellDevice {
+public class SwitchShellDevice extends ShellDevice<Integer> {
 
     @Override
-    public String getValue() throws Exception {
+    public Integer getValue() throws Exception {
         if (getReadCommand() != null) {
             return super.getValue();
         }
-        return "0";
+        return 0;
     }
     
     @Override
-    public void setValue(String value) throws Exception {
-        if (value.equals("1")) {
+    public void setValue(Integer value) throws Exception {
+        if (value.equals(1)) {
             super.setValue(value);
         }        
     }

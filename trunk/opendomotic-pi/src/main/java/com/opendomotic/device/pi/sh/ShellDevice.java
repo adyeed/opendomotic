@@ -1,9 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package com.opendomotic.device.pi.sh;
 
 import com.opendomotic.device.Device;
@@ -15,21 +9,21 @@ import java.io.InputStreamReader;
  *
  * @author Jaques Claudino
  */
-public class ShellDevice implements Device<String> {
+public class ShellDevice<T> implements Device<T> {
 
     private String readCommand;
     private String writeCommand;
     
     @Override
-    public String getValue() throws Exception {
+    public T getValue() throws Exception {
         if (getReadCommand() != null) {
-            return getRunTimeExecLine(getReadCommand());
-        }        
+            return (T) getRunTimeExecLine(getReadCommand());
+        }                
         return null;
     }
 
     @Override
-    public void setValue(String value) throws Exception {
+    public void setValue(T value) throws Exception {
         if (getWriteCommand() != null) {
             getRunTimeExecLine(getWriteCommand());
         }
