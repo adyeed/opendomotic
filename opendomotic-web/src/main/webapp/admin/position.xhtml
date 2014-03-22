@@ -23,7 +23,7 @@
 
                 <h:outputText value="#{msg.Device}"/>
                 <p:selectOneMenu value="#{positionMB.idConfig}">
-                    <f:selectItems value="#{configMB.listAll}" var="d" itemValue="#{d.id}" itemLabel="#{d.name}"/>
+                    <f:selectItems value="#{configMB.listAllOrderByName}" var="d" itemValue="#{d.id}" itemLabel="#{d.name}"/>
                 </p:selectOneMenu>    
             </h:panelGrid>
 

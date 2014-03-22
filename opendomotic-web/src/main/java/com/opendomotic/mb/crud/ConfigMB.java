@@ -37,6 +37,7 @@ public class ConfigMB extends AbstractCRUD<DeviceConfig> {
     private DevicePropertyDAO devicePropertyDAO;
     
     private List<DeviceProperty> listDeviceProperty;
+    private List<DeviceConfig> listAllOrderByName;
 
     @PostConstruct
     public void init() {
@@ -60,6 +61,7 @@ public class ConfigMB extends AbstractCRUD<DeviceConfig> {
         updateDeviceProperty();
         deviceService.loadDevices();
         deviceService.updateDeviceValuesAsync();
+        listAllOrderByName = null;
     }
         
     private void updateDeviceProperty() {
@@ -84,6 +86,7 @@ public class ConfigMB extends AbstractCRUD<DeviceConfig> {
     public void delete(DeviceConfig config) {
         super.delete(config);
         deviceService.loadDevices();
+        listAllOrderByName = null;
     }
 
     @Override
@@ -98,6 +101,13 @@ public class ConfigMB extends AbstractCRUD<DeviceConfig> {
         }        
         listDeviceProperty.add(new DeviceProperty());
         listDeviceProperty.add(new DeviceProperty());
+    }
+    
+    public List<DeviceConfig> getListAllOrderByName() {
+        if (listAllOrderByName == null) {
+            listAllOrderByName = deviceConfigDAO.findAllOrderByName();
+        }
+        return listAllOrderByName;
     }
     
     public String getDeviceValueAsString(DeviceConfig config) {
