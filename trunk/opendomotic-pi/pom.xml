@@ -4,7 +4,7 @@
 
     <groupId>com.opendomotic</groupId>
     <artifactId>opendomotic-pi</artifactId>
-    <version>0.0.2</version>
+    <version>0.0.3</version>
     <packaging>jar</packaging>
 
     <name>opendomotic-pi</name>
