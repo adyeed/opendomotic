@@ -45,6 +45,12 @@ public class DeviceConfigDAO extends AbstractDAO<DeviceConfig> {
                 .getResultList();
     }
     
+    public List<DeviceConfig> findAllOrderByName() {
+        return em
+                .createQuery("select c from DeviceConfig c order by c.name")
+                .getResultList();
+    }
+    
     public List<DeviceConfig> findAllWithHistory() {
         return em
                 .createQuery("select c from DeviceConfig c where c.history = true order by c.name")
