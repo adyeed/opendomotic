@@ -38,7 +38,7 @@ public class JobService {
     private boolean checkExecuteJobs() {
         boolean executed = false;
         Date now = new Date();
-        
+            
         for (Job job : jobDAO.findAllEnabled()) {
             try {
                 //LOG.log(Level.INFO, "Checking job: {0}", job.toString());
