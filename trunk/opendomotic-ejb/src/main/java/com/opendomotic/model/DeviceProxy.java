@@ -17,13 +17,15 @@ public class DeviceProxy implements Device {
     private static final Logger LOG = Logger.getLogger(DeviceProxy.class.getName());
 
     private final Device device;
+    private final String name;
     private Object value;
     private int millisResponse = -1;
     private int errors = 0;
     private DeviceHistory history; 
 
-    public DeviceProxy(Device device, boolean saveHistory) {
+    public DeviceProxy(Device device, String name, boolean saveHistory) {
         this.device = device;
+        this.name = name;
         if (saveHistory) {
             history = new DeviceHistory();
         }
@@ -58,22 +60,32 @@ public class DeviceProxy implements Device {
         errors++;
     }
     
-    public boolean updateValue() throws Exception {
+    public boolean updateValue() throws Exception {        
+        boolean changed = false;
         long millis = System.currentTimeMillis();
-        Object newValue = device.getValue();
-        boolean changed = !newValue.equals(value);
-        value = newValue;            
-        millisResponse = (int) (System.currentTimeMillis() - millis);
+        
+        try {
+            Object newValue = device.getValue();
+            changed = !newValue.equals(value);
+            value = newValue;            
+        } finally {
+            millisResponse = (int) (System.currentTimeMillis() - millis);
+        }
         
         if (history != null) {
             history.add(new Date(), value);
         }
-        
+
         return changed;
+        
     }
 
     public DeviceHistory getHistory() {
         return history;
+    }
+
+    public String getName() {
+        return name;
     }
 
     @Override

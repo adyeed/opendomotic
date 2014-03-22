@@ -41,7 +41,7 @@ public class DeviceConfigDAO extends AbstractDAO<DeviceConfig> {
     
     public List<DeviceConfig> findAllEnabled() {
         return em
-                .createQuery("select c from DeviceConfig c where c.enabled = true")
+                .createQuery("select c from DeviceConfig c where c.enabled = true order by c.threadId, c.name")
                 .getResultList();
     }
     
