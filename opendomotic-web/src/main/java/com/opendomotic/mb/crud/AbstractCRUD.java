@@ -8,6 +8,7 @@ import com.opendomotic.model.entity.AbstractEntityId;
 import com.opendomotic.service.dao.AbstractDAO;
 import java.io.Serializable;
 import java.util.List;
+import org.primefaces.event.CloseEvent;
 
 /**
  *
@@ -70,6 +71,10 @@ public abstract class AbstractCRUD<T extends AbstractEntityId> implements Serial
 
     public void setOrderBy(String[] orderBy) {
         this.orderBy = orderBy;
+    }
+    
+    public void handleClose(CloseEvent event) {
+        visible = false;
     }
     
 }
