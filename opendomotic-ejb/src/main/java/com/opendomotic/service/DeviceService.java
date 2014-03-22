@@ -6,10 +6,13 @@ import com.opendomotic.device.Device;
 import com.opendomotic.model.DeviceHistory;
 import com.opendomotic.model.DeviceProxy;
 import com.opendomotic.model.entity.DeviceConfig;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -36,8 +39,14 @@ public class DeviceService {
     private static final Logger LOG = Logger.getLogger(DeviceService.class.getName());
     
     private Map<String, DeviceProxy> mapDevice;
+    private Map<Integer, List<DeviceProxy>> mapWorker; //key=threadId
     private boolean scheduleInitialized = false;
+    private int millisResponse = -1;
+    private int millisWebSocket = -1;
 
+    @Inject
+    private DeviceWorker deviceWorker;
+    
     @Inject
     private WebSocketService webSocketService;
     
@@ -54,12 +63,22 @@ public class DeviceService {
         LOG.info("Loading devices...");
 
         mapDevice = Collections.synchronizedMap(new LinkedHashMap<String, DeviceProxy>());
+        mapWorker = Collections.synchronizedMap(new LinkedHashMap<Integer, List<DeviceProxy>>());
         for (DeviceConfig config : configDAO.findAllEnabled()) {
             try {
                 LOG.log(Level.INFO, "creating {0}", config.getName());
                 Device device = config.createDevice();
                 if (device != null) {
-                    mapDevice.put(config.getName(), new DeviceProxy(device, config.isHistory()));
+                    DeviceProxy deviceProxy = new DeviceProxy(device, config.getName(), config.isHistory());
+                    mapDevice.put(config.getName(), deviceProxy);
+                    
+                    //worker to updateDevices asynchronously:
+                    List<DeviceProxy> listDevice = mapWorker.get(config.getThreadId());
+                    if (listDevice == null) {
+                        listDevice = new ArrayList<>();
+                        mapWorker.put(config.getThreadId(), listDevice);
+                    }
+                    listDevice.add(deviceProxy);                    
                 }
             } catch (Exception ex) {
                 LOG.log(Level.SEVERE, "Error creating device: {0}", ex.toString());
@@ -83,32 +102,34 @@ public class DeviceService {
     }
     
     private void updateDeviceValues() {
-        long millisTotal = System.currentTimeMillis();
         
-        for (Entry<String, DeviceProxy> entry : mapDevice.entrySet()) {
-            String deviceName = entry.getKey();
-            DeviceProxy device = entry.getValue();
-            boolean sendWebSocket = false;
-                   
-            try {
-                if (device.updateValue()) {
-                    sendWebSocket = true;
-                }
-            } catch (Exception ex) {
-                LOG.log(Level.SEVERE, "Error updating device: {0} | {1}", new Object[] {deviceName, ex.toString()});
-                device.incErrors();
-                device.setValue(null);
-                sendWebSocket = true;
+        try {
+            //trigger threads:
+            long millisStart = System.currentTimeMillis();
+            List<Future<List<DeviceProxy>>> listFuture = new ArrayList<>();
+            for (Entry<Integer, List<DeviceProxy>> entry : mapWorker.entrySet()) {
+                listFuture.add(deviceWorker.updateDevices(entry.getKey(), entry.getValue()));        
             }
-            logTime(device.toString(), device.getMillisResponse(), 1000);
             
-            if (sendWebSocket) {
-                //TO-DO: apenas enviar para os clientes que estao observando o ambiente
-                webSocketService.sendUpdateDeviceValue(deviceName, getDeviceValueAsString(deviceName));
+            //join threads:
+            List<List<DeviceProxy>> listUpdated = new ArrayList<>();
+            for (Future<List<DeviceProxy>> future : listFuture) {
+                listUpdated.add(future.get());
             }
+            millisResponse = (int) (System.currentTimeMillis()-millisStart);
+            
+            //send websocket:           
+            millisStart = System.currentTimeMillis();                        
+            for (List<DeviceProxy> list : listUpdated) {
+                for (DeviceProxy device : list) {
+                    //TO-DO: apenas enviar websocket para os clientes que estao observando o ambiente
+                    webSocketService.sendUpdateDeviceValue(device.getName(), getDeviceValueAsString(device.getName()));
+                }
+            }
+            millisWebSocket = (int) (System.currentTimeMillis()-millisStart);
+        } catch (Exception ex) {
+            LOG.log(Level.SEVERE, "Error updating devices: {0}", ex.toString());
         }
-        
-        logTime("Total", System.currentTimeMillis()-millisTotal, 2000);
     }
     
     @Lock(LockType.READ)
@@ -165,13 +186,32 @@ public class DeviceService {
     
     @Lock(LockType.READ)
     public int getDeviceMillisResponseSum() {
-        int sum = 0;
-        for (DeviceProxy device : mapDevice.values()) {
-            if (device.getMillisResponse() > 0) {
-                sum += device.getMillisResponse();
+        return millisResponse;
+    }
+    
+    @Lock(LockType.READ)
+    public String getDeviceMillisResponseFmt() {
+        StringBuilder sb = new StringBuilder();       
+        
+        for (Entry<Integer, List<DeviceProxy>> entry : mapWorker.entrySet()) {
+            sb.append(entry.getKey());
+            sb.append("=");
+            int millis = 0;
+            for (DeviceProxy device : entry.getValue()) {
+                if (device.getMillisResponse() > 0) {
+                    millis += device.getMillisResponse();
+                }
             }
+            sb.append(millis);
+            sb.append(" | ");
         }        
-        return sum;
+        
+        sb.append("total=");
+        sb.append(millisResponse);
+        sb.append(" | websocket=");
+        sb.append(millisWebSocket);
+        
+        return sb.toString();
     }
     
     @Lock(LockType.READ)
@@ -217,12 +257,6 @@ public class DeviceService {
     @Lock(LockType.READ)
     public boolean isScheduleInitialized() {
         return scheduleInitialized;
-    }
-    
-    private void logTime(String item, long elapsedMillis, int limit) {
-        if (elapsedMillis > limit) {
-            LOG.log(Level.WARNING, "Slow reading device: {0} ms | {1}", new Object[] {elapsedMillis, item});
-        }
     }
     
 }
