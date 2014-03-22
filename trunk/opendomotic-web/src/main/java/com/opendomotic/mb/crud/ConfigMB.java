@@ -40,7 +40,7 @@ public class ConfigMB extends AbstractCRUD<DeviceConfig> {
 
     @PostConstruct
     public void init() {
-        setOrderBy(new String[] {"name"});
+        setOrderBy(new String[] {"threadId", "name"});
     }
     
     @Override
@@ -110,6 +110,10 @@ public class ConfigMB extends AbstractCRUD<DeviceConfig> {
     
     public int getDeviceMillisResponseSum() {
         return deviceService.getDeviceMillisResponseSum();
+    }
+    
+    public String getDeviceMillisResponseFmt() {
+        return deviceService.getDeviceMillisResponseFmt();
     }
     
     public int getDeviceErrors(DeviceConfig config) {

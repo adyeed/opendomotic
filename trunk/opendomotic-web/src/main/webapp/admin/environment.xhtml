@@ -9,7 +9,7 @@
     <ui:define name="content">        
             
         <p:commandButton value="#{msg.New}" action="#{environmentMB.create}" update="dialog"/>
-        <p:commandButton action="/admin/position" value="#{msg.PositioningDevices}" ajax="false"/>
+        <p:commandButton action="/admin/position" value="#{msg.DevicePosition}" ajax="false"/>
 
         <p:dialog id="dialog" header="#{msg.Environment}" visible="#{environmentMB.visible}">                   
             <h:panelGrid columns="2">
