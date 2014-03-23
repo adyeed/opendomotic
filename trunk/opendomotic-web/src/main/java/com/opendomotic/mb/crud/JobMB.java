@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.opendomotic.mb.crud;
 
 import com.opendomotic.model.entity.DeviceConfig;
@@ -14,7 +10,7 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import javax.enterprise.context.RequestScoped;
+import javax.enterprise.context.SessionScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -23,8 +19,8 @@ import javax.inject.Named;
  * @author jaques
  */
 @Named
-@RequestScoped
-public class JobMB extends AbstractCRUD<Job> {
+@SessionScoped
+public class JobMB extends AbstractSelectableCRUD<Job> {
     
     @Inject
     private JobDAO jobDAO;

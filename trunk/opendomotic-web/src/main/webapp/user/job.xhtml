@@ -5,15 +5,13 @@
                 template="../template/default.xhtml"
                 xmlns:p="http://primefaces.org/ui"
                 xmlns:h="http://java.sun.com/jsf/html"
-                xmlns:f="http://java.sun.com/jsf/core">
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:comp="http://java.sun.com/jsf/composite/comp">
 
     <ui:define name="content">
 
-        <p:commandButton value="#{msg.New}" action="#{jobMB.create()}" update="dialog"/>
-
-        <p:panel id="dialog" header="#{msg.Job}" visible="#{jobMB.visible}">
-            <h:inputHidden value="#{jobMB.entity.id}"/>
-
+        <!-- DIALOG -->
+        <comp:crudDialog header="#{msg.Job}" mb="#{jobMB}">
             <p:panel header="#{msg.Input}">
                 <p:tabView id="tabView" activeIndex="#{jobMB.tabActiveIndex}">    
                     <p:tab id="tab1" title="#{msg.Device}">  
@@ -67,49 +65,25 @@
 
             #{msg.Enabled}
             <p:selectBooleanCheckbox value="#{jobMB.entity.enabled}"/>  
-            
-            <br/>
-            <br/>
-            
-            <p:commandButton value="#{msg.Save}" action="#{jobMB.save}" update="dialog,table"/>
-            <p:commandButton value="#{msg.Cancel}" action="#{jobMB.cancel}" update="dialog"/>
-        </p:panel>
+        </comp:crudDialog>
 
-        <br/>
-
-        <p:dataTable id="table" value="#{jobMB.listAll}" var="job" emptyMessage="#{msg.WithoutJob}">
-            <p:column>
-                <f:facet name="header">
-                    <h:outputText value="#{msg.Input}"/>
-                </f:facet>
-                #{job.inputDescription}
+        <!-- TABLE -->
+        <comp:crudTable mb="#{jobMB}">
+            <p:column headerText="#{msg.Input}">
+                #{item.inputDescription}
             </p:column>
-            <p:column>
-                <f:facet name="header">
-                    <h:outputText value="#{msg.Output}"/>
-                </f:facet>
-                #{job.outputDescription}
+            <p:column headerText="#{msg.Output}">
+                #{item.outputDescription}
             </p:column>            
-            <p:column style="text-align: center;">
-                <f:facet name="header">
-                    <h:outputText value="#{msg.Delete}"/>
-                </f:facet>
-                <p:graphicImage value="../resources/images/button/checked.png" rendered="#{job.deleteAfterExecute}"/>
-                <p:graphicImage value="../resources/images/button/unchecked.png" rendered="#{!job.deleteAfterExecute}"/>
+            <p:column headerText="#{msg.Delete}" style="text-align: center;">
+                <p:graphicImage value="../resources/images/button/checked.png" rendered="#{item.deleteAfterExecute}"/>
+                <p:graphicImage value="../resources/images/button/unchecked.png" rendered="#{!item.deleteAfterExecute}"/>
             </p:column>
-            <p:column style="text-align: center;">
-                <f:facet name="header">
-                    <h:outputText value="#{msg.Enabled}"/>
-                </f:facet>
-                <p:graphicImage value="../resources/images/button/checked.png" rendered="#{job.enabled}"/>
-                <p:graphicImage value="../resources/images/button/unchecked.png" rendered="#{!job.enabled}"/>
+            <p:column headerText="#{msg.Enabled}" style="text-align: center;">
+                <p:graphicImage value="../resources/images/button/checked.png" rendered="#{item.enabled}"/>
+                <p:graphicImage value="../resources/images/button/unchecked.png" rendered="#{!item.enabled}"/>
             </p:column>
-            <p:column>
-                <p:commandButton value="#{msg.Delete}" action="#{jobMB.delete(job)}" update="table" onclick="return confirm('#{msg.ConfirmsTheExclusion}');"/>
-                <p:commandButton value="#{msg.Edit}" action="#{jobMB.edit(job)}" update="@form"/>
-                <p:commandButton value="#{job.enabled ? msg.Disable : msg.Enable}" action="#{jobMB.toggleEnable(job)}" update="table"/>
-            </p:column>
-        </p:dataTable> 
+        </comp:crudTable>
 
     </ui:define>
 

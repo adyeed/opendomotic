@@ -15,8 +15,9 @@ import org.primefaces.event.FileUploadEvent;
 /**
  *
  * @author jaques
+ * @param <T>
  */
-public abstract class AbstractFileUpload<T extends AbstractEntityFile> extends AbstractCRUD<T> {
+public abstract class AbstractFileUpload<T extends AbstractEntityFile> extends AbstractSelectableCRUD<T> {
     
     private static final Logger LOG = Logger.getLogger(AbstractFileUpload.class.getName());
     

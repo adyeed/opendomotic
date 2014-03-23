@@ -1,24 +1,25 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.opendomotic.mb.crud;
 
 import com.opendomotic.model.entity.AbstractEntityId;
 import com.opendomotic.service.dao.AbstractDAO;
+import com.opendomotic.service.dao.CriteriaGetter.OrderGetter;
+import com.opendomotic.service.dao.CriteriaGetter.PredicateGetter;
 import java.io.Serializable;
 import java.util.List;
+import java.util.logging.Logger;
 import org.primefaces.event.CloseEvent;
 
 /**
  *
  * @author jaques
+ * @param <T>
  */
 public abstract class AbstractCRUD<T extends AbstractEntityId> implements Serializable {
     
-    protected T entity;
+    private static final Logger LOG = Logger.getLogger(AbstractCRUD.class.getName());
+    
+    protected T entity;    
     private List<T> listAll;
-    private String[] orderBy;
     protected boolean visible = false;
  
     public abstract AbstractDAO<T> getDAO();
@@ -43,7 +44,7 @@ public abstract class AbstractCRUD<T extends AbstractEntityId> implements Serial
     }
     
     public void save() {
-        getDAO().save(entity);
+        entity = getDAO().save(entity);
         listAll = null;
         visible = false;
     }
@@ -58,23 +59,33 @@ public abstract class AbstractCRUD<T extends AbstractEntityId> implements Serial
     }
     
     public void edit(T entity) {
+        LOG.info(entity.toString());
         this.entity = entity;
         this.visible = true;
     }
     
+    public void clearList() {
+        listAll = null;
+    }
+    
     public List<T> getListAll() {
         if (listAll == null) {
-            listAll = getDAO().findAll(orderBy);
+            listAll = getDAO().findAll(getPredicateGetter(), getOrderGetter());
         }
         return listAll;
     }
 
-    public void setOrderBy(String[] orderBy) {
-        this.orderBy = orderBy;
+    protected PredicateGetter getPredicateGetter() {
+        return null; //reimplementar nas subclasses. Prefira implementar o PredicateGetter dentro do DAO.
     }
     
-    public void handleClose(CloseEvent event) {
-        visible = false;
+    protected OrderGetter getOrderGetter() {
+        return null; //reimplementar nas subclasses. Ex: return new String[] {"id"};
+    }
+    
+    //chamado ao fechar o dialog:
+    public void handleClose(CloseEvent event) {  
+        visible = false; 
     }
     
 }

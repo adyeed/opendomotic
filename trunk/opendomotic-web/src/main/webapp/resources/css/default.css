@@ -1,3 +1,14 @@
+/* --- PRIMEFACES OVERLOAD --- */
+
+.ui-datatable-header {
+    padding: 2px !important;
+    text-align: left !important;
+    background-color: #f2f1f1 !important;
+    border-color: silver !important;
+}
+
+/* --- DEFAULT --- */
+
 body {
     background-color: #ffffff;
     font-size: 16px;

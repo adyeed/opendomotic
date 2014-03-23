@@ -6,16 +6,20 @@ import com.opendomotic.model.entity.DeviceProperty;
 import com.opendomotic.service.dao.AbstractDAO;
 import com.opendomotic.service.dao.DeviceConfigDAO;
 import com.opendomotic.service.DeviceService;
+import com.opendomotic.service.dao.CriteriaGetter;
 import com.opendomotic.service.dao.DevicePropertyDAO;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Logger;
-import javax.annotation.PostConstruct;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 
 /**
  *
@@ -23,7 +27,7 @@ import javax.inject.Named;
  */
 @Named
 @SessionScoped
-public class ConfigMB extends AbstractCRUD<DeviceConfig> {
+public class ConfigMB extends AbstractSelectableCRUD<DeviceConfig> {
     
     private static final Logger LOG = Logger.getLogger(ConfigMB.class.getName());
         
@@ -39,9 +43,16 @@ public class ConfigMB extends AbstractCRUD<DeviceConfig> {
     private List<DeviceProperty> listDeviceProperty;
     private List<DeviceConfig> listAllOrderByName;
 
-    @PostConstruct
-    public void init() {
-        setOrderBy(new String[] {"threadId", "name"});
+    @Override
+    protected CriteriaGetter.OrderGetter getOrderGetter() {
+        return new CriteriaGetter.OrderGetter() {
+            @Override
+            public List getListOrder(CriteriaQuery query, CriteriaBuilder builder, Root root) {
+                return Arrays.asList(
+                        builder.asc(root.get("threadId")), 
+                        builder.asc(root.get("name")));
+            }
+        };
     }
     
     @Override
