@@ -4,16 +4,13 @@
                 template="../template/default.xhtml"
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:p="http://primefaces.org/ui"
-                xmlns:f="http://java.sun.com/jsf/core">
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:comp="http://java.sun.com/jsf/composite/comp">
 
     <ui:define name="content">
         
-        <p:commandButton value="#{msg.New}" action="#{configMB.create()}" update="dialog"/>
-        <p:commandButton action="/admin/image" value="#{msg.UploadImages}" ajax="false"/>
-
-        <p:dialog id="dialog" header="#{msg.Device}" visible="#{configMB.visible}" closeOnEscape="true">
-            <p:ajax event="close" listener="#{configMB.handleClose}"/>
-            <p:focus context="dialog"/>
+        <!-- DIALOG -->
+        <comp:crudDialog header="#{msg.Device}" mb="#{configMB}">
             <h:panelGrid columns="2">
                 #{msg.Name}
                 <p:inputText value="#{configMB.entity.name}"/>
@@ -59,67 +56,60 @@
                     <p:inputText value="#{p.value}"/>
                 </p:column>
             </p:dataTable>
+        </comp:crudDialog>
 
-            <p:defaultCommand target="salvar"/>  
-            <p:commandButton id="salvar" value="#{msg.Save}" action="#{configMB.save}" update="dialog,table"/>
-            <p:commandButton id="cancelar" value="#{msg.Cancel}" action="#{configMB.cancel}" update="dialog"/>
-        </p:dialog>
-
-        <br/>
-
-        <p:dataTable id="table" value="#{configMB.listAll}" var="config" emptyMessage="#{msg.WithoutDevice}">
+        <!-- TABLE -->
+        <comp:crudTable mb="#{configMB}" rows="5" customButtonValue="#{msg.UploadImages}" customButtonAction="/admin/image" customButton="true">
             <p:column headerText="Thr">
-                #{config.threadId}
+                #{item.threadId}
             </p:column>
             <p:column headerText="#{msg.Name}">
-                #{config.name}
+                #{item.name}
             </p:column>
             <p:column headerText="#{msg.Value}">
-                #{configMB.getDeviceValueAsString(config)}
+                #{configMB.getDeviceValueAsString(item)}
             </p:column>
             <p:column headerText="#{msg.Ms}">
-                #{configMB.getDeviceMillisResponse(config)}                
+                #{configMB.getDeviceMillisResponse(item)}                
                 <f:facet name="footer">
                     <p:commandLink value="#{configMB.getDeviceMillisResponseSum()}" onclick="alert('#{configMB.getDeviceMillisResponseFmt()}');"/>
                 </f:facet>
             </p:column>
             <p:column headerText="#{msg.Error}">
-                #{configMB.getDeviceErrors(config)}
+                #{configMB.getDeviceErrors(item)}
                 <f:facet name="footer">  
                     #{configMB.getDeviceErrorsSum()}
                 </f:facet>
             </p:column>
             <p:column headerText="#{msg.ClassName}">
-                #{config.deviceClassName}
+                #{item.deviceClassName}
             </p:column>
             <p:column headerText="#{msg.Enabled}" style="text-align: center;">
-                <p:graphicImage value="../resources/images/button/checked.png" rendered="#{config.enabled}"/>
-                <p:graphicImage value="../resources/images/button/unchecked.png" rendered="#{!config.enabled}"/>
+                <p:graphicImage value="../resources/images/button/checked.png" rendered="#{item.enabled}"/>
+                <p:graphicImage value="../resources/images/button/unchecked.png" rendered="#{!item.enabled}"/>
             </p:column>
             <p:column headerText="#{msg.Switchable}" style="text-align: center;">
-                <p:graphicImage value="../resources/images/button/checked.png" rendered="#{config.switchable}"/>
-                <p:graphicImage value="../resources/images/button/unchecked.png" rendered="#{!config.switchable}"/>
+                <p:graphicImage value="../resources/images/button/checked.png" rendered="#{item.switchable}"/>
+                <p:graphicImage value="../resources/images/button/unchecked.png" rendered="#{!item.switchable}"/>
             </p:column>
             <p:column headerText="#{msg.Format}">
-                #{config.format}
+                #{item.format}
             </p:column>
             <p:column headerText="#{msg.Properties}">
-                #{config.listDeviceProperty}
+                #{item.listDeviceProperty}
             </p:column>
             <p:column headerText="#{msg.Image}" width="130">
                 <p:graphicImage 
-                    value="../resources/images/#{config.deviceImageDefault.fileName}" 
-                    rendered="#{!empty config.deviceImageDefault}"/>
+                    value="../resources/images/#{item.deviceImageDefault.fileName}" 
+                    rendered="#{!empty item.deviceImageDefault}"/>
                 <p:graphicImage 
-                    value="../resources/images/#{config.deviceImageSwitch.fileName}" 
-                    rendered="#{!empty config.deviceImageSwitch}"/>
+                    value="../resources/images/#{item.deviceImageSwitch.fileName}" 
+                    rendered="#{!empty item.deviceImageSwitch}"/>
             </p:column>
-            <p:column width="300">
-                <p:commandButton value="#{msg.Delete}" action="#{configMB.delete(config)}" update="table" onclick="return confirm('#{msg.ConfirmsTheExclusion}');"/>
-                <p:commandButton value="#{msg.Edit}" action="#{configMB.edit(config)}" update="@form"/>
-                <p:commandButton value="#{msg.Test}" action="#{configMB.test(config)}" update="@form"/>
+            <p:column width="95">
+                <p:commandButton value="#{msg.Test}" action="#{configMB.test(item)}" update="@form"/>
             </p:column>
-        </p:dataTable>
+        </comp:crudTable>
 
     </ui:define>
 

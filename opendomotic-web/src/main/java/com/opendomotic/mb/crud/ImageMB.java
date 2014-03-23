@@ -6,8 +6,8 @@ package com.opendomotic.mb.crud;
 
 import com.opendomotic.model.entity.DeviceImage;
 import com.opendomotic.service.dao.AbstractDAO;
+import com.opendomotic.service.dao.CriteriaGetter;
 import com.opendomotic.service.dao.DeviceImageDAO;
-import javax.annotation.PostConstruct;
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -23,9 +23,9 @@ public class ImageMB extends AbstractFileUpload<DeviceImage> {
     @Inject 
     private DeviceImageDAO dao;
 
-    @PostConstruct
-    public void init() {
-        setOrderBy(new String[] {"name"});
+    @Override
+    protected CriteriaGetter.OrderGetter getOrderGetter() {
+        return dao.getCriteriaGetter().getOrderAttributeAsc("name");
     }
     
     @Override

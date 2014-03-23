@@ -4,13 +4,13 @@
                 template="./../template/default.xhtml"
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:p="http://primefaces.org/ui"
-                xmlns:f="http://java.sun.com/jsf/core">
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:comp="http://java.sun.com/jsf/composite/comp">
 
     <ui:define name="content">
             
-        <p:commandButton value="#{msg.New}" action="#{imageMB.create}" update="dialog"/>
-
-        <p:dialog id="dialog" header="#{msg.Image}" visible="#{imageMB.visible}">               
+        <!-- DIALOG -->
+        <comp:crudDialog id="dialog" header="#{msg.Image}" mb="#{imageMB}" updateSalvar="dialog">               
             <h:panelGrid columns="2">
                 <h:outputText value="#{msg.Name}"/>
                 <p:inputText value="#{imageMB.entity.name}"/>
@@ -26,39 +26,25 @@
                         fileUploadListener="#{imageMB.handleFileUpload}"  
                         label="#{msg.Upload}"
                         mode="advanced"  
-                        update="dialog,messages"  
+                        update="dialog"  
                         auto="true"  
                         allowTypes="/(\.|\/)(gif|jpe?g|png)$/"/>
                 </h:panelGrid>
             </h:panelGrid>
+        </comp:crudDialog>
 
-            <p:commandButton value="#{msg.Save}" action="#{imageMB.save}" update="dialog,table"/>
-            <p:commandButton value="#{msg.Cancel}" action="#{imageMB.cancel}" update="dialog"/>
-        </p:dialog>
-
-        <br/>
-
-        <p:dataTable id="table" value="#{imageMB.listAll}" var="item" emptyMessage="#{msg.WithoutImage}">
-            <p:column>
-                <f:facet name="header">
-                    #{msg.Name}
-                </f:facet>
+        <!-- TABLE -->
+        <comp:crudTable mb="#{imageMB}" rows="5">
+            <p:column headerText="#{msg.Name}">
                 #{item.name}
             </p:column>
-            <p:column>
-                <f:facet name="header">
-                    #{msg.Image}
-                </f:facet>
+            <p:column headerText="#{msg.Image}">
                 <p:graphicImage 
                     value="../resources/images/#{item.fileName}" 
                     rendered="#{!empty item.fileName}"/>
                 #{item.fileName}
             </p:column>
-            <p:column>
-                <p:commandButton value="#{msg.Delete}" action="#{imageMB.delete(item)}" update="table" onclick="return confirm('#{msg.ConfirmsTheExclusion}');"/>
-                <p:commandButton value="#{msg.Edit}" action="#{imageMB.edit(item)}" update="@form"/>
-            </p:column>
-        </p:dataTable>
+        </comp:crudTable>
     </ui:define>
 
 </ui:composition>
