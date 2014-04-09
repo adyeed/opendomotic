@@ -54,11 +54,17 @@ function Device(id, x, y, name, switchable, imageDefault, imageSwitch) {
         
         text = this.value;        
         if (text !== null) { //is null when loading
+            text = text.toString();
+            
             if ((text !== 'null') && this.switchable) { //is 'null' string when has comunication error   
                 text = (this.value === 1 || this.value === '1') ? 'on' : 'off';
             }
-            context.strokeText(text, this.x, this.getBottom());
-            context.fillText(text, this.x, this.getBottom());              
+            
+            lines = text.split('\\r\\n');
+            for (var i in lines) {
+                context.strokeText(lines[i], this.x, i * context.fontSize + this.getBottom());
+                context.fillText(lines[i], this.x, i * context.fontSize + this.getBottom());         
+            };                 
         }
 
         context.restore();

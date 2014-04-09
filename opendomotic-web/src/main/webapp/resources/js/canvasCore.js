@@ -30,6 +30,7 @@ function initCanvas(canDrag, onMouseUpDevice, idEnvironment) {
     }
     context = canvas.getContext("2d"); 
     context.font = "bold 26px verdana";
+    context.fontSize = 26;
     drawLoading();
     
     $.getJSON(getUrl('rest/environment/get?id='+idEnvironment), function(data) {

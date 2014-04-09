@@ -12,19 +12,38 @@ package com.opendomotic.device.pi.sh;
  */
 public class SwitchShellDevice extends ShellDevice<Integer> {
 
+    private int value = 0;
+    private String writeCommandOff;
+    
     @Override
     public Integer getValue() throws Exception {
         if (getReadCommand() != null) {
-            return super.getValue();
+            value = Integer.parseInt(getRunTimeExecLine(getReadCommand()));
         }
-        return 0;
+        return value;
     }
     
     @Override
     public void setValue(Integer value) throws Exception {
-        if (value.equals(1)) {
-            super.setValue(value);
-        }        
+        this.value = value;
+        super.setValue(value); //can be writeCommand[On] or writeCommandOff
+    }
+
+    @Override
+    public String getWriteCommand() {
+        if (value == 1) {
+            return super.getWriteCommand(); //writeCommand[On]
+        } else {
+            return writeCommandOff;
+        }
+    }   
+    
+    public void setWriteCommandOn(String writeCommandOn) {
+        this.setWriteCommand(writeCommandOn);
+    }
+    
+    public void setWriteCommandOff(String writeCommandOff) {
+        this.writeCommandOff = writeCommandOff;
     }
     
 }
