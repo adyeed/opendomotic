@@ -1,17 +1,14 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.opendomotic.mb;
 
 import com.opendomotic.model.entity.Environment;
-import com.opendomotic.service.DeviceService;
 import com.opendomotic.service.dao.EnvironmentDAO;
 import java.io.Serializable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.SessionScoped;
+import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -29,7 +26,6 @@ public class HomeMB implements Serializable {
     private EnvironmentDAO environmentDAO;
     
     private Integer idEnvironment;
-    private Boolean adminLogged;
     
     @PostConstruct
     public void init() {
@@ -48,12 +44,12 @@ public class HomeMB implements Serializable {
         this.idEnvironment = idEnvironment;
     }
 
-    public Boolean getAdminLogged() {
-        return adminLogged;
+    public Boolean getAdminLogged() {        
+        return getExternalContext().isUserInRole("admin");
     }
-
-    public void setAdminLogged(Boolean adminLogged) {
-        this.adminLogged = adminLogged;
+ 
+    private ExternalContext getExternalContext() {
+        return FacesContext.getCurrentInstance().getExternalContext();
     }
     
 }
