@@ -9,7 +9,7 @@ function Device(id, x, y, name, switchable, imageDefault, imageSwitch) {
     this.imageDefault = new Image();
     this.imageDefault.alt = name;
     this.imageDefault.src = imageDefault;
-
+    
     if (imageSwitch !== undefined && imageSwitch !== '') {
         this.imageSwitch = new Image();
         this.imageSwitch.alt = name;
@@ -47,8 +47,22 @@ function Device(id, x, y, name, switchable, imageDefault, imageSwitch) {
             context.shadowColor = 'yellow';
             context.shadowBlur = 20;
         }
-               
-        context.drawImage(this.getImage(), this.x, this.y);
+             
+        try {
+            context.drawImage(this.getImage(), this.x, this.y);
+        } catch(err) {
+            //image not found:
+            this.getImage().width = 64;
+            this.getImage().height = 64;
+            
+            //draw rect:
+            context.beginPath();
+            context.lineWidth = 1;
+            context.strokeStyle = 'black';
+            context.rect(this.x, this.y, 64, 64);
+            context.stroke();        
+        }
+                
         context.lineWidth = 1; 
         context.strokeStyle = 'white';
         
