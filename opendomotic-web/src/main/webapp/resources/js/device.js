@@ -1,9 +1,11 @@
-function Device(id, x, y, name, switchable, imageDefault, imageSwitch) {
+var DeviceType = {'SENSOR':0,'VALUE':1,'SWITCH':2,'SWITCH_CONFIRM':3};
+
+function Device(id, x, y, name, type, imageDefault, imageSwitch) {    
     this.id = id;
     this.x = x;
     this.y = y;
     this.name = name;
-    this.switchable = switchable;
+    this.type = type;
     this.value = null;   
 
     this.imageDefault = new Image();
@@ -40,6 +42,10 @@ function Device(id, x, y, name, switchable, imageDefault, imageSwitch) {
                 && this.getBottom() >= y;
     };
 
+    this.isSwitch = function() {
+        return (this.type === DeviceType.SWITCH) || (this.type === DeviceType.SWITCH_CONFIRM);
+    };
+
     this.draw = function(context, isPressed) {       
         context.save();
         
@@ -70,7 +76,7 @@ function Device(id, x, y, name, switchable, imageDefault, imageSwitch) {
         if (text !== null) { //is null when loading
             text = text.toString();
             
-            if ((text !== 'null') && this.switchable) { //is 'null' string when has comunication error   
+            if ((text !== 'null') && this.isSwitch()) { //is 'null' string when has comunication error   
                 text = (this.value === 1 || this.value === '1') ? 'on' : 'off';
             }
             

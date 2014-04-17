@@ -3,6 +3,7 @@ package com.opendomotic.mb.crud;
 import com.opendomotic.device.Device;
 import com.opendomotic.model.entity.DeviceConfig;
 import com.opendomotic.model.entity.DeviceProperty;
+import com.opendomotic.model.entity.DeviceType;
 import com.opendomotic.service.dao.AbstractDAO;
 import com.opendomotic.service.dao.DeviceConfigDAO;
 import com.opendomotic.service.DeviceService;
@@ -159,6 +160,10 @@ public class ConfigMB extends AbstractSelectableCRUD<DeviceConfig> {
 
     public List<DeviceProperty> getListDeviceProperty() {
         return listDeviceProperty;
+    }
+    
+    public DeviceType[] getDeviceTypes() {
+        return DeviceType.values();
     }
     
 }

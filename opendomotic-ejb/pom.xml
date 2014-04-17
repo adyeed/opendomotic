@@ -4,7 +4,7 @@
 
     <groupId>com.opendomotic</groupId>
     <artifactId>opendomotic-ejb</artifactId>
-    <version>0.0.3</version>
+    <version>0.0.4</version>
     <packaging>ejb</packaging>
 
     <name>opendomotic-ejb</name>

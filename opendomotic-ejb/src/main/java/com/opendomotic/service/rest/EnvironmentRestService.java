@@ -49,7 +49,7 @@ public class EnvironmentRestService {
                            position.getX(),
                            position.getY(),
                            position.getDeviceConfig().getName(), 
-                           position.getDeviceConfig().isSwitchable(),
+                           position.getDeviceConfig().getDeviceType().ordinal(),
                            getDeviceImageFileName(position.getDeviceConfig().getDeviceImageDefault()),
                            getDeviceImageFileName(position.getDeviceConfig().getDeviceImageSwitch())));
                     }

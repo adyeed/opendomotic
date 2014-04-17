@@ -69,7 +69,7 @@ function initCanvas(canDrag, onMouseUpDevice, idEnvironment) {
 }
 
 function addDevice(p) {
-    deviceArray.push(new Device(p.id, p.x, p.y, p.name, p.switchable, p.imageDefault, p.imageSwitch));
+    deviceArray.push(new Device(p.id, p.x, p.y, p.name, p.type, p.imageDefault, p.imageSwitch));
 }
 
 function draw() {

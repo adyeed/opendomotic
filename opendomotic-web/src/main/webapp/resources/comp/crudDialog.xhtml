@@ -26,7 +26,7 @@
             <p:separator/>
             <p:defaultCommand target="salvar"/>                    
             <p:commandButton id="salvar" value="#{msg.Save}" action="#{cc.attrs.mb.save}" update="@form #{cc.attrs.updateSalvar}"/>
-            <p:commandButton id="cancelar" value="#{msg.Cancel}" action="#{cc.attrs.mb.cancel}" update="dialog" immediate="true"/>
+            <p:commandButton id="cancelar" value="#{msg.Cancel}" action="#{cc.attrs.mb.cancel}" update="dialog"/>
         </p:dialog>
     </cc:implementation>
 </html>

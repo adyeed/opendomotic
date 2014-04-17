@@ -17,19 +17,19 @@ public class DevicePositionRest {
     private int x;
     private int y;
     private String name;
-    private boolean switchable;
+    private int type;
     private String imageDefault; 
     private String imageSwitch;
 
     public DevicePositionRest() {
     }
 
-    public DevicePositionRest(int id, int x, int y, String name, boolean switchable, String imageDefault, String imageSwitch) {
+    public DevicePositionRest(int id, int x, int y, String name, int type, String imageDefault, String imageSwitch) {
         this.id = id;
         this.x = x;
         this.y = y;
         this.name = name;
-        this.switchable = switchable;
+        this.type = type;
         this.imageDefault = imageDefault;
         this.imageSwitch = imageSwitch;
     }
@@ -65,13 +65,13 @@ public class DevicePositionRest {
     public void setName(String name) {
         this.name = name;
     }
-   
-    public boolean isSwitchable() {
-        return switchable;
+
+    public int getType() {
+        return type;
     }
 
-    public void setSwitchable(boolean switchable) {
-        this.switchable = switchable;
+    public void setType(int type) {
+        this.type = type;
     }
     
     public String getImageDefault() {

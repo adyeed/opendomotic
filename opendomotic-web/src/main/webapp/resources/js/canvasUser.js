@@ -11,14 +11,26 @@ function drawCanvas(idEnvironment) {
 //------------------------------------------------------------------------------
 
 function mouseUpDevice() {
-    if (devicePressed.switchable) {
-        deviceName = devicePressed.name;
-        $.getJSON(getUrl('rest/device/switch?name='+deviceName), null, function(data) {
-            if (data !== 'OK') {
-                alert(data);
-            }
-        }); 
-    } else {
-        alert(devicePressed.name + ' = ' + devicePressed.value);
+    switch (devicePressed.type) {            
+        case DeviceType.VALUE:
+            newValue = prompt(devicePressed.name, devicePressed.value);
+            if (newValue !== null) {
+                $.getJSON(getUrl('rest/device/set?name=' + devicePressed.name + '&value='+newValue), null, null);
+            }            
+            break;
+        
+        case DeviceType.SWITCH_CONFIRM:
+            switched = devicePressed.value === '1' || devicePressed.value === 1;
+            if (!confirm((switched ? 'Desligar ' : 'Ligar ') + devicePressed.name + '?'))
+                break;
+        
+        case DeviceType.SWITCH:
+            $.getJSON(getUrl('rest/device/switch?name=' + devicePressed.name), null, null);
+            break;
+        
+        default: //DeviceType.SENSOR:
+            alert(devicePressed.name + ' = ' + devicePressed.value);
+            break;
     }
+    
 }
