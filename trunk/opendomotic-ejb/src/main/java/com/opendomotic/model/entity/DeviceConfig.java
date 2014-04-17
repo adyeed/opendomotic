@@ -34,8 +34,8 @@ public class DeviceConfig extends AbstractEntityName {
     private List<DeviceProperty> listDeviceProperty;
     
     private String deviceClassName;
+    private DeviceType deviceType = DeviceType.SENSOR;
     private boolean enabled;
-    private boolean switchable;
     private boolean history;
     private String format;
     private int threadId;
@@ -76,6 +76,14 @@ public class DeviceConfig extends AbstractEntityName {
         this.deviceClassName = deviceClassName;
     }
 
+    public DeviceType getDeviceType() {
+        return deviceType;
+    }
+
+    public void setDeviceType(DeviceType deviceType) {
+        this.deviceType = deviceType;
+    }
+
     public DeviceImage getDeviceImageSwitch() {
         return deviceImageSwitch;
     }
@@ -90,14 +98,6 @@ public class DeviceConfig extends AbstractEntityName {
 
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
-    }
-
-    public boolean isSwitchable() {
-        return switchable;
-    }
-
-    public void setSwitchable(boolean switchable) {
-        this.switchable = switchable;
     }
 
     public String getFormat() {

@@ -24,14 +24,10 @@
                 #{msg.ThreadId}
                 <p:spinner value="#{configMB.entity.threadId}"/>
                 
-                #{msg.Enabled}
-                <p:selectBooleanCheckbox value="#{configMB.entity.enabled}"/>  
-                
-                #{msg.Switchable}
-                <p:selectBooleanCheckbox value="#{configMB.entity.switchable}"/>    
-                
-                #{msg.History}
-                <p:selectBooleanCheckbox value="#{configMB.entity.history}"/> 
+                <h:outputText value="#{msg.Type}"/>
+                <p:selectOneMenu value="#{configMB.entity.deviceType}">
+                    <f:selectItems value="#{configMB.deviceTypes}"/>                         
+                </p:selectOneMenu>
                 
                 <h:outputText value="#{msg.DefaultImage}"/>
                 <p:selectOneMenu value="#{configMB.entity.deviceImageDefault}" converter="#{entityConverter}">
@@ -44,6 +40,12 @@
                     <f:selectItem itemLabel="#{msg.None}"/>
                     <f:selectItems value="#{imageMB.listAll}" var="i" itemLabel="#{i.name}"/>                         
                 </p:selectOneMenu>
+                
+                #{msg.Enabled}
+                <p:selectBooleanCheckbox value="#{configMB.entity.enabled}"/>
+                
+                #{msg.History}
+                <p:selectBooleanCheckbox value="#{configMB.entity.history}"/> 
             </h:panelGrid>
 
             <p:dataTable value="#{configMB.listDeviceProperty}" var="p">
@@ -84,14 +86,6 @@
             <p:column headerText="#{msg.ClassName}">
                 #{item.deviceClassName}
             </p:column>
-            <p:column headerText="#{msg.Enabled}" style="text-align: center;">
-                <p:graphicImage value="../resources/images/button/checked.png" rendered="#{item.enabled}"/>
-                <p:graphicImage value="../resources/images/button/unchecked.png" rendered="#{!item.enabled}"/>
-            </p:column>
-            <p:column headerText="#{msg.Switchable}" style="text-align: center;">
-                <p:graphicImage value="../resources/images/button/checked.png" rendered="#{item.switchable}"/>
-                <p:graphicImage value="../resources/images/button/unchecked.png" rendered="#{!item.switchable}"/>
-            </p:column>
             <p:column headerText="#{msg.Format}">
                 #{item.format}
             </p:column>
@@ -105,6 +99,10 @@
                 <p:graphicImage 
                     value="../resources/images/#{item.deviceImageSwitch.fileName}" 
                     rendered="#{!empty item.deviceImageSwitch}"/>
+            </p:column>
+            <p:column headerText="#{msg.Enabled}" style="text-align: center;">
+                <p:graphicImage value="../resources/images/button/checked.png" rendered="#{item.enabled}"/>
+                <p:graphicImage value="../resources/images/button/unchecked.png" rendered="#{!item.enabled}"/>
             </p:column>
             <p:column width="95">
                 <p:commandButton value="#{msg.Test}" action="#{configMB.test(item)}" update="@form"/>
