@@ -38,7 +38,7 @@ public class DeviceConfig extends AbstractEntityName {
     private boolean enabled;
     private boolean history;
     private String format;
-    private int threadId;
+    private String threadId;
 
     public Device createDevice() throws ClassNotFoundException, InstantiationException, IllegalAccessException, DevicePropertyNotFoundException, IllegalArgumentException, InvocationTargetException {
         return DeviceFactory.createDevice(deviceClassName, createDeviceProperties());
@@ -116,11 +116,11 @@ public class DeviceConfig extends AbstractEntityName {
         this.history = history;
     }
 
-    public int getThreadId() {
+    public String getThreadId() {
         return threadId;
     }
 
-    public void setThreadId(int threadId) {
+    public void setThreadId(String threadId) {
         this.threadId = threadId;
     }
     

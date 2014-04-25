@@ -66,18 +66,17 @@ public class DeviceProxy implements Device {
         
         try {
             Object newValue = device.getValue();
-            changed = !newValue.equals(value);
+            changed = newValue != null && !newValue.equals(value);
             value = newValue;            
         } finally {
             millisResponse = (int) (System.currentTimeMillis() - millis);
         }
         
-        if (history != null) {
+        if (history != null && value != null) {
             history.add(new Date(), value);
         }
 
-        return changed;
-        
+        return changed;        
     }
 
     public DeviceHistory getHistory() {
