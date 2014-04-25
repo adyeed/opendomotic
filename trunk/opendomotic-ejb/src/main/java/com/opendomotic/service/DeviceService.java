@@ -39,7 +39,7 @@ public class DeviceService {
     private static final Logger LOG = Logger.getLogger(DeviceService.class.getName());
     
     private Map<String, DeviceProxy> mapDevice;
-    private Map<Integer, List<DeviceProxy>> mapWorker; //key=threadId
+    private Map<String, List<DeviceProxy>> mapWorker; //key=threadId
     private boolean scheduleInitialized = false;
     private int millisResponse = -1;
     private int millisWebSocket = -1;
@@ -63,7 +63,7 @@ public class DeviceService {
         LOG.info("Loading devices...");
 
         mapDevice = Collections.synchronizedMap(new LinkedHashMap<String, DeviceProxy>());
-        mapWorker = Collections.synchronizedMap(new LinkedHashMap<Integer, List<DeviceProxy>>());
+        mapWorker = Collections.synchronizedMap(new LinkedHashMap<String, List<DeviceProxy>>());
         for (DeviceConfig config : configDAO.findAllEnabled()) {
             try {
                 LOG.log(Level.INFO, "creating {0}", config.getName());
@@ -107,7 +107,7 @@ public class DeviceService {
             //trigger threads:
             long millisStart = System.currentTimeMillis();
             List<Future<List<DeviceProxy>>> listFuture = new ArrayList<>();
-            for (Entry<Integer, List<DeviceProxy>> entry : mapWorker.entrySet()) {
+            for (Entry<String, List<DeviceProxy>> entry : mapWorker.entrySet()) {
                 listFuture.add(deviceWorker.updateDevices(entry.getKey(), entry.getValue()));        
             }
             
@@ -193,7 +193,7 @@ public class DeviceService {
     public String getDeviceMillisResponseFmt() {
         StringBuilder sb = new StringBuilder();       
         
-        for (Entry<Integer, List<DeviceProxy>> entry : mapWorker.entrySet()) {
+        for (Entry<String, List<DeviceProxy>> entry : mapWorker.entrySet()) {
             sb.append(entry.getKey());
             sb.append("=");
             int millis = 0;

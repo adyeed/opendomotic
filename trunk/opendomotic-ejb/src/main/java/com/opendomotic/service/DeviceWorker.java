@@ -26,7 +26,7 @@ public class DeviceWorker {
     private static final Logger LOG = Logger.getLogger(DeviceWorker.class.getName());
     
     @Asynchronous
-    public Future<List<DeviceProxy>> updateDevices(Integer threadId, List<DeviceProxy> listDevice) {
+    public Future<List<DeviceProxy>> updateDevices(String threadId, List<DeviceProxy> listDevice) {
         List<DeviceProxy> listUpdated = new ArrayList<>();
         for (DeviceProxy device : listDevice) {
             boolean updated = false;

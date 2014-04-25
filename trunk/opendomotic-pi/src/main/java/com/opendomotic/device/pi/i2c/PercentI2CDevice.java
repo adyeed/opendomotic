@@ -1,9 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package com.opendomotic.device.pi.i2c;
 
 import com.opendomotic.device.util.Percent;
@@ -19,7 +13,10 @@ public class PercentI2CDevice extends DoubleI2CDevice {
     @Override
     public Double getValue() throws Exception {
         Double value = super.getValue();
-        return percent.getPercent(value);
+        if (value != null) {
+            return percent.getPercent(value);
+        }
+        return null;
     }
     
     public void setMin(Double min) {

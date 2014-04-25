@@ -1,9 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package com.opendomotic.device.pi.i2c;
 
 /**
@@ -16,8 +10,11 @@ public class DoubleI2CDevice extends I2CDevice<Double> {
     
     @Override
     public Double getValue() throws Exception {
-        double value = super.getValueInt();
-        return value / factor;
+        Integer value = super.getValueInt();
+        if (value != null) {
+            return ((double) value) / factor;
+        }
+        return null;        
     }
 
     public void setFactor(double factor) {
