@@ -11,12 +11,22 @@
         
         <!-- DIALOG -->
         <comp:crudDialog header="#{msg.Device}" mb="#{configMB}">
-            <h:panelGrid columns="2">
+            <h:panelGrid id="panelDialog" columns="2" columnClasses="textRight">
                 #{msg.Name}
-                <p:inputText value="#{configMB.entity.name}"/>
-
+                <p:inputText value="#{configMB.entity.name}"/>                      
+                
                 #{msg.ClassName}
-                <p:inputText value="#{configMB.entity.deviceClassName}"/>      
+                <p:selectOneMenu value="#{configMB.entity.deviceClassName}" valueChangeListener="#{configMB.valueChangeMethod}">
+                    <f:selectItem itemLabel="#{msg.Custom}"/>
+                    <f:selectItems value="#{configMB.listClassNames}"/>                        
+                    <p:ajax update="panelDialog tableProperty"/>
+                </p:selectOneMenu>  
+                
+                <h:outputText rendered="#{configMB.customClassName}"/>
+                <h:panelGroup rendered="#{configMB.customClassName}">
+                    <p:inputText id="customClassName" value="#{configMB.entity.deviceClassName}"/>
+                    <p:watermark for="customClassName" value="ex: com.my.CustomDevice"/>
+                </h:panelGroup>
                 
                 #{msg.Format}
                 <p:inputText value="#{configMB.entity.format}"/>
@@ -48,7 +58,7 @@
                 <p:selectBooleanCheckbox value="#{configMB.entity.history}"/> 
             </h:panelGrid>
 
-            <p:dataTable value="#{configMB.listDeviceProperty}" var="p">
+            <p:dataTable id="tableProperty" value="#{configMB.listDeviceProperty}" var="p">
                 <p:column>
                     <f:facet name="header">#{msg.Property}</f:facet>
                     <p:inputText value="#{p.name}"/>

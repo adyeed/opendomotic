@@ -63,3 +63,7 @@ a:link:hover, a:visited:hover  {
     background-image: url('../images/button/environment.png') !important; 
     border-radius: 0;
 }
+
+.textRight {
+    text-align: right;
+}
