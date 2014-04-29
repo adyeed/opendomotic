@@ -1,26 +1,31 @@
 package com.opendomotic.mb.crud;
 
 import com.opendomotic.device.Device;
+import com.opendomotic.model.DeviceProxy;
 import com.opendomotic.model.entity.DeviceConfig;
 import com.opendomotic.model.entity.DeviceProperty;
 import com.opendomotic.model.entity.DeviceType;
-import com.opendomotic.service.dao.AbstractDAO;
-import com.opendomotic.service.dao.DeviceConfigDAO;
 import com.opendomotic.service.DeviceService;
+import com.opendomotic.service.dao.AbstractDAO;
 import com.opendomotic.service.dao.CriteriaGetter;
+import com.opendomotic.service.dao.DeviceConfigDAO;
 import com.opendomotic.service.dao.DevicePropertyDAO;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.logging.Logger;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
+import javax.faces.event.ValueChangeEvent;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import org.reflections.Reflections;
 
 /**
  *
@@ -35,7 +40,7 @@ public class ConfigMB extends AbstractSelectableCRUD<DeviceConfig> {
     @Inject 
     private DeviceService deviceService;
     
-    @Inject 
+    @Inject
     private DeviceConfigDAO deviceConfigDAO;
     
     @Inject
@@ -43,6 +48,7 @@ public class ConfigMB extends AbstractSelectableCRUD<DeviceConfig> {
     
     private List<DeviceProperty> listDeviceProperty;
     private List<DeviceConfig> listAllOrderByName;
+    private List<String> listClassNames;
 
     @Override
     protected CriteriaGetter.OrderGetter getOrderGetter() {
@@ -80,7 +86,7 @@ public class ConfigMB extends AbstractSelectableCRUD<DeviceConfig> {
         int i = 0;
         while (i < listDeviceProperty.size()) {
             DeviceProperty p = listDeviceProperty.get(i);            
-            if (p.getName().isEmpty()) {
+            if (p.getName().isEmpty() || p.getValue().isEmpty()) {
                 if (p.getId() != null) {
                     devicePropertyDAO.delete(p);
                 }
@@ -120,6 +126,41 @@ public class ConfigMB extends AbstractSelectableCRUD<DeviceConfig> {
             listAllOrderByName = deviceConfigDAO.findAllOrderByName();
         }
         return listAllOrderByName;
+    }
+    
+    public List<String> getListClassNames() {
+        if (listClassNames == null) {
+            listClassNames = new ArrayList<>();
+            Reflections reflections = new Reflections("com.opendomotic");               
+            for (Class<? extends Device> clazz : reflections.getSubTypesOf(Device.class)) {
+                if (clazz != DeviceProxy.class) {
+                    listClassNames.add(clazz.getName());
+                }
+            }        
+            Collections.sort(listClassNames);
+        }
+        return listClassNames;
+    }
+    
+    public void valueChangeMethod(ValueChangeEvent e) {
+        listDeviceProperty.clear(); 
+        
+        try {
+            String className = (String) e.getNewValue();           
+            for (Method method : Class.forName(className).getMethods()) {
+                if (method.getName().startsWith("set") && !method.getName().equals("setValue")) {
+                    String propertyName = Character.toString(method.getName().charAt(3)).toLowerCase() + method.getName().substring(4, method.getName().length());
+                    listDeviceProperty.add(new DeviceProperty(entity, propertyName, ""));
+                }
+            }
+        } catch (Exception ex) {
+            LOG.severe(ex.toString());
+        }
+        
+        if (listDeviceProperty.isEmpty()) {
+            listDeviceProperty.add(new DeviceProperty());
+            listDeviceProperty.add(new DeviceProperty());
+        }
     }
     
     public String getDeviceValueAsString(DeviceConfig config) {
@@ -164,6 +205,10 @@ public class ConfigMB extends AbstractSelectableCRUD<DeviceConfig> {
     
     public DeviceType[] getDeviceTypes() {
         return DeviceType.values();
+    }
+    
+    public boolean isCustomClassName() {
+        return listClassNames.indexOf(entity.getDeviceClassName()) == -1;
     }
     
 }

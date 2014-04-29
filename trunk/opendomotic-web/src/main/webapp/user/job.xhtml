@@ -15,7 +15,7 @@
             <p:panel header="#{msg.Input}">
                 <p:tabView id="tabView" activeIndex="#{jobMB.tabActiveIndex}">    
                     <p:tab id="tab1" title="#{msg.Device}">  
-                        <h:panelGrid columns="2">
+                        <h:panelGrid columns="2" columnClasses="textRight">
                             <h:outputText value="#{msg.Device}"/>
                             <p:selectOneMenu value="#{jobMB.idInput}">
                                 <f:selectItem itemLabel="#{msg.None}" itemValue="#{null}"/>
@@ -47,7 +47,7 @@
             <br/>
 
             <p:panel header="#{msg.Output}">
-                <h:panelGrid columns="2">
+                <h:panelGrid columns="2" columnClasses="textRight">
                     <h:outputText value="#{msg.Device}"/>
                     <p:selectOneMenu value="#{jobMB.idOutput}">
                         <f:selectItems value="#{configMB.listAllOrderByName}" var="d" itemValue="#{d.id}" itemLabel="#{d.name}"/>
@@ -63,8 +63,10 @@
 
             <br/>
 
-            #{msg.Enabled}
-            <p:selectBooleanCheckbox value="#{jobMB.entity.enabled}"/>  
+            <h:panelGrid columns="2">
+                #{msg.Enabled}
+                <p:selectBooleanCheckbox value="#{jobMB.entity.enabled}"/>  
+            </h:panelGrid>
         </comp:crudDialog>
 
         <!-- TABLE -->

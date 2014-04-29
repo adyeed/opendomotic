@@ -91,10 +91,6 @@ public class HttpDevice<T> implements Device<T> {
         return "http://" + host + "/" + path;
     }
 
-    public void setIp(String ip) {
-        this.host = ip;
-    }
-
     public void setHost(String host) {
         this.host = host;
     }
