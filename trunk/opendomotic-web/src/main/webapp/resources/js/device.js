@@ -1,13 +1,14 @@
-var DeviceType = {'SENSOR':0,'VALUE':1,'SWITCH':2,'SWITCH_CONFIRM':3};
+var DeviceType = {'SENSOR':0,'VALUE':1,'SWITCH':2,'SWITCH_CONFIRM':3,'CUSTOM':4};
 
-function Device(id, x, y, name, type, imageDefault, imageSwitch) {    
+function Device(id, x, y, name, type, customScript, imageDefault, imageSwitch) {    
     this.id = id;
     this.x = x;
     this.y = y;
     this.name = name;
     this.type = type;
+    this.customScript = customScript;
     this.value = null;   
-
+    
     this.imageDefault = new Image();
     this.imageDefault.alt = name;
     this.imageDefault.src = imageDefault;

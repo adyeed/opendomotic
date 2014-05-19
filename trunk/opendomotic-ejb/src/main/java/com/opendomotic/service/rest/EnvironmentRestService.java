@@ -45,13 +45,14 @@ public class EnvironmentRestService {
                     DeviceConfig config = position.getDeviceConfig();
                     if (config.isEnabled()) {
                         list.add(new DevicePositionRest(
-                           position.getId(), 
-                           position.getX(),
-                           position.getY(),
-                           position.getDeviceConfig().getName(), 
-                           position.getDeviceConfig().getDeviceType().ordinal(),
-                           getDeviceImageFileName(position.getDeviceConfig().getDeviceImageDefault()),
-                           getDeviceImageFileName(position.getDeviceConfig().getDeviceImageSwitch())));
+                            position.getId(), 
+                            position.getX(),
+                            position.getY(),
+                            position.getDeviceConfig().getName(), 
+                            position.getDeviceConfig().getDeviceType().ordinal(),
+                            position.getDeviceConfig().getCustomScript(),
+                            getDeviceImageFileName(position.getDeviceConfig().getDeviceImageDefault()),
+                            getDeviceImageFileName(position.getDeviceConfig().getDeviceImageSwitch())));
                     }
                 }
             }

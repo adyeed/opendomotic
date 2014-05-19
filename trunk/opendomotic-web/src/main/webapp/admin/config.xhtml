@@ -39,6 +39,9 @@
                     <f:selectItems value="#{configMB.deviceTypes}"/>                         
                 </p:selectOneMenu>
                 
+                <h:outputText value="#{msg.CustomScript}"/>
+                <p:inputTextarea value="#{configMB.entity.customScript}" rows="3" cols="40"/>
+                
                 <h:outputText value="#{msg.DefaultImage}"/>
                 <p:selectOneMenu value="#{configMB.entity.deviceImageDefault}" converter="#{entityConverter}">
                     <f:selectItem itemLabel="#{msg.Select}"/>

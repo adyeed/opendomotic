@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.opendomotic.model.rest;
 
 import javax.xml.bind.annotation.XmlRootElement;
@@ -18,18 +14,20 @@ public class DevicePositionRest {
     private int y;
     private String name;
     private int type;
+    private String customScript;
     private String imageDefault; 
     private String imageSwitch;
 
     public DevicePositionRest() {
     }
 
-    public DevicePositionRest(int id, int x, int y, String name, int type, String imageDefault, String imageSwitch) {
+    public DevicePositionRest(int id, int x, int y, String name, int type, String customScript, String imageDefault, String imageSwitch) {
         this.id = id;
         this.x = x;
         this.y = y;
         this.name = name;
         this.type = type;
+        this.customScript = customScript;
         this.imageDefault = imageDefault;
         this.imageSwitch = imageSwitch;
     }
@@ -72,6 +70,14 @@ public class DevicePositionRest {
 
     public void setType(int type) {
         this.type = type;
+    }
+
+    public String getCustomScript() {
+        return customScript;
+    }
+
+    public void setCustomScript(String customScript) {
+        this.customScript = customScript;
     }
     
     public String getImageDefault() {

@@ -12,7 +12,7 @@ package com.opendomotic.model.entity;
  */
 public enum DeviceType {
     
-    SENSOR("Sensor"), VALUE("Value"), SWITCH("Switch"), SWITCH_CONFIRM("SwitchConfirm");
+    SENSOR("Sensor"), VALUE("Value"), SWITCH("Switch"), SWITCH_CONFIRM("SwitchConfirm"), CUSTOM("Custom");
     
     private final String name;
     
