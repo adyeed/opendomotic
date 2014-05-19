@@ -74,7 +74,11 @@ public class ConfigMB extends AbstractSelectableCRUD<DeviceConfig> {
     }
     
     @Override
-    public void save() {     
+    public void save() {   
+        if (entity.getCustomScript().isEmpty()) {
+            entity.setCustomScript(null);
+        }
+        
         super.save();
         updateDeviceProperty();
         deviceService.loadDevices();

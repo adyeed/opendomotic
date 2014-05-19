@@ -35,6 +35,7 @@ public class DeviceConfig extends AbstractEntityName {
     
     private String deviceClassName;
     private DeviceType deviceType = DeviceType.SENSOR;
+    private String customScript;
     private boolean enabled;
     private boolean history;
     private String format;
@@ -82,6 +83,14 @@ public class DeviceConfig extends AbstractEntityName {
 
     public void setDeviceType(DeviceType deviceType) {
         this.deviceType = deviceType;
+    }
+
+    public String getCustomScript() {
+        return customScript;
+    }
+
+    public void setCustomScript(String customScript) {
+        this.customScript = customScript;
     }
 
     public DeviceImage getDeviceImageSwitch() {
