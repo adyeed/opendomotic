@@ -147,23 +147,25 @@ public class ConfigMB extends AbstractSelectableCRUD<DeviceConfig> {
     }
     
     public void valueChangeMethod(ValueChangeEvent e) {
-        listDeviceProperty.clear(); 
-        
-        try {
-            String className = (String) e.getNewValue();           
-            for (Method method : Class.forName(className).getMethods()) {
-                if (method.getName().startsWith("set") && !method.getName().equals("setValue")) {
-                    String propertyName = Character.toString(method.getName().charAt(3)).toLowerCase() + method.getName().substring(4, method.getName().length());
-                    listDeviceProperty.add(new DeviceProperty(entity, propertyName, ""));
+        if (listDeviceProperty != null) {
+            listDeviceProperty.clear(); 
+
+            try {
+                String className = (String) e.getNewValue();           
+                for (Method method : Class.forName(className).getMethods()) {
+                    if (method.getName().startsWith("set") && !method.getName().equals("setValue")) {
+                        String propertyName = Character.toString(method.getName().charAt(3)).toLowerCase() + method.getName().substring(4, method.getName().length());
+                        listDeviceProperty.add(new DeviceProperty(entity, propertyName, ""));
+                    }
                 }
+            } catch (Exception ex) {
+                LOG.severe(ex.toString());
             }
-        } catch (Exception ex) {
-            LOG.severe(ex.toString());
-        }
-        
-        if (listDeviceProperty.isEmpty()) {
-            listDeviceProperty.add(new DeviceProperty());
-            listDeviceProperty.add(new DeviceProperty());
+
+            if (listDeviceProperty.isEmpty()) {
+                listDeviceProperty.add(new DeviceProperty());
+                listDeviceProperty.add(new DeviceProperty());
+            }
         }
     }
     
