@@ -1,9 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package com.opendomotic.mb;
 
 import com.opendomotic.model.DeviceHistory;
@@ -14,6 +8,7 @@ import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.SessionScoped;
@@ -57,14 +52,21 @@ public class HistoryMB implements Serializable {
     @PostConstruct
     public void init() {
         listDeviceConfigHistory = deviceConfigDAO.findAllWithHistory();
-        if (!listDeviceConfigHistory.isEmpty()) {
+                
+        Map<String, String> params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
+        String deviceParam = params.get("device");
+        if (deviceParam != null) {
+            DeviceConfig configParam = deviceConfigDAO.findByName(deviceParam);
+            if (configParam != null) {
+                refresh(configParam);
+            }
+        } else if (!listDeviceConfigHistory.isEmpty()) {
             refresh(listDeviceConfigHistory.get(0));
         }
     }
        
-    //uses idConfig setted by selectOneMenu:
     public void refresh() {
-        config = deviceConfigDAO.findById(idConfig);
+        config = deviceConfigDAO.findById(idConfig); //by selectOneMenu       
         if (config != null) {
             refresh(config);
         }        
@@ -126,7 +128,7 @@ public class HistoryMB implements Serializable {
                 new FacesMessage(FacesMessage.SEVERITY_INFO, "Selecionado:", "index "+ event.getSeriesIndex()));  
     }
     
-    public CartesianChartModel getLinearModel() {  
+    public CartesianChartModel getLinearModel() {      
         return linearModel;
     }
 

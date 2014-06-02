@@ -5,9 +5,9 @@
         <param-value>Production</param-value>
         <!--<param-value>Development</param-value>!-->
     </context-param>
-    <!--<context-param>
+<!--    <context-param>
         <param-name>javax.faces.STATE_SAVING_METHOD</param-name>
-        <param-value>server</param-value>
+        <param-value>client</param-value>
     </context-param>-->
     <context-param>
         <param-name>javax.faces.DATETIMECONVERTER_DEFAULT_TIMEZONE_IS_SYSTEM_TIMEZONE</param-name>
@@ -17,6 +17,7 @@
         <param-name>primefaces.THEME</param-name>  
         <param-value>bootstrap</param-value>  
     </context-param>  
+    
     
     <servlet>
         <servlet-name>Faces Servlet</servlet-name>
