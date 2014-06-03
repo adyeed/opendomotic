@@ -14,7 +14,7 @@
             <br/>
         </h:panelGroup>
 
-        <h:panelGroup id="panelGroupCanvas" rendered="#{!empty historyMB.listDeviceConfigHistory}">
+        <h:panelGroup id="panelGroupHistory" rendered="#{!empty historyMB.listDeviceConfigHistory}">
             <f:event type="preRenderView" listener="#{historyMB.init}" />
             
             <p:growl id="growl" showDetail="true" />  
