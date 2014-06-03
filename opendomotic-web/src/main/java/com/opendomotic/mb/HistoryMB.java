@@ -60,7 +60,7 @@ public class HistoryMB implements Serializable {
             if (configParam != null) {
                 refresh(configParam);
             }
-        } else if (!listDeviceConfigHistory.isEmpty()) {
+        } else if (idConfig == 0 && !listDeviceConfigHistory.isEmpty()) {
             refresh(listDeviceConfigHistory.get(0));
         }
     }
