@@ -12,14 +12,11 @@
         <!-- DIALOG -->
         <comp:crudDialog header="#{msg.Device}" mb="#{configMB}">
             <h:panelGrid id="panelDialog" columns="2" columnClasses="textRight">
-                #{msg.Name}
-                <p:inputText value="#{configMB.entity.name}"/>                      
-                
                 #{msg.ClassName}
                 <p:selectOneMenu value="#{configMB.entity.deviceClassName}" valueChangeListener="#{configMB.valueChangeMethod}">
                     <f:selectItem itemLabel="#{msg.Custom}"/>
                     <f:selectItems value="#{configMB.listClassNames}"/>                        
-                    <p:ajax update="panelDialog tableProperty"/>
+                    <p:ajax update="panelDialog tableProperty "/>
                 </p:selectOneMenu>  
                 
                 <h:outputText rendered="#{configMB.customClassName}"/>
@@ -27,6 +24,9 @@
                     <p:inputText id="customClassName" value="#{configMB.entity.deviceClassName}"/>
                     <p:watermark for="customClassName" value="ex: com.my.CustomDevice"/>
                 </h:panelGroup>
+                
+                #{msg.Name}
+                <p:inputText value="#{configMB.entity.name}"/> 
                 
                 #{msg.Format}
                 <p:inputText value="#{configMB.entity.format}"/>

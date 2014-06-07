@@ -8,11 +8,13 @@ import java.io.InputStreamReader;
 /**
  *
  * @author Jaques Claudino
+ * @param <T>
  */
 public class ShellDevice<T> implements Device<T> {
 
     private String readCommand;
     private String writeCommand;
+    private boolean readAllLines = true;
     
     @Override
     public T getValue() throws Exception {
@@ -38,14 +40,20 @@ public class ShellDevice<T> implements Device<T> {
      * @throws java.io.IOException 
      */
     public String getRunTimeExecLine(String command) throws IOException {
+        String ret = null;
         String line;
         Process p = Runtime.getRuntime().exec(new String[] {"/bin/sh", "-c", command});
         try (BufferedReader in = new BufferedReader(new InputStreamReader(p.getInputStream()))) {
             while ((line = in.readLine()) != null) {
-                return line;
+                if (ret == null) {
+                    ret = line;
+                }
+                if (!readAllLines) {
+                    return ret;
+                }
             }
         }
-        return null;
+        return ret;
     }
 
     public String getReadCommand() {
@@ -62,6 +70,10 @@ public class ShellDevice<T> implements Device<T> {
 
     public void setWriteCommand(String writeCommand) {
         this.writeCommand = writeCommand;
+    }
+
+    public void setReadAllLines(boolean readAllLines) {
+        this.readAllLines = readAllLines;
     }
     
 }
