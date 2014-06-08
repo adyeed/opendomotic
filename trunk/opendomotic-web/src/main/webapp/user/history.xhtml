@@ -24,15 +24,20 @@
             <p:panel>
                 <h:panelGrid columns="2">
                     <h:outputText value="#{msg.Device}"/>
-                    <p:selectOneMenu value="#{historyMB.idConfig}" valueChangeListener="#{historyMB.configChangeMethod}">
+                    <h:selectOneMenu value="#{historyMB.idConfig}" valueChangeListener="#{historyMB.configChangeMethod}">
                         <f:selectItems value="#{historyMB.listDeviceConfigHistory}" var="d" itemValue="#{d.id}" itemLabel="#{d.name}"/>
                         <p:ajax update="panel,grafico"/>
-                    </p:selectOneMenu> 
+                    </h:selectOneMenu> 
 
                     <h:outputText value="#{msg.Interval}:"/>
-                    <p:spinner value="#{historyMB.minutesInterval}" min="0" max="60" size="2" valueChangeListener="#{historyMB.intervalChangeMethod}">
+                    <h:selectOneMenu value="#{historyMB.minutesInterval}" valueChangeListener="#{historyMB.intervalChangeMethod}">
+                        <f:selectItem itemValue="1"/>
+                        <f:selectItem itemValue="5"/>
+                        <f:selectItem itemValue="10"/>
+                        <f:selectItem itemValue="15"/>
+                        <f:selectItem itemValue="30"/>
                         <p:ajax update="panel,grafico"/>
-                    </p:spinner>
+                    </h:selectOneMenu>
                 </h:panelGrid>
             </p:panel>
 
