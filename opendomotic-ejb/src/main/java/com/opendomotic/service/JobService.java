@@ -28,10 +28,8 @@ public class JobService {
         
     @Schedule(minute = "*/1", hour = "*")
     public void timerJobs() {
-        if (deviceService.isScheduleInitialized()) { //to avoid ConcurrentAccessTimeoutException:
-            if (checkExecuteJobs()) {
-                deviceService.updateDeviceValuesAsync();
-            }
+        if (checkExecuteJobs()) {
+            deviceService.updateDeviceValuesAsync();
         }
     }
     

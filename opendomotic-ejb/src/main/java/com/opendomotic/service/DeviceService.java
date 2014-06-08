@@ -14,13 +14,13 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
-import javax.ejb.AccessTimeout;
 import javax.ejb.Asynchronous;
-import javax.ejb.Lock;
-import javax.ejb.LockType;
+import javax.ejb.ConcurrencyManagement;
+import javax.ejb.ConcurrencyManagementType;
 import javax.ejb.Schedule;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
@@ -32,15 +32,14 @@ import javax.inject.Inject;
  */
 @Singleton
 @Startup
-@Lock(LockType.WRITE)
-@AccessTimeout(value = 10, unit = TimeUnit.SECONDS)
+@ConcurrencyManagement(ConcurrencyManagementType.BEAN) //to use synchronized. So another threads can read values while they are been updated.
 public class DeviceService {
 
     private static final Logger LOG = Logger.getLogger(DeviceService.class.getName());
+    private static final int FUTURE_TIMEOUT = 10000;
     
     private Map<String, DeviceProxy> mapDevice;
     private Map<String, List<DeviceProxy>> mapWorker; //key=threadId
-    private boolean scheduleInitialized = false;
     private int millisResponse = -1;
     private int millisWebSocket = -1;
 
@@ -58,8 +57,8 @@ public class DeviceService {
         LOG.info("DeviceService init...");
         loadDevices();
     }
-           
-    public void loadDevices() {
+     
+    public synchronized void loadDevices() {
         LOG.info("Loading devices...");
 
         mapDevice = Collections.synchronizedMap(new LinkedHashMap<String, DeviceProxy>());
@@ -87,22 +86,16 @@ public class DeviceService {
     }
     
     @Schedule(second = "*/30", minute = "*", hour = "*")
-    public void updateDeviceValuesTimer() {
+    public synchronized void updateDeviceValuesTimer() {
         updateDeviceValues();
-        
-        if (!scheduleInitialized) { //to avoid ConcurrentAccessTimeoutException from JobService 
-            scheduleInitialized = true;
-            LOG.info("Schedule initialized.");
-        }
     }
     
     @Asynchronous
-    public void updateDeviceValuesAsync() {
+    public synchronized void updateDeviceValuesAsync() {
         updateDeviceValues();
     }
     
-    private void updateDeviceValues() {
-        
+    private synchronized void updateDeviceValues() {        
         try {
             //trigger threads:
             long millisStart = System.currentTimeMillis();
@@ -114,7 +107,11 @@ public class DeviceService {
             //join threads:
             List<List<DeviceProxy>> listUpdated = new ArrayList<>();
             for (Future<List<DeviceProxy>> future : listFuture) {
-                listUpdated.add(future.get());
+                try {
+                    listUpdated.add(future.get(FUTURE_TIMEOUT, TimeUnit.MILLISECONDS));
+                } catch (TimeoutException ex) {
+                    LOG.log(Level.WARNING, "Future timeout on updating devices: {0}", ex.toString());
+                }
             }
             millisResponse = (int) (System.currentTimeMillis()-millisStart);
             
@@ -132,7 +129,27 @@ public class DeviceService {
         }
     }
     
-    @Lock(LockType.READ)
+    public synchronized void setDeviceValue(String deviceName, Object value) {
+        DeviceProxy device = mapDevice.get(deviceName);
+        if (device != null) {
+            device.setValue(value);
+            webSocketService.sendUpdateDeviceValue(deviceName, getDeviceValueAsString(deviceName)); 
+        }
+    }
+        
+    public synchronized void switchDeviceValue(String deviceName) {
+        Object value = getDeviceValue(deviceName);        
+        Object newValue;
+        if (value instanceof String) {
+            newValue = value.equals("1") ? "0" : "1";
+        } else {
+            newValue = value.equals(1) ? 0 : 1;
+        }            
+        setDeviceValue(deviceName, newValue);
+    }
+    
+    //---------- non synchronized methods:
+    
     public String getDeviceValueAsString(DeviceConfig config) {
         Object value = getDeviceValue(config.getName());
         String valueStr = "";
@@ -148,13 +165,11 @@ public class DeviceService {
         return valueStr;
     }
     
-    @Lock(LockType.READ)
     public String getDeviceValueAsString(String deviceName) {
         DeviceConfig config = configDAO.findByName(deviceName);
         return getDeviceValueAsString(config);
     }
            
-    @Lock(LockType.READ)
     public Object getDeviceValue(String deviceName) {
         DeviceProxy device = mapDevice.get(deviceName);
         if (device != null) {
@@ -164,7 +179,6 @@ public class DeviceService {
         }
     }
     
-    @Lock(LockType.READ)
     public DeviceHistory getDeviceHistory(DeviceConfig config) {
         DeviceProxy device = mapDevice.get(config.getName());
         if (device != null) {
@@ -174,7 +188,6 @@ public class DeviceService {
         }
     }
     
-    @Lock(LockType.READ)
     public int getDeviceMillisResponse(DeviceConfig config) {
         DeviceProxy device = mapDevice.get(config.getName());
         if (device != null) {
@@ -184,12 +197,10 @@ public class DeviceService {
         }
     }
     
-    @Lock(LockType.READ)
     public int getDeviceMillisResponseSum() {
         return millisResponse;
     }
     
-    @Lock(LockType.READ)
     public String getDeviceMillisResponseFmt() {
         StringBuilder sb = new StringBuilder();       
         
@@ -214,7 +225,6 @@ public class DeviceService {
         return sb.toString();
     }
     
-    @Lock(LockType.READ)
     public int getDeviceErrors(DeviceConfig config) {
         DeviceProxy device = mapDevice.get(config.getName());
         if (device != null) {
@@ -224,7 +234,6 @@ public class DeviceService {
         }
     }
     
-    @Lock(LockType.READ)
     public int getDeviceErrorsSum() {
         int sum = 0;
         for (DeviceProxy device : mapDevice.values()) {
@@ -233,30 +242,6 @@ public class DeviceService {
             }
         }        
         return sum;
-    }
-
-    public void setDeviceValue(String deviceName, Object value) {
-        DeviceProxy device = mapDevice.get(deviceName);
-        if (device != null) {
-            device.setValue(value);
-            webSocketService.sendUpdateDeviceValue(deviceName, getDeviceValueAsString(deviceName)); 
-        }
-    }
-    
-    public void switchDeviceValue(String deviceName) {
-        Object value = getDeviceValue(deviceName);        
-        Object newValue;
-        if (value instanceof String) {
-            newValue = value.equals("1") ? "0" : "1";
-        } else {
-            newValue = value.equals(1) ? 0 : 1;
-        }            
-        setDeviceValue(deviceName, newValue);
-    }
-    
-    @Lock(LockType.READ)
-    public boolean isScheduleInitialized() {
-        return scheduleInitialized;
     }
     
 }
