@@ -25,8 +25,8 @@ function initCanvas(canDrag, onMouseUpDevice, idEnvironment) {
     canvas.onmousemove = mouseMove;
     canvas.onmouseup = mouseUp;
     if (environmentImage === null) {
-        canvas.width = 1000;
-        canvas.height = 500;
+        canvas.width = 1024;
+        canvas.height = 768;
     }
     context = canvas.getContext("2d"); 
     context.font = "bold 26px verdana";
@@ -76,7 +76,11 @@ function draw() {
     context.clearRect(0, 0, canvas.width, canvas.height); 
     
     if (environmentImage !== null) {
-        context.drawImage(environmentImage, 0, 0);
+        try {
+            context.drawImage(environmentImage, 0, 0);
+        } catch(err) {
+            //image not found
+        }
     }
     
     if (loading) {

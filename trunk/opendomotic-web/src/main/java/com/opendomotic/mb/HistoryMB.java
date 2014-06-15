@@ -51,16 +51,8 @@ public class HistoryMB implements Serializable {
     
     @PostConstruct
     public void init() {
-        listDeviceConfigHistory = deviceConfigDAO.findAllWithHistory();
-                
-        Map<String, String> params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
-        String deviceParam = params.get("device");
-        if (deviceParam != null) {
-            DeviceConfig configParam = deviceConfigDAO.findByName(deviceParam);
-            if (configParam != null) {
-                refresh(configParam);
-            }
-        } else if (idConfig == 0 && !listDeviceConfigHistory.isEmpty()) {
+        listDeviceConfigHistory = deviceConfigDAO.findAllWithHistory();        
+        if (!listDeviceConfigHistory.isEmpty()) {
             refresh(listDeviceConfigHistory.get(0));
         }
     }
@@ -78,6 +70,17 @@ public class HistoryMB implements Serializable {
         this.history = deviceService.getDeviceHistory(config);
         if (history != null) {
             createLinearModel();
+        }
+    }
+    
+    public void checkParamName() {
+        Map<String, String> params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
+        String paramName = params.get("name");
+        if (paramName != null) {
+            DeviceConfig configParam = deviceConfigDAO.findByName(paramName);
+            if (configParam != null) {
+                refresh(configParam);
+            }
         }
     }
     

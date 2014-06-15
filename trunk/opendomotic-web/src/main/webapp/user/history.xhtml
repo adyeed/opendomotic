@@ -15,7 +15,7 @@
         </h:panelGroup>
 
         <h:panelGroup id="panelGroupHistory" rendered="#{!empty historyMB.listDeviceConfigHistory}">
-            <f:event type="preRenderView" listener="#{historyMB.init}" />
+            <f:event type="preRenderView" listener="#{historyMB.checkParamName}"/>
             
             <p:growl id="growl" showDetail="true" />  
 
