@@ -3,6 +3,7 @@ package com.opendomotic.mb;
 import com.opendomotic.model.entity.Environment;
 import com.opendomotic.service.dao.EnvironmentDAO;
 import java.io.Serializable;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
@@ -34,6 +35,17 @@ public class HomeMB implements Serializable {
             idEnvironment = environment.getId();
         }
         LOG.log(Level.INFO, "HomeMB init id={0}", idEnvironment);
+    }
+    
+    public void checkParamName() {
+        Map<String, String> params = getExternalContext().getRequestParameterMap();
+        String paramName = params.get("name");
+        if (paramName != null) {
+            Environment environment = environmentDAO.findByName(paramName);
+            if (environment != null) {
+                idEnvironment = environment.getId();
+            }
+        }
     }
     
     public Integer getIdEnvironment() {

@@ -1,14 +1,9 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.opendomotic.service.dao;
 
 import com.opendomotic.model.entity.DeviceConfig;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 
 /**
@@ -22,14 +17,7 @@ public class DeviceConfigDAO extends AbstractDAO<DeviceConfig> {
     private EntityManager em;
     
     public DeviceConfig findByName(String name) {
-        try {
-            return em
-                .createQuery("select c from DeviceConfig c where c.name = ?1", DeviceConfig.class)
-                .setParameter(1, name)
-                .getSingleResult();
-        } catch (NoResultException e) {
-            return null;
-        }
+        return findFirstByAttributeEqual("name", name);
     }
     
     public List<DeviceConfig> findAllByNameLike(String name) {
