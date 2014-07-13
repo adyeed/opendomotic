@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.opendomotic.device.pi.serial;
 
 import com.opendomotic.device.Device;
@@ -9,6 +5,7 @@ import com.opendomotic.device.Device;
 /**
  *
  * @author jaques
+ * @param <T>
  */
 public class SerialDevice<T> implements Device<T> {
 
@@ -16,8 +13,10 @@ public class SerialDevice<T> implements Device<T> {
     private int device;
 
     @Override
-    public void setValue(T value) {
-        SerialBus.getInstance().writeDevice(address, device, (Integer) value);
+    public void setValue(T value) throws Exception {
+        if (SerialBus.getInstance().writeDevice(address, device, (Integer) value) == -1) {
+            throw new Exception(getExceptionMessage("setValue"));
+        }
     }
 
     @Override
@@ -26,11 +25,15 @@ public class SerialDevice<T> implements Device<T> {
     }
 
     protected Integer getValueInt() throws Exception {
-        Integer value = SerialBus.getInstance().readDevice(address, device);
+        int value = SerialBus.getInstance().readDevice(address, device);
         if (value == -1) {
-            throw new Exception(String.format("Error on getValue of address=%d, device=%d", address, device));
+            throw new Exception(getExceptionMessage("getValue"));
         }
         return value;
+    }
+    
+    private String getExceptionMessage(String local) {
+        return String.format("Error on %s of address=%d, device=%d", local, address, device);
     }
     
     public int getAddress() {

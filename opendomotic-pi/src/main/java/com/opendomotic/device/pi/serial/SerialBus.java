@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.opendomotic.device.pi.serial;
 
 import com.pi4j.io.gpio.GpioController;
@@ -28,7 +24,8 @@ public class SerialBus {
     private static final int INDEX_DATA_LENGTH = 1;
     private static final int INDEX_DATA_BEGIN  = 2;
     
-    private static final int READ_ATTEMPTS = 3; //tentativas para ler o device
+    private static final int READ_DEVICE_ATTEMPTS = 3; //tentativas para ler o device
+    private static final int WRITE_DEVICE_ATTEMPTS = 3; //tentativas para alterar o device
     private static final int TIMEOUT = 100;
     
     private static SerialBus instance;
@@ -55,6 +52,14 @@ public class SerialBus {
         return instance;
     }
     
+    public int readDevice(int address, int device) {
+        return serialWriteAndWaitResponse(getBufferTx(address, COMMAND_READ, device, 0), READ_DEVICE_ATTEMPTS);
+    }
+    
+    public int writeDevice(int address, int device, int value) {
+        return serialWriteAndWaitResponse(getBufferTx(address, COMMAND_WRITE, device, value), WRITE_DEVICE_ATTEMPTS);
+    }
+    
     public void shutdown() {
         if (gpio != null) {
             serial.shutdown();
@@ -64,30 +69,22 @@ public class SerialBus {
         }
     }
     
-    public void serialWrite(byte[] bufferTx, boolean canWaitResponse) {
+    private void serialWrite(byte[] bufferTx) {
         try {
             pin1.high(); //tx mode
             serial.write(bufferTx);
             serial.flush();
             Thread.sleep(5); //esperar slave receber 5 era pouco para 9600
             pin1.low(); //rx mode
-            
-            if (canWaitResponse) {
-                waitResponse();
-            }
         } catch (IllegalStateException | InterruptedException ex) {
             LOG.log(Level.SEVERE, null, ex);    
         }
     }
     
-    public void serialWrite(byte[] bufferTx) {
-        serialWrite(bufferTx, true);
-    }
-    
-    public int serialRead(byte[] bufferTx, int attempts) {
+    private int serialWriteAndWaitResponse(byte[] bufferTx, int attempts) {
         serial.removeListener(serialListener);
         try {
-            serialWrite(bufferTx, false);
+            serialWrite(bufferTx);
             int[] bufferRx = waitResponse();
             if (bufferRx != null) {
                 return getBufferInt(bufferRx, 0); //conseguiu ler
@@ -95,7 +92,7 @@ public class SerialBus {
                 if (SHOW_LOG) {
                     LOG.warning("Error on reading device. Trying again...");
                 }
-                return serialRead(bufferTx, attempts-1);
+                return serialWriteAndWaitResponse(bufferTx, attempts-1);
             } else {
                 LOG.severe("Failed on read device.");
                 return -1;
@@ -181,14 +178,6 @@ public class SerialBus {
     private int getBufferInt(int[] bufferRx, int dataIndex) {
         return bufferRx[INDEX_DATA_BEGIN + dataIndex] * 256 + 
                bufferRx[INDEX_DATA_BEGIN + dataIndex + 1];
-    }
-    
-    public int readDevice(int address, int device) {
-        return serialRead(getBufferTx(address, COMMAND_READ, device, 0), READ_ATTEMPTS);
-    }
-    
-    public void writeDevice(int address, int device, int value) {
-        serialWrite(getBufferTx(address, COMMAND_WRITE, device, value));
     }
     
 }
