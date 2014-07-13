@@ -22,10 +22,10 @@
                     <p:toolbarGroup>
                         <h:panelGrid columns="#{homeMB.adminLogged ? 7 : 5}">
                             <h:outputText value="#{msg.Environment}" rendered="#{environmentMB.listAll.size() > 1}"/> 
-                            <p:selectOneMenu value="#{homeMB.idEnvironment}" rendered="#{environmentMB.listAll.size() > 1}">
+                            <h:selectOneMenu value="#{homeMB.idEnvironment}" rendered="#{environmentMB.listAll.size() > 1}">
                                 <f:selectItems value="#{environmentMB.listAll}" var="e" itemValue="#{e.id}" itemLabel="#{e.name}"/>
                                 <p:ajax process="@form" update="@form"/>
-                            </p:selectOneMenu>   
+                            </h:selectOneMenu>   
                             
                             <p:commandButton ajax="false" action="/user/index" icon="icon-home" value="#{msg.Home}" />
                             <p:commandButton ajax="false" action="/user/history" icon="icon-history" value="#{msg.History}" />   

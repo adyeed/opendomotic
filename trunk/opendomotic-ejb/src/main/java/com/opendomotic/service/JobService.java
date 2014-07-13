@@ -2,7 +2,9 @@ package com.opendomotic.service;
 
 import com.opendomotic.model.entity.Job;
 import com.opendomotic.service.dao.JobDAO;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.Schedule;
@@ -26,28 +28,28 @@ public class JobService {
     @Inject
     private JobDAO jobDAO;
         
+    private final List<Job> listExecuteJob = new ArrayList<>(); //added to the list to rewrite when error
+    
     @Schedule(minute = "*/1", hour = "*")
     public void timerJobs() {
-        if (checkExecuteJobs()) {
+        checkExecuteJobs();
+        if (executeJobs()) {
             deviceService.updateDeviceValuesAsync();
         }
     }
     
-    private boolean checkExecuteJobs() {
-        boolean executed = false;
+    private void checkExecuteJobs() {
         Date now = new Date();
             
         for (Job job : jobDAO.findAllEnabled()) {
             try {
-                //LOG.log(Level.INFO, "Checking job: {0}", job.toString());
-                if (canExecuteJob(job, now) && executeJob(job)) {
-                    executed = true;
-                }
+                if (canExecuteJob(job, now) && !listExecuteJob.contains(job)) {
+                    listExecuteJob.add(job);
+                }   
             } catch (Exception ex) {
-                LOG.log(Level.INFO, "Error executing job: {0} | {1}", new Object[] {job.toString(), ex.toString()});
+                LOG.log(Level.INFO, "Error checking job: {0} | {1}", new Object[] {job.toString(), ex.toString()});
             }
         }
-        return executed;
     }
     
     private boolean canExecuteJob(Job job, Date now) throws Exception {
@@ -67,25 +69,52 @@ public class JobService {
         return false;
     }
     
+    private boolean executeJobs() {
+        boolean executed = false;
+        int index = 0;
+        while (index < listExecuteJob.size()) {            
+            Job job = listExecuteJob.get(index);
+            try {
+                if (executeJob(job)) {
+                    listExecuteJob.remove(index);
+                    executed = true;
+                } else {
+                    index++;
+                }            
+            } catch (Exception ex) {
+                LOG.log(Level.INFO, "Error executing job: {0} | {1}", new Object[] {job.toString(), ex.toString()});
+            }
+        }        
+        return executed;
+    }
+    
     private boolean executeJob(Job job) {
+        boolean executed = false;
         Object outputValue = deviceService.getDeviceValue(job.getOutput().getName());
         if (outputValue != null) {
             Object actionValue = job.getActionValueAsType(outputValue.getClass());
-            if (!outputValue.equals(actionValue)) {
+            if (outputValue.equals(actionValue)) {
+                executed = true; //device already has the action value 
+            } else {
                 LOG.log(Level.INFO, "Executing job: {0}", job.toString());
 
                 deviceService.setDeviceValue(
                         job.getOutput().getName(), 
                         actionValue);
 
-                //TO-DO: Check if really changed the value in device. Can occurs communication error.
-                if (job.isDeleteAfterExecute()) {
-                    jobDAO.delete(job);
+                //check if has really changed:
+                outputValue = deviceService.getDeviceValue(job.getOutput().getName());
+                if (outputValue != null && outputValue.equals(actionValue)) {
+                    if (job.isDeleteAfterExecute()) {
+                        jobDAO.delete(job);
+                    }
+                    executed = true;
+                } else {
+                    LOG.log(Level.WARNING, "Error on setDeviceValue of job: {0}", job.toString());
                 }
-                return true;
             }
         }
-        return false;
+        return executed;
     }
     
 }
