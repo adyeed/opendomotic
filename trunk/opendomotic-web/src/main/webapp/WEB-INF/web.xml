@@ -53,7 +53,7 @@
     <login-config>
         <!--
         TomEE: Use tomcat-user.xml. Add roles admin/user and the usernames; 
-        Glassfish: Create a fileRealm with the name UserDatabase. Roles and Groups are associated in glassfish-web.xml
+        Glassfish: Create a fileRealm with the name UserDatabase. Roles and Groups are associated in glassfish-web.xml. Name=UserDatabase; JAAS Context=fileRealm; Arquivo=${com.sun.aas.instanceRoot}/config/UserDatabaseRealm
         !-->
         <auth-method>BASIC</auth-method>
         <realm-name>UserDatabase</realm-name>

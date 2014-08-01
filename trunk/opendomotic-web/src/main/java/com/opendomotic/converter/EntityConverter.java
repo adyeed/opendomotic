@@ -29,7 +29,7 @@ public class EntityConverter implements Converter {
     
     @Override
     public Object getAsObject(FacesContext context, UIComponent component, String value) {
-        if (value != null && !value.isEmpty()) {
+        if (value != null && !value.isEmpty() && value.contains("|")) {
             try {
                 String key[] = value.split("\\|");
                 Integer id = Integer.parseInt(key[0]);

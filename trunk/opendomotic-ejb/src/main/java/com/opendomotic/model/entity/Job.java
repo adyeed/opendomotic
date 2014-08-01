@@ -32,6 +32,7 @@ public class Job extends AbstractEntityId {
     private String actionValue;
     
     private boolean enabled;
+    private int index;
     
     @ManyToOne
     private DeviceConfig output;
@@ -136,6 +137,14 @@ public class Job extends AbstractEntityId {
 
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
+    }
+
+    public int getIndex() {
+        return index;
+    }
+
+    public void setIndex(int index) {
+        this.index = index;
     }
 
     @Override
