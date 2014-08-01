@@ -125,6 +125,10 @@ public class DeviceService {
                 }
             }
             millisWebSocket = (int) (System.currentTimeMillis()-millisStart);
+            
+            if (millisResponse >= FUTURE_TIMEOUT) {
+                LOG.log(Level.WARNING, "Slow reading devices: {0}", getDeviceMillisResponseFmt());
+            }
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, "Error updating devices: {0}", ex.toString());
         }
