@@ -1,9 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package com.opendomotic.service;
 
 import com.opendomotic.model.DeviceProxy;
@@ -35,7 +29,6 @@ public class DeviceWorker {
                 if (device.updateValue()) {
                     updated = true;
                 }
-                //System.out.println(threadId + " update " + device.getName());
             } catch (Exception ex) {
                 LOG.log(Level.SEVERE, "Error updating device: {0} | {1}", new Object[] {device.getName(), ex.toString()});
                 device.incErrors();
