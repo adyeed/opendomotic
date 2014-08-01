@@ -18,7 +18,7 @@ public class JobDAO extends AbstractDAO<Job> {
     
     public List<Job> findAllEnabled() {
         return getEntityManager()
-                .createQuery("select j from Job j where j.enabled = true")
+                .createQuery("select j from Job j where j.enabled = true order by j.index")
                 .getResultList();
     }
     

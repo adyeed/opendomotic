@@ -31,6 +31,7 @@ public class HttpDevice<T> implements Device<T> {
     private String path;
     private String user;
     private String password;
+    private String queryParam;
     private HttpClient httpClient;
     private int timeout = DEFAULT_TIMEOUT;
     
@@ -41,7 +42,15 @@ public class HttpDevice<T> implements Device<T> {
 
     @Override
     public void setValue(T value) throws Exception {
-        makeRequest(getURI() + "=" + value);
+        StringBuilder sb = new StringBuilder(getURI());
+        if (queryParam != null) {
+            sb.append('?');
+            sb.append(queryParam);
+        }
+        sb.append('=');
+        sb.append(value);
+        
+        makeRequest(sb.toString());
     }
     
     private HttpClient getHttpClient() {
@@ -109,6 +118,10 @@ public class HttpDevice<T> implements Device<T> {
 
     public void setTimeout(int timeout) {
         this.timeout = timeout;
+    }
+
+    public void setQueryParam(String queryParam) {
+        this.queryParam = queryParam;
     }
 
     @Override

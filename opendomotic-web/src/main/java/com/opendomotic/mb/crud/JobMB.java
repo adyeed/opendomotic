@@ -4,6 +4,7 @@ import com.opendomotic.model.entity.DeviceConfig;
 import com.opendomotic.model.entity.Job;
 import com.opendomotic.model.entity.JobOperator;
 import com.opendomotic.service.dao.AbstractDAO;
+import com.opendomotic.service.dao.CriteriaGetter;
 import com.opendomotic.service.dao.DeviceConfigDAO;
 import com.opendomotic.service.dao.JobDAO;
 import java.util.Arrays;
@@ -13,6 +14,9 @@ import java.util.List;
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 
 /**
  *
@@ -92,6 +96,11 @@ public class JobMB extends AbstractSelectableCRUD<Job> {
     public void toggleEnable(Job job) {
         job.setEnabled(!job.isEnabled());
         jobDAO.save(job);
+    }
+
+    @Override
+    protected CriteriaGetter.OrderGetter getOrderGetter() {
+        return jobDAO.getCriteriaGetter().getOrderAttributeAsc("index");
     }
     
     private Integer getIdDeviceConfig(DeviceConfig deviceConfig) {

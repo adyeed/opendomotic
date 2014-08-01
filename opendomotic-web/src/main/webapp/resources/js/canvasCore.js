@@ -34,6 +34,7 @@ function initCanvas(canDrag, onMouseUpDevice, idEnvironment) {
     drawLoading();
     
     $.getJSON(getUrl('rest/environment/get?id='+idEnvironment), function(data) {
+        //TODO: glassfish (jersey) nao retorna data em array, mesmo se definir nome para @XmlRoolElement
         for (var environment in data) {
             environmentImage = new Image();
             environmentImage.src = data[environment].fileName;

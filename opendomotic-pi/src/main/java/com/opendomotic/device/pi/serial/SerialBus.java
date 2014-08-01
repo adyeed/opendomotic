@@ -21,12 +21,14 @@ public class SerialBus {
     private static final char COMMAND_READ  = 'r';
     private static final char COMMAND_WRITE = 'w';    
     
+    private static final int INDEX_ADDRESS = 0;
     private static final int INDEX_DATA_LENGTH = 1;
     private static final int INDEX_DATA_BEGIN  = 2;
     
     private static final int READ_DEVICE_ATTEMPTS = 3; //tentativas para ler o device
     private static final int WRITE_DEVICE_ATTEMPTS = 3; //tentativas para alterar o device
     private static final int TIMEOUT = 100;
+    private static final int MAX_BUFFER_RX_SIZE = 200;
     
     private static SerialBus instance;
     private static final Logger LOG = Logger.getLogger(SerialBus.class.getName());
@@ -34,18 +36,18 @@ public class SerialBus {
     
     //GPIO:
     private GpioController gpio;
-    private GpioPinDigitalOutput pin1;
+    private final GpioPinDigitalOutput pinRE;
     private Serial serial = SerialFactory.createInstance();
-    private SerialDataListener serialListener = new SerialBusListener();
+    private final SerialDataListener serialListener = new SerialBusListener();
     
     private SerialBus() {        
         gpio = GpioFactory.getInstance();
-        pin1 = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_00, "PIN_RE_485", PinState.LOW);
+        pinRE = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_00, "PIN_RE_485", PinState.LOW);
         serial.open(Serial.DEFAULT_COM_PORT, 115200);
         serial.addListener(serialListener);
     }
     
-    public static SerialBus getInstance() {
+    public static synchronized SerialBus getInstance() {
         if (instance == null) {
             instance = new SerialBus();
         }
@@ -71,21 +73,21 @@ public class SerialBus {
     
     private void serialWrite(byte[] bufferTx) {
         try {
-            pin1.high(); //tx mode
+            pinRE.high(); //tx mode
             serial.write(bufferTx);
             serial.flush();
             Thread.sleep(5); //esperar slave receber 5 era pouco para 9600
-            pin1.low(); //rx mode
+            pinRE.low(); //rx mode
         } catch (IllegalStateException | InterruptedException ex) {
             LOG.log(Level.SEVERE, null, ex);    
         }
     }
     
-    private int serialWriteAndWaitResponse(byte[] bufferTx, int attempts) {
+    private synchronized int serialWriteAndWaitResponse(byte[] bufferTx, int attempts) {
         serial.removeListener(serialListener);
         try {
             serialWrite(bufferTx);
-            int[] bufferRx = waitResponse();
+            byte[] bufferRx = waitResponse(bufferTx[INDEX_ADDRESS]);
             if (bufferRx != null) {
                 return getBufferInt(bufferRx, 0); //conseguiu ler
             } else if (attempts > 0) {
@@ -102,15 +104,15 @@ public class SerialBus {
         }
     }
     
-    private int[] waitResponse() {
-        int[] bufferRx = new int[300];
+    private byte[] waitResponse(byte address) {
+        byte[] bufferRx = new byte[MAX_BUFFER_RX_SIZE];
         int indexRx=0;
         long millisStart = System.currentTimeMillis();        
         
         StringBuilder log = new StringBuilder("waitResponse RX=");
         while (System.currentTimeMillis()-millisStart < TIMEOUT) {
             if (serial.availableBytes() > 0) {
-                bufferRx[indexRx++] = serial.read() & 0xff; //unsigned
+                bufferRx[indexRx++] = (byte) serial.read();
                 log.append(bufferRx[indexRx-1]);
                 log.append("|");
             } else if (indexRx > 0) {
@@ -119,26 +121,28 @@ public class SerialBus {
         }
         
         long tempo = System.currentTimeMillis()-millisStart;
-        if (SHOW_LOG && tempo > 30) {
+        if (SHOW_LOG) {
             log.append(tempo);
             log.append(" ms");
             LOG.info(log.toString());
         }
         
-        if (indexRx > 0 && isCheckSumOK(bufferRx))
+        if (indexRx > 0 && address == bufferRx[0] && isCheckSumOK(bufferRx))
             return Arrays.copyOf(bufferRx, indexRx);
         return null;        
     }
     
-    private boolean isCheckSumOK(int[] bufferRx) {
-        int dataLength = bufferRx[INDEX_DATA_LENGTH];
+    private boolean isCheckSumOK(byte[] bufferRx) {
+        int dataLength = bufferRx[INDEX_DATA_LENGTH] & 0xff;
         int checksum = 0;
         int i;
         for (i=0; i<dataLength+INDEX_DATA_BEGIN; i++) {
-            checksum += bufferRx[i];
+            checksum += bufferRx[i] & 0xff;
         }
 
-        boolean isOK = (bufferRx[i] == checksum / 256) && (bufferRx[i+1] == checksum % 256);
+        int msb = bufferRx[i] & 0xff;
+        int lsb = bufferRx[i+1] & 0xff;
+        boolean isOK = (msb == checksum / 256) && (lsb == checksum % 256);
 
         if (SHOW_LOG && !isOK) {
             StringBuilder log = new StringBuilder("CHECKSUM ERROR: ");
@@ -158,26 +162,27 @@ public class SerialBus {
     }
     
     private byte[] getBufferTx(int address, int command, int device, int value) {
-        byte[] tx = new byte[8];
+        byte[] bufferTx = new byte[8];
         byte len = 4;
         
-        tx[0] = (byte)address;
-        tx[1] = len;
-        tx[2] = (byte)command;
-        tx[3] = (byte)device;
-        tx[4] = (byte)(value / 256);
-        tx[5] = (byte)(value % 256);
+        bufferTx[0] = (byte)address;
+        bufferTx[1] = len;
+        bufferTx[2] = (byte)command;
+        bufferTx[3] = (byte)device;
+        bufferTx[4] = (byte)(value / 256);
+        bufferTx[5] = (byte)(value % 256);
         
         int checksum = address + len + command + device + value;
-        tx[6] = (byte)(checksum / 256);
-        tx[7] = (byte)(checksum % 256);
+        bufferTx[6] = (byte)(checksum / 256);
+        bufferTx[7] = (byte)(checksum % 256);
         
-        return tx;
+        return bufferTx;
     }
     
-    private int getBufferInt(int[] bufferRx, int dataIndex) {
-        return bufferRx[INDEX_DATA_BEGIN + dataIndex] * 256 + 
-               bufferRx[INDEX_DATA_BEGIN + dataIndex + 1];
+    private int getBufferInt(byte[] bufferRx, int dataIndex) {
+        int msb = bufferRx[INDEX_DATA_BEGIN + dataIndex] & 0xff;
+        int lsb = bufferRx[INDEX_DATA_BEGIN + dataIndex + 1] & 0xff;
+        return msb * 256 + lsb;
     }
     
 }

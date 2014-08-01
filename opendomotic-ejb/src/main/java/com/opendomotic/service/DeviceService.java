@@ -5,6 +5,7 @@ import com.opendomotic.service.dao.DeviceConfigDAO;
 import com.opendomotic.device.Device;
 import com.opendomotic.model.DeviceHistory;
 import com.opendomotic.model.DeviceProxy;
+import com.opendomotic.model.DeviceValueFormat;
 import com.opendomotic.model.entity.DeviceConfig;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -151,18 +152,7 @@ public class DeviceService {
     //---------- non synchronized methods:
     
     public String getDeviceValueAsString(DeviceConfig config) {
-        Object value = getDeviceValue(config.getName());
-        String valueStr = "";
-        try {
-            if (value != null && config.getFormat() != null && !config.getFormat().isEmpty()) {
-                valueStr = String.format(config.getFormat(), value);
-            } else {
-                valueStr = String.valueOf(value);
-            }    
-        } catch (Exception ex) {
-            LOG.severe(ex.toString());
-        }
-        return valueStr;
+        return new DeviceValueFormat().format(getDeviceValue(config.getName()), config.getFormat());
     }
     
     public String getDeviceValueAsString(String deviceName) {
