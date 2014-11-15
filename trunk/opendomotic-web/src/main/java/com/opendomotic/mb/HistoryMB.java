@@ -69,6 +69,7 @@ public class HistoryMB implements Serializable {
         this.config = config;
         this.history = deviceService.getDeviceHistory(config);
         if (history != null) {
+            extractMinMax();
             createLinearModel();
         }
     }
@@ -90,14 +91,30 @@ public class HistoryMB implements Serializable {
         linearModel = new CartesianChartModel();
         linearModel.addSeries(lineSeries);  
         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm"); 
-        
-        min = null;
-        max = null;
         last = null;   
 
         Iterator<DeviceHistory.DeviceHistoryItem> it = history.getList().iterator();
         while (it.hasNext()) {
             DeviceHistory.DeviceHistoryItem item = it.next();
+                        
+            if (last == null || 
+                    !it.hasNext() || 
+                    item == min ||
+                    item == max ||                    
+                    item.getDate().getTime() - last.getDate().getTime() >= minutesInterval*60*1000) {
+                String dt = sdf.format(item.getDate());
+                lineSeries.set(dt, item.getValueAsInt());
+                last = item;
+            }
+        }
+        
+    }
+    
+    private void extractMinMax() {
+        min = null;
+        max = null;  
+
+        for (DeviceHistory.DeviceHistoryItem item : history.getList()) {
             Integer value = item.getValueAsInt();
             
             if (min == null || value < min.getValueAsInt()) {
@@ -106,14 +123,7 @@ public class HistoryMB implements Serializable {
             if (max == null || value > max.getValueAsInt()) {
                 max = item;
             }
-                        
-            if (last == null || !it.hasNext() || item.getDate().getTime() - last.getDate().getTime() >= minutesInterval*60*1000) {
-                String dt = sdf.format(item.getDate());
-                lineSeries.set(dt, value);
-                last = item;
-            }
         }
-        
     }
     
     public void configChangeMethod(ValueChangeEvent e) {

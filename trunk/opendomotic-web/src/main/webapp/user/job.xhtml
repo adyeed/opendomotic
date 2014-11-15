@@ -17,15 +17,15 @@
                     <p:tab id="tab1" title="#{msg.Device}">  
                         <h:panelGrid columns="2" columnClasses="textRight">
                             <h:outputText value="#{msg.Device}"/>
-                            <p:selectOneMenu value="#{jobMB.idInput}">
+                            <h:selectOneMenu value="#{jobMB.idInput}">
                                 <f:selectItem itemLabel="#{msg.None}" itemValue="#{null}"/>
                                 <f:selectItems value="#{configMB.listAllOrderByName}" var="d" itemValue="#{d.id}" itemLabel="#{d.name}"/>
-                            </p:selectOneMenu>  
+                            </h:selectOneMenu>  
 
                             <h:outputText value="#{msg.Operator}"/>
-                            <p:selectOneMenu value="#{jobMB.entity.operator}">
+                            <h:selectOneMenu value="#{jobMB.entity.operator}">
                                 <f:selectItems value="#{jobMB.listOperator}"/>
-                            </p:selectOneMenu>  
+                            </h:selectOneMenu>  
 
                             <h:outputText value="#{msg.ExpectValue}"/>
                             <p:inputText value="#{jobMB.entity.expectValue}"/>
@@ -49,15 +49,15 @@
             <p:panel header="#{msg.Output}">
                 <h:panelGrid columns="2" columnClasses="textRight">
                     <h:outputText value="#{msg.Device}"/>
-                    <p:selectOneMenu value="#{jobMB.idOutput}">
+                    <h:selectOneMenu value="#{jobMB.idOutput}">
                         <f:selectItems value="#{configMB.listAllOrderByName}" var="d" itemValue="#{d.id}" itemLabel="#{d.name}"/>
-                    </p:selectOneMenu>  
+                    </h:selectOneMenu>  
 
                     <h:outputText value="#{msg.ActionValue}"/>
                     <p:inputText value="#{jobMB.entity.actionValue}"/>
 
                     <h:outputText value="#{msg.DeleteAfterExecute}"/>
-                <p:selectBooleanCheckbox value="#{jobMB.entity.deleteAfterExecute}"/>
+                    <p:selectBooleanCheckbox value="#{jobMB.entity.deleteAfterExecute}"/>
                 </h:panelGrid>          
             </p:panel>
 
