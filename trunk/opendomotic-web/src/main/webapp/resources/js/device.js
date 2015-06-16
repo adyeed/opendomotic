@@ -73,12 +73,16 @@ function Device(id, x, y, name, type, customScript, imageDefault, imageSwitch) {
         context.lineWidth = 1; 
         context.strokeStyle = 'white';
         
-        text = this.value;        
+        text = this.value;      
         if (text !== null) { //is null when loading
             text = text.toString();
             
-            if ((text !== 'null') && this.isSwitch()) { //is 'null' string when has comunication error   
-                text = (this.value === 1 || this.value === '1') ? 'on' : 'off';
+            if ((text !== 'null') && this.isSwitch()) { //is 'null' string when has comunication error  
+                if (this.value === 1 || this.value === '1') {
+                    text = 'on';
+                } else if (this.value === 0 || this.value === '0') {
+                    text = 'off';
+                }
             }
             
             lines = text.split('\\r\\n');

@@ -34,36 +34,33 @@ function initCanvas(canDrag, onMouseUpDevice, idEnvironment) {
     drawLoading();
     
     $.getJSON(getUrl('rest/environment/get?id='+idEnvironment), function(data) {
-        //TODO: glassfish (jersey) nao retorna data em array, mesmo se definir nome para @XmlRoolElement
-        for (var environment in data) {
-            environmentImage = new Image();
-            environmentImage.src = data[environment].fileName;
-            environmentImage.onload = function() {
-                canvas.width = environmentImage.width;
-                canvas.height = environmentImage.height;
-                context.font = "bold 26px verdana";
-                context.shadowColor = 'white';
-                context.shadowBlur = 5;
+        environmentImage = new Image();
+        environmentImage.src = data.fileName;
+        environmentImage.onload = function() {
+            canvas.width = environmentImage.width;
+            canvas.height = environmentImage.height;
+            context.font = "bold 26px verdana";
+            context.shadowColor = 'white';
+            context.shadowBlur = 5;
+            draw();
+        };
+
+        //para limpar em caso de ajax update:
+        deviceArray = new Array(); 
+
+        list = data.listDevicePositionRest; //returns array only when > 1
+        if (list instanceof Array) {
+            for (var index in list) {
+                addDevice(list[index]);                    
+            }
+        } else if (list !== undefined) {
+            addDevice(list);
+        }                
+
+        if (deviceArray.length > 0) {
+            deviceArray[deviceArray.length-1].imageDefault.onload = function() {
                 draw();
             };
-
-            //para limpar em caso de ajax update:
-            deviceArray = new Array(); 
-            
-            list = data[environment].listDevicePositionRest; //returns array only when > 1
-            if (list instanceof Array) {
-                for (var index in list) {
-                    addDevice(list[index]);                    
-                }
-            } else if (list !== undefined) {
-                addDevice(list);
-            }                
-            
-            if (deviceArray.length > 0) {
-                deviceArray[deviceArray.length-1].imageDefault.onload = function() {
-                    draw();
-                };
-            }
         }
         updateDeviceValues();
     });
@@ -105,11 +102,8 @@ function drawLoading() {
 function updateDeviceValues() {
     drawLoading();
     $.getJSON(getUrl('rest/device/value'), function(data) {
-        for (var device in data) {
-            for (var index in data[device]) {
-                d = data[device][index]; //d.name; d.value;
-                updateDeviceValue(d.name, d.value, false);
-            }
+        for (var i in data) {    
+            updateDeviceValue(data[i].name, data[i].value, false);
         }
         loading = false;
         draw();
