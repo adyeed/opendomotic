@@ -57,7 +57,7 @@ function log(message) {
         
     line = fmtDate + ' WebSocket: ' +  message;               
     console.log(line);
-    document.getElementById('log').innerHTML = line;
+    //document.getElementById('log').innerHTML = line;
 }
 
 function formatField(value, len) {
