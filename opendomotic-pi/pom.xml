@@ -34,7 +34,11 @@
         <dependency>
             <groupId>com.pi4j</groupId>
             <artifactId>pi4j-core</artifactId>
+            <!-- Raspberry B+ -->
             <version>0.0.5</version>
+            
+            <!-- Raspberry 2 -->
+            <!--<version>1.0</version>-->
         </dependency>
     </dependencies>
 </project>
