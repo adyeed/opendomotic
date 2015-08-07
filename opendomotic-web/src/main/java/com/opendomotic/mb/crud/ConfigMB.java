@@ -9,7 +9,9 @@ import com.opendomotic.service.DeviceService;
 import com.opendomotic.service.dao.AbstractDAO;
 import com.opendomotic.service.dao.CriteriaGetter;
 import com.opendomotic.service.dao.DeviceConfigDAO;
+import com.opendomotic.service.dao.DevicePositionDAO;
 import com.opendomotic.service.dao.DevicePropertyDAO;
+import com.opendomotic.service.dao.JobDAO;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -45,6 +47,13 @@ public class ConfigMB extends AbstractSelectableCRUD<DeviceConfig> {
     
     @Inject
     private DevicePropertyDAO devicePropertyDAO;
+    
+    @Inject
+    private DevicePositionDAO devicePositionDAO;
+    
+    @Inject
+    private JobDAO jobDAO;
+    
     
     private List<DeviceProperty> listDeviceProperty;
     private List<DeviceConfig> listAllOrderByName;
@@ -106,7 +115,12 @@ public class ConfigMB extends AbstractSelectableCRUD<DeviceConfig> {
     
     @Override
     public void delete(DeviceConfig config) {
+        devicePropertyDAO.deleteByConfig(config);
+        devicePositionDAO.deleteByConfig(config);
+        jobDAO.deleteByConfig(config);    
+        
         super.delete(config);
+        
         deviceService.loadDevices();
         listAllOrderByName = null;
     }
@@ -147,9 +161,9 @@ public class ConfigMB extends AbstractSelectableCRUD<DeviceConfig> {
     }
     
     public void valueChangeMethod(ValueChangeEvent e) {
-        if (listDeviceProperty != null) {
+        if (listDeviceProperty != null && !listDeviceProperty.isEmpty() && listDeviceProperty.get(0).isEmpty()) {
             listDeviceProperty.clear(); 
-
+            
             try {
                 String className = (String) e.getNewValue();           
                 for (Method method : Class.forName(className).getMethods()) {

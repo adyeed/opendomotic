@@ -44,6 +44,13 @@ public class DeviceProperty extends AbstractEntityName {
     public void setValue(String value) {
         this.value = value;
     }
+    
+    public boolean isEmpty() {
+        return getName() == null ||
+                getValue() == null ||
+                getName().trim().isEmpty() ||
+                getValue().trim().isEmpty();
+    }
 
     @Override
     public String toString() {
