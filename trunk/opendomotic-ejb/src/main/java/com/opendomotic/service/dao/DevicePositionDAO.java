@@ -4,6 +4,7 @@
  */
 package com.opendomotic.service.dao;
 
+import com.opendomotic.model.entity.DeviceConfig;
 import com.opendomotic.model.entity.DevicePosition;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -45,6 +46,12 @@ public class DevicePositionDAO extends AbstractDAO<DevicePosition> {
     public void deleteByIdEnvironment(Integer idEnvironment) {
         em.createQuery("delete from DevicePosition p where p.environment.id = ?1")
                 .setParameter(1, idEnvironment)
+                .executeUpdate();
+    }
+    
+    public void deleteByConfig(DeviceConfig deviceConfig) {
+        em.createQuery("delete from DevicePosition p where p.deviceConfig = ?1")
+                .setParameter(1, deviceConfig)
                 .executeUpdate();
     }
     

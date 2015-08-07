@@ -108,10 +108,12 @@
             <p:column headerText="#{msg.Image}" width="130">
                 <p:graphicImage 
                     value="../resources/images/#{item.deviceImageDefault.fileName}" 
-                    rendered="#{!empty item.deviceImageDefault}"/>
+                    rendered="#{!empty item.deviceImageDefault}"
+                    style="max-height: 100px;"/>
                 <p:graphicImage 
                     value="../resources/images/#{item.deviceImageSwitch.fileName}" 
-                    rendered="#{!empty item.deviceImageSwitch}"/>
+                    rendered="#{!empty item.deviceImageSwitch}"
+                    style="max-height: 100px;"/>
             </p:column>
             <p:column headerText="#{msg.Enabled}" style="text-align: center;">
                 <p:graphicImage value="../resources/images/button/checked.png" rendered="#{item.enabled}"/>
