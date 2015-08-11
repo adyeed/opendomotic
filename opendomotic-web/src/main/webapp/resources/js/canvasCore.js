@@ -35,7 +35,7 @@ function initCanvas(canDrag, onMouseUpDevice, idEnvironment) {
     
     $.getJSON(getUrl('rest/environment/get?id='+idEnvironment), function(data) {
         environmentImage = new Image();
-        environmentImage.src = data.fileName;
+        environmentImage.src = data.environmentRest.fileName;
         environmentImage.onload = function() {
             canvas.width = environmentImage.width;
             canvas.height = environmentImage.height;
@@ -48,7 +48,7 @@ function initCanvas(canDrag, onMouseUpDevice, idEnvironment) {
         //para limpar em caso de ajax update:
         deviceArray = new Array(); 
 
-        list = data.listDevicePositionRest; //returns array only when > 1
+        list = data.environmentRest.listDevicePositionRest; //returns array only when > 1
         if (list instanceof Array) {
             for (var index in list) {
                 addDevice(list[index]);                    
