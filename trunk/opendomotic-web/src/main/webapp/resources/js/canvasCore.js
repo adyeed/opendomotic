@@ -102,6 +102,7 @@ function drawLoading() {
 function updateDeviceValues() {
     drawLoading();
     $.getJSON(getUrl('rest/device/value'), function(data) {
+        data = data.deviceValueRest;
         for (var i in data) {    
             updateDeviceValue(data[i].name, data[i].value, false);
         }
